@@ -1,0 +1,80 @@
+<mat-card class="example-card">
+    <mat-card-content>
+      <h2 class="example-h2">Progress bar configuration</h2>
+  
+     
+  
+  
+      <section class="example-section" *ngIf="mode === 'buffer'">
+        <label class="example-margin">Buffer:</label>
+        <mat-slider class="example-margin">
+          <input type="range" [(ngModel)]="bufferValue" matSliderThumb>
+        </mat-slider>
+      </section>
+    </mat-card-content>
+  </mat-card>
+  
+  <mat-card class="example-card">
+    <mat-card-content>
+      <h2 class="example-h2">Monthly Limit</h2>
+  
+      <section class="example-section">
+        <mat-progress-bar
+            class="example-margin"
+            [color]="color"
+            [mode]="mode"
+            [value]="monthlyValue"
+            [bufferValue]="bufferValue">
+        </mat-progress-bar>
+      </section>
+    </mat-card-content>
+
+    <mat-card class="example-card">
+        <mat-card-content>
+          <h2 class="example-h2">Yearly Limit</h2>
+      
+          <section class="example-section">
+            <mat-progress-bar
+                class="example-margin"
+                [color]="color"
+                [mode]="mode"
+                [value]="yearlyValue"
+                [bufferValue]="bufferValue">
+            </mat-progress-bar>
+          </section>
+        </mat-card-content>
+  </mat-card>
+
+  <div class="w-full bg-green-100 h-6 flex"><div class="bg-green-600 basis-${value}%"></div></div>
+<div class="mdc-linear-progress__bar-inner"></div>
+  <mat-card class="example-card">
+    <mat-card-content>
+      <h2 class="example-h2">Daily Limit</h2>
+  
+      <section class="example-section">
+        <mat-progress-bar
+            class="example-margin"
+            [color]="color"
+            [mode]="mode"
+            [value]="dailyValue"
+            [bufferValue]="bufferValue">
+        </mat-progress-bar>
+      </section>
+    </mat-card-content>
+<div>Category limits:</div>
+    <mat-card class="example-card">
+        <mat-card-content>
+          <h2 class="example-h2">Food Limit</h2>
+      
+          <section class="example-section">
+            <mat-progress-bar
+                class="example-margin"
+                [color]="color"
+                [mode]="mode"
+                [value]="dailyValue"
+                [bufferValue]="bufferValue">
+            </mat-progress-bar>
+          </section>
+        </mat-card-content>
+</mat-card>
+  

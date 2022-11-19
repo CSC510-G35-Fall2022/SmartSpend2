@@ -15,58 +15,33 @@ import {map, startWith} from 'rxjs/operators';
 })
 export class AppComponent {
   separatorKeysCodes: number[] = [ENTER, COMMA];
-  fruitCtrl = new FormControl('');
-  filteredFruits: Observable<string[]>;
-  fruits: string[] = ['Lemon'];
-  allFruits: string[] = ['Apple', 'Lemon', 'Lime', 'Orange', 'Strawberry'];
+  value = 'Clear me';
 
-  @ViewChild('fruitInput')
+
   fruitInput!: ElementRef<HTMLInputElement>;
-
-  constructor() {
-    this.filteredFruits = this.fruitCtrl.valueChanges.pipe(
-      startWith(null),
-      map((fruit: string | null) => (fruit ? this._filter(fruit) : this.allFruits.slice())),
-    );
-  }
-
-  add(event: MatChipInputEvent): void {
-    const value = (event.value || '').trim();
-
-    // Add our fruit
-    if (value) {
-      this.fruits.push(value);
-    }
-
-    // Clear the input value
-    event.chipInput!.clear();
-
-    this.fruitCtrl.setValue(null);
-  }
-
-  remove(fruit: string): void {
-    const index = this.fruits.indexOf(fruit);
-
-    if (index >= 0) {
-      this.fruits.splice(index, 1);
-    }
-  }
-
-  selected(event: MatAutocompleteSelectedEvent): void {
-    this.fruits.push(event.option.viewValue);
-    this.fruitInput.nativeElement.value = '';
-    this.fruitCtrl.setValue(null);
-  }
-
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-
-    return this.allFruits.filter(fruit => fruit.toLowerCase().includes(filterValue));
-  }
-
-
   // constructor(private http: HttpClient){}
   title = 'SmartSpend';
+
+  constructor(private httpClient: HttpClient) {
+  }
+  serverData!: JSON;
+  employeeData!: JSON;
+  
+  
+
+  sayHi() {
+    this.httpClient.get('http://127.0.0.1:5002/').subscribe(data => {
+      this.serverData = data as JSON;
+      console.log(this.serverData);
+    })
+  }
+
+  getAllEmployees() {
+    this.httpClient.get('http://127.0.0.1:5002/employees').subscribe(data => {
+      this.employeeData = data as JSON;
+      console.log(this.employeeData);
+    })
+  }
   // public httpOptions = {
   //   headers: new HttpHeaders({
   //     'Access-Control-Allow-Origin': '*',
