@@ -168,7 +168,7 @@ def edit_cost(update: Update):
             bot.reply_to(update.effective_message, "The cost is invalid")
             return
     except Exception as e:
-        bot.reply_to(m, "Oops!" + str(e) + str(e.__cause__) + str(e.__context__))
+        bot.reply_to(update.effective_message, "Oops!" + str(e) + str(e.__cause__) + str(e.__context__))
 	
 
 def validate_entered_amount(amount_entered):

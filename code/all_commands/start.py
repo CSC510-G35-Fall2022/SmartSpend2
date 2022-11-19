@@ -42,4 +42,3 @@ def start_and_menu_command(update: Update, context: CallbackContext):
         text_intro += "/" + c + ": "
         text_intro += commands[c] + "\n\n"
     bot.send_message(chat_id, text_intro)
-    return True

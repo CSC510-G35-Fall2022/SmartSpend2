@@ -556,6 +556,7 @@ async def main():
         main_conversation = ConversationHandler(
         entry_points=[
             CommandHandler('start', start_and_menu_command),
+            CommandHandler('menu', start_and_menu_command),
             CommandHandler('edit', edit1),
         ],
         states={},
