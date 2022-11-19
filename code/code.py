@@ -22,6 +22,8 @@ from tabulate import tabulate
 load_dotenv()
 from all_commands.start import start_and_menu_command
 from all_commands.edit import edit1
+from all_commands.add import command_add
+
 from telegram.ext import (Updater,
                           CommandHandler,
                           ConversationHandler)
@@ -543,6 +545,7 @@ async def main():
         entry_points=[
             CommandHandler('start', start_and_menu_command),
             CommandHandler('menu', start_and_menu_command),
+            CommandHandler('add', command_add),
             CommandHandler('edit', edit1),
         ],
         states={},

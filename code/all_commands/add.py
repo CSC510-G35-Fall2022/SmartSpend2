@@ -39,52 +39,58 @@ limit_categories = ['daily', 'monthly', 'yearly', 'View Limits']
 bot = telebot.TeleBot(api_token)
 telebot.logger.setLevel(logging.INFO)
 
+commands = {
+    'menu': 'Display this menu',
+    'add': 'Record/Add a new spending',
+    'display': 'Show sum of expenditure for the current day/month',
+    'history': 'Display spending history',
+    'delete': 'Clear/Erase all your records',
+    'edit': 'Edit/Change spending details',
+    'limit': 'Add daily/monthly/yearly limits for spending',
+    'search':'Search a product and comapre prices',
+    'settle': 'Settle an expense shared with you'
+}
 
 @bot.message_handler(commands=['add'])
-def command_add(message):
-    chat_id = message.chat.id
+def command_add(update: Update, context: CallbackContext):
+    chat_id = update.effective_message.chat.id
     user_bills['user_telegram_id'] = chat_id
     markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
     markup.row_width = 2
     for c in spend_categories:
         markup.add(c)
-    msg = bot.reply_to(message, 'Select Category', reply_markup=markup)
+        print(c)
+    print(update.effective_message)
+    msg = bot.send_message(chat_id=update.effective_chat.id, text='Select Category', reply_to_message_id=update.message.message_id, reply_markup=markup)
     # print('category', msg)
-    bot.register_next_step_handler(msg, post_category_selection)
+    bot.register_next_step_handler(msg, post_category_selection(update))
 
-def post_category_selection(message):
+def post_category_selection(update):
         # print(message.text)
-        try:
-            chat_id = message.chat.id
-            selected_category = message.text
-            if not selected_category in spend_categories:
-                if 'New_Category' in spend_categories:
-                    spend_categories.remove('New_Category')
-                    spend_categories.append(selected_category)
-                    user_bills['category'] = selected_category
-                    message = bot.send_message(chat_id, 'How much did you spend on {}? \n(Enter numeric values only)'.format(str(selected_category)))
-                    bot.register_next_step_handler(message, post_amount_input)
-                else:
-                    msg = bot.send_message(chat_id, 'Invalid', reply_markup=types.ReplyKeyboardRemove())
-                    raise Exception("Sorry I don't recognise this category \"{}\"!".format(selected_category))
-            elif str(selected_category) == 'Others (Please Specify)':
-                spend_categories.append('New_Category')
-                message = bot.send_message(chat_id, 'Please type new category.')
-                bot.register_next_step_handler(message, post_category_selection)
-            else:
+        chat_id = update.effective_chat.id
+        selected_category = update.effective_message.text
+        print(selected_category)
+        # print(update.effective_message)
+        if not selected_category in spend_categories:
+            if 'New_Category' in spend_categories:
+                spend_categories.remove('New_Category')
+                spend_categories.append(selected_category)
                 user_bills['category'] = selected_category
                 message = bot.send_message(chat_id, 'How much did you spend on {}? \n(Enter numeric values only)'.format(str(selected_category)))
-                # print('message:', message)
                 bot.register_next_step_handler(message, post_amount_input)
-                # print(post_amount_input)
-        except Exception as e:
-            bot.reply_to(message, 'Oh no! ' + str(e))
-            display_text = ""
-            for c in commands:  # generate help text out of the commands dictionary defined at the top
-                display_text += "/" + c + ": "
-                display_text += commands[c] + "\n"
-            bot.send_message(chat_id, 'Please select a menu option from below:')
-            bot.send_message(chat_id, display_text)
+            else:
+                msg = bot.send_message(chat_id, 'Invalid', reply_markup=types.ReplyKeyboardRemove())
+                raise Exception("Sorry I don't recognise this category \"{}\"!".format(selected_category))
+        elif str(selected_category) == 'Others (Please Specify)':
+            spend_categories.append('New_Category')
+            message = bot.send_message(chat_id, 'Please type new category.')
+            bot.register_next_step_handler(message, post_category_selection)
+        else:
+            user_bills['category'] = selected_category
+            message = bot.send_message(chat_id, 'How much did you spend on {}? \n(Enter numeric values only)'.format(str(selected_category)))
+            # print('message:', message)
+            bot.register_next_step_handler(message, post_amount_input)
+            # print(post_amount_input)
 
 def post_amount_input(message):
     # print(message.text)
