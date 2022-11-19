@@ -70,20 +70,6 @@ telebot.logger.setLevel(logging.INFO)
 # 			# print("{} name: {} chat_id: {} message: {}".format(str(datetime.now()),str(req.chat.first_name),str(req.chat.id)))
 
 # bot.set_update_listener(listener)
-
-
-#defines how the /new command has to be handled/processed
-@bot.message_handler(commands=['add'])
-def command_add(message):
-    chat_id = message.chat.id
-    user_bills['user_telegram_id'] = chat_id
-    markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
-    markup.row_width = 2
-    for c in spend_categories:
-        markup.add(c)
-    msg = bot.reply_to(message, 'Select Category', reply_markup=markup)
-    # print('category', msg)
-    bot.register_next_step_handler(msg, post_category_selection)
 	
 	
 @bot.message_handler(commands=['search'])
