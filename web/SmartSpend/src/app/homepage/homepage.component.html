@@ -6,5 +6,6 @@
       <input matInput #message maxlength="256" placeholder="Ex. I need help with...">
     </mat-form-field>
   </form>
+  <div *ngFor="let ex of expenseData">{{ex.category}} - {{ex.cost}} - {{ex.timestamp}}</div>
 
 

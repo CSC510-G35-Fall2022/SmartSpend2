@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ExpenseComponent } from '../expense/expense.component';
+import { ExpenseService } from '../expense/expense.service';
 
 @Component({
   selector: 'app-history',
@@ -8,8 +9,15 @@ import { ExpenseComponent } from '../expense/expense.component';
 })
 export class HistoryComponent {
   expenses!: ExpenseComponent[]
+  constructor(public expenseService: ExpenseService) {}
 
-  
+  ngOnInit(): void {
+    this.expenseService.getExpenses();
+    console.log(this.expenseService.expenseData);
+    
+  }
+
+
 
 
 }

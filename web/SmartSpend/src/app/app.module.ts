@@ -21,9 +21,10 @@ import { HomepageComponent } from './homepage/homepage.component';
 import {MatCardModule} from '@angular/material/card';
 import { CategoryLimitsComponent } from './category-limits/category-limits.component';
 import { ExpenseComponent } from './expense/expense.component';
+import { ExpenseService } from './expense/expense.service';
 
 @NgModule({
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
   declarations: [AppComponent, HeaderComponent, HistoryComponent, HomepageComponent, CategoryLimitsComponent, ExpenseComponent],
   imports: [
     BrowserModule,
@@ -39,7 +40,7 @@ import { ExpenseComponent } from './expense/expense.component';
 MatCardModule,
     BrowserAnimationsModule,
   ],
-  providers: [],
+  providers: [ExpenseService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

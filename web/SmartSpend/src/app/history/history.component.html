@@ -1,2 +1,2 @@
 <div class="text-center text-2xl ">Here is all your expense history</div>
-<app-expense *ngFor="let ex of expenses"></app-expense>
+<app-expense class="flex-col gap-10" *ngFor="let ex of expenseService.expenseData" [category]="ex.category" [cost]="ex.cost" [timestamp]="ex.timestamp"></app-expense>

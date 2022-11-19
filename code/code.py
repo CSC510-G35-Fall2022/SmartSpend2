@@ -335,12 +335,14 @@ def validate_entered_amount(amount_entered):
 def show_history(message):
     try:
         user_history = db.user_bills.find({'user_telegram_id' : message.chat.id})
+        print(user_history)
         
         chat_id = message.chat.id
         if user_history is None:
             raise Exception("Sorry! No spending records found!")
         spend_total_str = "Here is your spending history : \n EXPENSE NUMBER |    DATE AND TIME   | CATEGORY | AMOUNT |\n-----------------------------------------------------------------------\n"
         for rec in user_history:
+            print(rec)
             spend_total_str += '\n{:20s} {:20s} {:20s} {:20s}\n'.format(str(rec['number']), str(rec['timestamp'].strftime(timestamp_format)),  str(rec['category']),  str(rec['cost']))
             if 'shared_with' in rec.keys():
                 spend_total_str += 'Shared With:'
@@ -724,8 +726,9 @@ async def main():
     try:
         bot.polling(none_stop=True)
     except Exception as e:
+        print(e)
         time.sleep(3)
-        # print(e)
+       
 
 if __name__ == '__main__':
     asyncio.run(main())

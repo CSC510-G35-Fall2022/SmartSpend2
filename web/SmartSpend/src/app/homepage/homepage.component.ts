@@ -12,6 +12,7 @@ export class HomepageComponent {
   }
   serverData!: JSON;
   employeeData!: JSON;
+  expenseData:any;
   
   ngOnInit():void {
     this.sayHi();
@@ -19,8 +20,12 @@ export class HomepageComponent {
 
   sayHi() {
     this.httpClient.get('http://127.0.0.1:5002/').subscribe(data => {
-      this.serverData = data as JSON;
-      console.log(this.serverData);
+      this.expenseData = data;
+      
+      // this.expenseData = data as JSON;
+      // console.log(this.expenseData);
+
+
     })
   }
 
