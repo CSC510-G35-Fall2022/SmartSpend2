@@ -696,6 +696,8 @@ def post_settle_selection(message,record):
 
 async def main():
     try:
+        updater = Updater(api_token)
+        dispatcher = updater.dispatcher
 
         main_conversation = ConversationHandler(
         entry_points=[
@@ -705,8 +707,10 @@ async def main():
         fallbacks=[]
     )
 
-        bot.add_handler(main_conversation)
-        bot.polling(none_stop=True)
+        dispatcher.add_handler(main_conversation)
+
+        updater.start_polling()
+        updater.idle()
     except Exception as e:
         print(str(e))
         time.sleep(3)
