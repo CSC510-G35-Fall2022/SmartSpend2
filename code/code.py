@@ -26,7 +26,8 @@ from all_commands.add import command_add
 
 from telegram.ext import (Updater,
                           CommandHandler,
-                          ConversationHandler)
+                          ConversationHandler,
+                          MessageHandler)
 
 api_token = os.getenv('TELEGRAM_BOT_TOKEN')
 api_id = os.getenv('TELEGRAM_API_ID')
@@ -548,7 +549,9 @@ async def main():
             CommandHandler('add', command_add),
             CommandHandler('edit', edit1),
         ],
-        states={},
+        states={
+            # CAT:[MessageHandler(filters=regex('Food'), command_add]
+        },
         fallbacks=[]
     )
 

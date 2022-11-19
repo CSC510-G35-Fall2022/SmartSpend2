@@ -14,6 +14,7 @@ import os
 from dotenv import load_dotenv
 from tabulate import tabulate
 load_dotenv()
+from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
 
 from telegram.ext import CallbackContext
 from telegram import Update
@@ -55,15 +56,18 @@ commands = {
 def command_add(update: Update, context: CallbackContext):
     chat_id = update.effective_message.chat.id
     user_bills['user_telegram_id'] = chat_id
-    markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
-    markup.row_width = 2
+    # markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
+    # markup.row_width = 2
+    reply_keyboard = []
     for c in spend_categories:
-        markup.add(c)
-        print(c)
+        reply_keyboard.append([c])
+    # reply_keyboard.append(tmp)
     print(update.effective_message)
-    msg = bot.send_message(chat_id=update.effective_chat.id, text='Select Category', reply_to_message_id=update.message.message_id, reply_markup=markup)
-    # print('category', msg)
-    bot.register_next_step_handler(msg, post_category_selection(update))
+    msg = update.message.reply_text(text="Select Category", reply_markup=ReplyKeyboardMarkup(
+            reply_keyboard, one_time_keyboard=True
+        ))
+    print('category', msg)
+    # bot.register_next_step_handler(msg, post_category_selection(update))
 
 def post_category_selection(update):
         # print(message.text)
