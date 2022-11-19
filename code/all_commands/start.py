@@ -13,6 +13,9 @@ from dotenv import load_dotenv
 from tabulate import tabulate
 load_dotenv()
 
+from telegram.ext import CallbackContext
+from telegram import Update
+
 api_token = os.getenv('TELEGRAM_BOT_TOKEN')
 
 commands = {
@@ -32,9 +35,9 @@ bot = telebot.TeleBot(api_token)
 telebot.logger.setLevel(logging.INFO)
 
 #defines how the /start and /help commands have to be handled/processed
-# @bot.message_handler(commands=['start', 'menu'])
-def start_and_menu_command(m):
-    chat_id = m.chat.id
+@bot.message_handler(commands=['start', 'menu'])
+def start_and_menu_command(update: Update, context: CallbackContext):
+    chat_id = update.effective_chat.id
     # print(cluster)
    
     text_intro = "Welcome to SmartSpend - a simple solution to spend money smartly on your expenses! \nHere is a list of available commands, please enter a command of your choice so that I can assist you further: \n\n"

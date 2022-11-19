@@ -17,6 +17,7 @@ from dotenv import load_dotenv
 import argparse
 import Scraped_data
 import formatter
+from threading import Thread
 from tabulate import tabulate
 load_dotenv()
 from all_commands.start import start_and_menu_command
@@ -691,7 +692,6 @@ def post_settle_selection(message,record):
         
     else:
         bot.send_message(chat_id, "You did not select any expense to settle. ")
-  
 
 
 async def main():
@@ -709,8 +709,11 @@ async def main():
 
         dispatcher.add_handler(main_conversation)
 
-        updater.start_polling()
+        updater.start_polling(drop_pending_updates=True)
+        print("started")
+        
         updater.idle()
+        
     except Exception as e:
         print(str(e))
         time.sleep(3)
