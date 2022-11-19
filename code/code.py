@@ -579,7 +579,25 @@ def display_total(message):
 #handles "/delete" command
 @bot.message_handler(commands=['delete'])
 def command_delete(message):
-    db.user_bills.delete_many({'user_telegram_id': message.chat.id})
+
+    markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
+    markup.row_width = 2
+    options = ["Delete all", "Delete a specific transaction"]
+    for mode in options:
+        markup.add(mode)
+    # db.user_bills.delete_many({'user_telegram_id': message.chat.id})
+    msg = bot.send_message(message.chat.id, 'Would you like to delete all data or a specific expense?', reply_markup=markup)
+    print(msg)
+    if (msg.equals(options[0])):
+        print('delete all')
+        db.user_bills.delete_many({'user_telegram_id': message.chat.id})
+    elif (msg.equals(options[1])):
+        print('delete one')
+        num = bot.send_message(message.chat.id, "which transaction number would you like to delete")
+        user_history = db.user_bills.find({'user_telegram_id' : message.chat.id, 'number': 2})
+
+    db.user_bills.delete_one({'number': 2 })
+
     bot.send_message(message.chat.id, 'All data deleted.')
 
 @bot.message_handler(commands=['limit'])
