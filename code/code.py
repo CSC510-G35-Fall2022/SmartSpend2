@@ -19,6 +19,10 @@ import Scraped_data
 import formatter
 from tabulate import tabulate
 load_dotenv()
+from all_commands.start import start_and_menu_command
+from telegram.ext import (Updater,
+                          CommandHandler,
+                          ConversationHandler)
 
 api_token = os.getenv('TELEGRAM_BOT_TOKEN')
 api_id = os.getenv('TELEGRAM_API_ID')
@@ -65,18 +69,6 @@ telebot.logger.setLevel(logging.INFO)
 
 # bot.set_update_listener(listener)
 
-#defines how the /start and /help commands have to be handled/processed
-@bot.message_handler(commands=['start', 'menu'])
-def start_and_menu_command(m):
-    chat_id = m.chat.id
-    # print(cluster)
-   
-    text_intro = "Welcome to SmartSpend - a simple solution to spend money smartly on your expenses! \nHere is a list of available commands, please enter a command of your choice so that I can assist you further: \n\n"
-    for c in commands:  # generate help text out of the commands dictionary defined at the top
-        text_intro += "/" + c + ": "
-        text_intro += commands[c] + "\n\n"
-    bot.send_message(chat_id, text_intro)
-    return True
 
 #defines how the /new command has to be handled/processed
 @bot.message_handler(commands=['add'])
@@ -704,8 +696,19 @@ def post_settle_selection(message,record):
 
 async def main():
     try:
+
+        main_conversation = ConversationHandler(
+        entry_points=[
+            CommandHandler('start', start_and_menu_command)
+        ],
+        states={},
+        fallbacks=[]
+    )
+
+        bot.add_handler(main_conversation)
         bot.polling(none_stop=True)
     except Exception as e:
+        print(str(e))
         time.sleep(3)
         # print(e)
 
