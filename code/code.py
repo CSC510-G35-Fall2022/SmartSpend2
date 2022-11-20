@@ -537,7 +537,6 @@ def post_settle_selection(message,record):
     else:
         bot.send_message(chat_id, "You did not select any expense to settle. ")
 
-
 async def main():
     try:
         updater = Updater(api_token, use_context=True)
@@ -548,11 +547,10 @@ async def main():
             CommandHandler('start', start_and_menu_command),
             CommandHandler('menu', start_and_menu_command),
             CommandHandler('add', command_add),
-            CallbackQueryHandler(post_category_selection),
+            CallbackQueryHandler(post_category_selection, pattern='^Food'),
             CommandHandler('edit', edit1),
         ],
         states={
-            # CAT:[MessageHandler(filters=regex('Food'), command_add]
         },
         fallbacks=[]
     )

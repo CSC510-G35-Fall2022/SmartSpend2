@@ -45,20 +45,14 @@ telebot.logger.setLevel(logging.INFO)
 def command_add(update: Update, context: CallbackContext):
     chat_id = update.effective_message.chat.id
     user_bills['user_telegram_id'] = chat_id
-    # markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
-    # markup.row_width = 2
     reply_keyboard = []
     for c in spend_categories:
         reply_keyboard.append([InlineKeyboardButton(text=c, callback_data=c)])
-    # reply_keyboard.append(tmp)
     print(update.effective_message)
     update.message.reply_text(text="Select Category", reply_markup=InlineKeyboardMarkup(reply_keyboard))
 
-    # print('category', update.callback_query.data)
-    # bot.register_next_step_handler(msg, post_category_selection(update, context))
 
-def post_category_selection(self, update: Update, context: CallbackContext):
-        # print(message.text)
+def post_category_selection(update: Update, context: CallbackContext):
         query = update.callback_query
         query.answer()
         chat_id = update.effective_chat.id
