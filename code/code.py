@@ -22,12 +22,13 @@ from tabulate import tabulate
 load_dotenv()
 from all_commands.start import start_and_menu_command
 from all_commands.edit import edit1
-from all_commands.add import command_add
+from all_commands.add import (command_add, post_category_selection)
 
 from telegram.ext import (Updater,
                           CommandHandler,
                           ConversationHandler,
-                          MessageHandler)
+                          CallbackQueryHandler)
+
 
 api_token = os.getenv('TELEGRAM_BOT_TOKEN')
 api_id = os.getenv('TELEGRAM_API_ID')
@@ -539,7 +540,7 @@ def post_settle_selection(message,record):
 
 async def main():
     try:
-        updater = Updater(api_token)
+        updater = Updater(api_token, use_context=True)
         dispatcher = updater.dispatcher
 
         main_conversation = ConversationHandler(
@@ -547,6 +548,7 @@ async def main():
             CommandHandler('start', start_and_menu_command),
             CommandHandler('menu', start_and_menu_command),
             CommandHandler('add', command_add),
+            CallbackQueryHandler(post_category_selection),
             CommandHandler('edit', edit1),
         ],
         states={
@@ -554,9 +556,7 @@ async def main():
         },
         fallbacks=[]
     )
-
         dispatcher.add_handler(main_conversation)
-
         updater.start_polling(drop_pending_updates=True)
         print("started")
         

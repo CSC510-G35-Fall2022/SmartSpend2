@@ -14,7 +14,7 @@ import os
 from dotenv import load_dotenv
 from tabulate import tabulate
 load_dotenv()
-from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, KeyboardButton, ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
 
 from telegram.ext import CallbackContext
 from telegram import Update
@@ -40,17 +40,6 @@ limit_categories = ['daily', 'monthly', 'yearly', 'View Limits']
 bot = telebot.TeleBot(api_token)
 telebot.logger.setLevel(logging.INFO)
 
-commands = {
-    'menu': 'Display this menu',
-    'add': 'Record/Add a new spending',
-    'display': 'Show sum of expenditure for the current day/month',
-    'history': 'Display spending history',
-    'delete': 'Clear/Erase all your records',
-    'edit': 'Edit/Change spending details',
-    'limit': 'Add daily/monthly/yearly limits for spending',
-    'search':'Search a product and comapre prices',
-    'settle': 'Settle an expense shared with you'
-}
 
 @bot.message_handler(commands=['add'])
 def command_add(update: Update, context: CallbackContext):
@@ -60,19 +49,20 @@ def command_add(update: Update, context: CallbackContext):
     # markup.row_width = 2
     reply_keyboard = []
     for c in spend_categories:
-        reply_keyboard.append([c])
+        reply_keyboard.append([InlineKeyboardButton(text=c, callback_data=c)])
     # reply_keyboard.append(tmp)
     print(update.effective_message)
-    msg = update.message.reply_text(text="Select Category", reply_markup=ReplyKeyboardMarkup(
-            reply_keyboard, one_time_keyboard=True
-        ))
-    print('category', msg)
-    # bot.register_next_step_handler(msg, post_category_selection(update))
+    update.message.reply_text(text="Select Category", reply_markup=InlineKeyboardMarkup(reply_keyboard))
 
-def post_category_selection(update):
+    # print('category', update.callback_query.data)
+    # bot.register_next_step_handler(msg, post_category_selection(update, context))
+
+def post_category_selection(self, update: Update, context: CallbackContext):
         # print(message.text)
+        query = update.callback_query
+        query.answer()
         chat_id = update.effective_chat.id
-        selected_category = update.effective_message.text
+        selected_category = update.callback_query.data
         print(selected_category)
         # print(update.effective_message)
         if not selected_category in spend_categories:
