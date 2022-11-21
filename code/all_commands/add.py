@@ -49,10 +49,11 @@ def command_add(update: Update, context: CallbackContext):
     for c in spend_categories:
         reply_keyboard.append([InlineKeyboardButton(text=c, callback_data=c)])
     print(update.effective_message)
-    update.message.reply_text(text="Select Category", reply_markup=InlineKeyboardMarkup(reply_keyboard))
+    update.message.reply_text(text="Select Category", reply_markup=InlineKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
 
 
 def post_category_selection(update: Update, context: CallbackContext):
+        update.effective_message.delete()
         query = update.callback_query
         query.answer()
         chat_id = update.effective_chat.id

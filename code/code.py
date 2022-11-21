@@ -125,40 +125,7 @@ async def find_user_by_username(username):
                 return user
     except Exception as e:
         print("Failed to search user, details: ", e)
-                    
-def post_category_selection(message):
-        # print(message.text)
-        try:
-            chat_id = message.chat.id
-            selected_category = message.text
-            if not selected_category in spend_categories:
-                if 'New_Category' in spend_categories:
-                    spend_categories.remove('New_Category')
-                    spend_categories.append(selected_category)
-                    user_bills['category'] = selected_category
-                    message = bot.send_message(chat_id, 'How much did you spend on {}? \n(Enter numeric values only)'.format(str(selected_category)))
-                    bot.register_next_step_handler(message, post_amount_input)
-                else:
-                    msg = bot.send_message(chat_id, 'Invalid', reply_markup=types.ReplyKeyboardRemove())
-                    raise Exception("Sorry I don't recognise this category \"{}\"!".format(selected_category))
-            elif str(selected_category) == 'Others (Please Specify)':
-                spend_categories.append('New_Category')
-                message = bot.send_message(chat_id, 'Please type new category.')
-                bot.register_next_step_handler(message, post_category_selection)
-            else:
-                user_bills['category'] = selected_category
-                message = bot.send_message(chat_id, 'How much did you spend on {}? \n(Enter numeric values only)'.format(str(selected_category)))
-                # print('message:', message)
-                bot.register_next_step_handler(message, post_amount_input)
-                # print(post_amount_input)
-        except Exception as e:
-            bot.reply_to(message, 'Oh no! ' + str(e))
-            display_text = ""
-            for c in commands:  # generate help text out of the commands dictionary defined at the top
-                display_text += "/" + c + ": "
-                display_text += commands[c] + "\n"
-            bot.send_message(chat_id, 'Please select a menu option from below:')
-            bot.send_message(chat_id, display_text)
+    
 
 def post_amount_input(message):
     # print(message.text)
