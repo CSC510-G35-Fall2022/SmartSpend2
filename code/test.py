@@ -28,6 +28,12 @@ app = Flask(__name__)
 api = Api(app)
 CORS(app)
 
+
+@app.route('/id/<id>')
+def get_records_by_id(id):
+   return dumps(list(db['user_bills'].find({'user_telegram_id': int(id)})))
+
+
 @app.route("/")
 def hello():
     # return jsonify({'text':'Hello World!'})
