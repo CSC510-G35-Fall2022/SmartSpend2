@@ -22,12 +22,13 @@ from tabulate import tabulate
 load_dotenv()
 from all_commands.start import start_and_menu_command
 from all_commands.edit import edit1
-from all_commands.add import (command_add, post_category_selection)
+from all_commands.add import (command_add, post_category_selection, post_amount_input)
 
 from telegram.ext import (Updater,
                           CommandHandler,
                           ConversationHandler,
-                          CallbackQueryHandler)
+                          CallbackQueryHandler,
+                          RegexHandler)
 
 
 api_token = os.getenv('TELEGRAM_BOT_TOKEN')
@@ -126,78 +127,6 @@ async def find_user_by_username(username):
     except Exception as e:
         print("Failed to search user, details: ", e)
     
-
-def post_amount_input(message):
-    # print(message.text)
-    # try:
-    chat_id = message.chat.id
-    amount_entered = message.text
-    amount_value = validate_entered_amount(amount_entered)  # validate
-    if amount_value == 0:  # cannot be $0 spending
-        raise Exception("Spent amount has to be a non-zero number.")
-
-    user_bills['cost'] = float(amount_value)
-    # print(user_bills)
-    # print(user_bills['cost'])
-
-    user_bills['timestamp'] = datetime.now()
-    # print(user_bills['timestamp'])
-    # print(count)
-    # print(user_çcbills['number'])
-
-    user_history = db.user_bills.find({'user_telegram_id' : message.chat.id})
-    maximum = 0
-    for rec in user_history:
-        maximum = max(maximum, rec['number'])
-        # print(maximum)
-    # print('done')
-
-    # global count_
-    user_bills['number'] = maximum+1
-    # count_ += 1
-
-    get_sharing_details(message)
-
-    # except Exception as e:
-        # bot.reply_to(message, 'Oh no. ' + str(e) + str(e.__cause__) + str(e.__context__))
-
-def get_sharing_details(message):
-    markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
-    markup.row_width = 2
-    markup.add("Yes")
-    markup.add("No")
-    bot.send_message(message.chat.id, 'Do you want to split this bill with any other users?', reply_markup=markup)
-    bot.register_next_step_handler(message, post_sharing_selection)
-
-def post_sharing_selection(message):
-    chat_id = message.chat.id
-    response = message.text
-
-    if response == "Yes":
-        # handle multi-user scenario
-        bot.send_message(message.chat.id, 'Enter the username of the other user: ')
-        bot.register_next_step_handler(message, handle_user_id_input_for_sharing)
-
-    else:
-        # handle direct commit scenario
-        add_bill_to_database(message)
-
-def handle_user_id_input_for_sharing(message):
-    chat_id = message.chat.id
-    username = str(message.text)
-
-    bot.send_message(chat_id, "User {} will be sent an update about the split".format(username))
-
-    if 'shared_with' in user_bills:
-        user_bills['shared_with'].append(username)
-    else:
-        user_bills['shared_with'] = [username]
-
-    get_sharing_details(message)
-
-    # TODO: Add message queue to handle multiple requests
-    asyncio.run(send_update_to_user_about_expense(message, user_bills))
-
 
 async def send_update_to_user_about_expense(message, user_bills):
     try:
@@ -338,7 +267,7 @@ def display_total(message):
         display_option = message.text
 
         if not display_option in spend_display_option:
-            raise Exception("Sorry I can't show spendings for \"{}\"!".format(display_option))
+            raise Exception("Sorry I can't show spending for \"{}\"!".format(display_option))
 
         if display_option == 'Day':
             start_timestamp = datetime.combine(date.today(), datetime.min.time())
@@ -372,9 +301,9 @@ def display_total(message):
 
         spending_text = ""
         if len(total_text) == 0:
-            spending_text = "You have no spendings for {}!".format(display_option)
+            spending_text = "You have no spending for {}!".format(display_option)
         else:
-            spending_text = "Here are your {} total spendings:\n | CATEGORIES | AMOUNT |\n----------------------------------------\n{}".format(display_option.lower(), total_text)
+            spending_text = "Here are your {} total spending:\n | CATEGORIES | AMOUNT |\n----------------------------------------\n{}".format(display_option.lower(), total_text)
 
         bot.send_message(chat_id, spending_text)
     except Exception as e:
@@ -514,8 +443,10 @@ async def main():
             CommandHandler('start', start_and_menu_command),
             CommandHandler('menu', start_and_menu_command),
             CommandHandler('add', command_add),
-            CallbackQueryHandler(post_category_selection, pattern='^Food'),
+            CallbackQueryHandler(post_category_selection, pattern='^Food|Groceries|Utilities|Transport|Shopping|Miscellaneous|Others \(Please Specify\)|New_Category'),
             CommandHandler('edit', edit1),
+            RegexHandler('^\$[0-9]+(\.[0-9][0-9])?$', post_amount_input),
+            RegexHandler('^\"\"', post_category_selection)
         ],
         states={
         },

@@ -65,27 +65,23 @@ def post_category_selection(update: Update, context: CallbackContext):
                 spend_categories.remove('New_Category')
                 spend_categories.append(selected_category)
                 user_bills['category'] = selected_category
-                message = bot.send_message(chat_id, 'How much did you spend on {}? \n(Enter numeric values only)'.format(str(selected_category)))
-                bot.register_next_step_handler(message, post_amount_input)
+                bot.send_message(chat_id, 'How much did you spend on {}? \n(Enter numeric values only with $ sign - Example: $10.00)'.format(str(selected_category)))
             else:
-                msg = bot.send_message(chat_id, 'Invalid', reply_markup=types.ReplyKeyboardRemove())
-                raise Exception("Sorry I don't recognise this category \"{}\"!".format(selected_category))
+                bot.send_message(chat_id, 'Invalid', reply_markup=types.ReplyKeyboardRemove())
+                raise Exception("Sorry I don't recognize this category \"{}\"!".format(selected_category))
         elif str(selected_category) == 'Others (Please Specify)':
             spend_categories.append('New_Category')
-            message = bot.send_message(chat_id, 'Please type new category.')
-            bot.register_next_step_handler(message, post_category_selection)
+            bot.send_message(chat_id, 'Please type new category in quotes. Example: "Category"')
         else:
             user_bills['category'] = selected_category
-            message = bot.send_message(chat_id, 'How much did you spend on {}? \n(Enter numeric values only)'.format(str(selected_category)))
-            # print('message:', message)
-            bot.register_next_step_handler(message, post_amount_input)
-            # print(post_amount_input)
+            bot.send_message(chat_id, 'How much did you spend on {}? \n(Enter numeric values only with $ sign - Example: $10.00)'.format(str(selected_category)))
 
-def post_amount_input(message):
-    # print(message.text)
-    # try:
-    chat_id = message.chat.id
-    amount_entered = message.text
+
+def post_amount_input(update, context):
+
+    chat_id = update.effective_chat.id
+    amount_entered = update.message.text[1:]
+    print(amount_entered)
     amount_value = validate_entered_amount(amount_entered)  # validate
     if amount_value == 0:  # cannot be $0 spending
         raise Exception("Spent amount has to be a non-zero number.")
@@ -93,19 +89,13 @@ def post_amount_input(message):
     user_bills['cost'] = float(amount_value)
     user_bills['timestamp'] = datetime.now()
 
-
-    user_history = db.user_bills.find({'user_telegram_id' : message.chat.id})
+    user_history = db.user_bills.find({'user_telegram_id' : chat_id})
     maximum = 0
     for rec in user_history:
         maximum = max(maximum, rec['number'])
-        # print(maximum)
-    # print('done')
 
-    # global count_
     user_bills['number'] = maximum+1
-    # count_ += 1
 
-    get_sharing_details(message)
 
 def get_sharing_details(message):
     markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
