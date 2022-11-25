@@ -37,6 +37,7 @@ spend_categories = ['Food', 'Groceries', 'Utilities', 'Transport', 'Shopping', '
 spend_display_option = ['Day', 'Month', 'All']
 timestamp_format = '%b %d %Y %I:%M%p'
 limit_categories = ['daily', 'monthly', 'yearly', 'View Limits']
+delete_options = ['Delete All', 'Delete a specific record']
 
 #set of implemented commands and their description
 commands = {
@@ -88,7 +89,7 @@ def command_add(message):
     for c in spend_categories:
         markup.add(c)
     msg = bot.reply_to(message, 'Select Category', reply_markup=markup)
-    # print('category', msg)
+    # print('category', message.text)
     bot.register_next_step_handler(msg, post_category_selection)
 	
 	
@@ -584,23 +585,78 @@ def command_delete(message):
 
     markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
     markup.row_width = 2
-    options = ["Delete all", "Delete a specific transaction"]
-    for mode in options:
-        markup.add(mode)
+    for c in delete_options:
+        markup.add(c)
+    # markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
+    # markup.row_width = 2
+    # options = ["Delete all", "Delete a specific transaction"]
+    # for mode in options:
+    #     markup.add(mode)
     # db.user_bills.delete_many({'user_telegram_id': message.chat.id})
-    msg = bot.send_message(message.chat.id, 'Would you like to delete all data or a specific expense?', reply_markup=markup)
-    print(msg)
-    if (msg.equals(options[0])):
-        print('delete all')
-        db.user_bills.delete_many({'user_telegram_id': message.chat.id})
-    elif (msg.equals(options[1])):
-        print('delete one')
-        num = bot.send_message(message.chat.id, "which transaction number would you like to delete")
-        user_history = db.user_bills.find({'user_telegram_id' : message.chat.id, 'number': 2})
+    msg = bot.reply_to(message, 'Would you like to delete all data or a specific expense?', reply_markup=markup)
+
+    bot.register_next_step_handler(msg, post_delete_selection)
+
+    # # msg = bot.send_message(message.chat.id, 'Would you like to delete all data or a specific expense?', reply_markup=markup)
+    # print("Message: "  + msg.text)
+    # if (msg.text ==delete_options[0]):
+    #     print('delete all')
+
+    #     # db.user_bills.delete_many({'user_telegram_id': message.chat.id})
+    #     db.user_bills.delete_many({})
+    #     bot.send_message(message.chat.id, 'All data deleted.')
+    # elif (msg == delete_options[1]):
+    #     print('delete one')
+    #     num = bot.send_message(message.chat.id, "which transaction number would you like to delete")
+    #     user_history = db.user_bills.find({'user_telegram_id' : message.chat.id, 'number': 2})
 
     db.user_bills.delete_one({'number': 2 })
 
-    bot.send_message(message.chat.id, 'All data deleted.')
+def post_delete_selection(message):
+        # print(message.text)
+        try:
+            chat_id = message.chat.id
+            selected_delete_option = message.text
+
+            if (selected_delete_option ==delete_options[0]):
+                print('delete all')
+
+                db.user_bills.delete_many({'user_telegram_id': message.chat.id})
+                # db.user_bills.delete_many({})
+                bot.send_message(message.chat.id, 'All data deleted.')
+            elif (selected_delete_option == delete_options[1]):
+                print('delete one')
+                num = bot.send_message(message.chat.id, "which transaction number would you like to delete")
+                user_history = db.user_bills.find({'user_telegram_id' : message.chat.id, 'number': 2})
+            # if not selected_delete_option in delete_options:
+            #     if 'New_Category' in spend_categories:
+            #         spend_categories.remove('New_Category')
+            #         spend_categories.append(selected_category)
+            #         user_bills['category'] = selected_category
+            #         message = bot.send_message(chat_id, 'How much did you spend on {}? \n(Enter numeric values only)'.format(str(selected_category)))
+            #         bot.register_next_step_handler(message, post_amount_input)
+            #     else:
+            #         msg = bot.send_message(chat_id, 'Invalid', reply_markup=types.ReplyKeyboardRemove())
+            #         raise Exception("Sorry I don't recognise this category \"{}\"!".format(selected_category))
+            # elif str(selected_category) == 'Others (Please Specify)':
+            #     spend_categories.append('New_Category')
+            #     message = bot.send_message(chat_id, 'Please type new category.')
+            #     bot.register_next_step_handler(message, post_category_selection)
+            # else:
+            #     user_bills['category'] = selected_category
+            #     message = bot.send_message(chat_id, 'How much did you spend on {}? \n(Enter numeric values only)'.format(str(selected_category)))
+            #     # print('message:', message)
+            #     bot.register_next_step_handler(message, post_amount_input)
+            #     # print(post_amount_input)
+        except Exception as e:
+            bot.reply_to(message, 'Oh no! ' + str(e))
+            display_text = ""
+            for c in commands:  # generate help text out of the commands dictionary defined at the top
+                display_text += "/" + c + ": "
+                display_text += commands[c] + "\n"
+            bot.send_message(chat_id, 'Please select a menu option from below:')
+            bot.send_message(chat_id, display_text)
+
 
 @bot.message_handler(commands=['limit'])
 def command_limit(message):
@@ -611,7 +667,7 @@ def command_limit(message):
     for c in limit_categories:
         markup.add(c)
     msg = bot.reply_to(message, 'Select Category', reply_markup=markup)
-    # print('category', msg)
+    print('category', msg.text)
     bot.register_next_step_handler(msg, post_limit_category_selection)
 
 def post_limit_category_selection(message):

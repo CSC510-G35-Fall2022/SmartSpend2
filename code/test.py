@@ -12,6 +12,8 @@ from datetime import datetime, date, timedelta
 from telethon import TelegramClient
 from dotenv import load_dotenv
 from tabulate import tabulate
+from datetime import datetime
+
 from pymongo import MongoClient, ReturnDocument
 
 load_dotenv()
@@ -33,6 +35,15 @@ CORS(app)
 def get_records_by_id(id):
    return dumps(list(db['user_bills'].find({'user_telegram_id': int(id)})))
 
+@app.route('/tests', methods=['POST'])
+def my_test_endpoint():
+    print(request.get_json());
+    
+    date = datetime.now()
+    print(date)
+    db.user_bills.insert_one(request.get_json());
+    
+    return jsonify(request.get_json())
 
 @app.route("/")
 def hello():
@@ -58,19 +69,19 @@ def hello():
     return dumps(list(db['user_bills'].find({})))
     # return jsonify({'text':'Hello World!'})
 
-class Employees(Resource):
-    def get(self):
-        return {'employees': [{'id':1, 'name':'Balram'},{'id':2, 'name':'Tom'}]} 
+# class Employees(Resource):
+#     def get(self):
+#         return {'employees': [{'id':1, 'name':'Balram'},{'id':2, 'name':'Tom'}]} 
 
-class Employees_Name(Resource):
-    def get(self, employee_id):
-        print('Employee id:' + employee_id)
-        result = {'data': {'id':1, 'name':'Balram'}}
-        return jsonify(result)       
+# class Employees_Name(Resource):
+#     def get(self, employee_id):
+#         print('Employee id:' + employee_id)
+#         result = {'data': {'id':1, 'name':'Balram'}}
+#         return jsonify(result)       
 
 
-api.add_resource(Employees, '/employees') # Route_1
-api.add_resource(Employees_Name, '/employees/<employee_id>') # Route_3
+# api.add_resource(Employees, '/employees') # Route_1
+# api.add_resource(Employees_Name, '/employees/<employee_id>') # Route_3
 
 
 if __name__ == '__main__':
