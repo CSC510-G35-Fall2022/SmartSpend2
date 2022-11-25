@@ -157,7 +157,7 @@ def post_category_selection(message):
                     spend_categories.remove('New_Category')
                     spend_categories.append(selected_category)
                     user_bills['category'] = selected_category
-                    message = bot.send_message(chat_id, 'How much did you spend on {}? \n(Enter numeric values only)'.format(str(selected_category)))
+                    message = bot.send_message(chat_id, 'How much did you spend on {}? \n(Enter numeric values only Type Cancel to abort!)'.format(str(selected_category)))
                     bot.register_next_step_handler(message, post_amount_input)
                 else:
                     msg = bot.send_message(chat_id, 'Invalid', reply_markup=types.ReplyKeyboardRemove())
@@ -168,7 +168,7 @@ def post_category_selection(message):
                 bot.register_next_step_handler(message, post_category_selection)
             else:
                 user_bills['category'] = selected_category
-                message = bot.send_message(chat_id, 'How much did you spend on {}? \n(Enter numeric values only)'.format(str(selected_category)))
+                message = bot.send_message(chat_id, 'How much did you spend on {}? \n(Enter numeric values only or Type Cancel to abort!)'.format(str(selected_category)))
                 # print('message:', message)
                 bot.register_next_step_handler(message, post_amount_input)
                 # print(post_amount_input)
@@ -183,37 +183,45 @@ def post_category_selection(message):
 
 def post_amount_input(message):
     # print(message.text)
-    # try:
-    chat_id = message.chat.id
-    amount_entered = message.text
-    amount_value = validate_entered_amount(amount_entered)  # validate
-    if amount_value == 0:  # cannot be $0 spending
-        raise Exception("Spent amount has to be a non-zero number.")
+    try:
+	    chat_id = message.chat.id
+	    amount_entered = message.text
+	    if amount_entered=='Cancel':
+	    	raise Exception("Cancelling record!!")
+	    amount_value = validate_entered_amount(amount_entered)  # validate
+	    if amount_value == 0:  # cannot be $0 spending
+	        raise Exception("Spent amount has to be a non-zero number.")
 
-    user_bills['cost'] = float(amount_value)
-    # print(user_bills)
-    # print(user_bills['cost'])
+	    user_bills['cost'] = float(amount_value)
+	    # print(user_bills)
+	    # print(user_bills['cost'])
 
-    user_bills['timestamp'] = datetime.now()
-    # print(user_bills['timestamp'])
-    # print(count)
-    # print(user_çcbills['number'])
+	    user_bills['timestamp'] = datetime.now()
+	    # print(user_bills['timestamp'])
+	    # print(count)
+	    # print(user_çcbills['number'])
 
-    user_history = db.user_bills.find({'user_telegram_id' : message.chat.id})
-    maximum = 0
-    for rec in user_history:
-        maximum = max(maximum, rec['number'])
-        # print(maximum)
-    # print('done')
+	    user_history = db.user_bills.find({'user_telegram_id' : message.chat.id})
+	    maximum = 0
+	    for rec in user_history:
+	        maximum = max(maximum, rec['number'])
+	        # print(maximum)
+	    # print('done')
 
-    # global count_
-    user_bills['number'] = maximum+1
-    # count_ += 1
+	    # global count_
+	    user_bills['number'] = maximum+1
+	    # count_ += 1
 
-    get_sharing_details(message)
+	    get_sharing_details(message)
 
-    # except Exception as e:
-        # bot.reply_to(message, 'Oh no. ' + str(e) + str(e.__cause__) + str(e.__context__))
+    except Exception as e:
+        bot.reply_to(message,str(e))
+        display_text = ""
+        for c in commands:  # generate help text out of the commands dictionary defined at the top
+            display_text += "/" + c + ": "
+            display_text += commands[c] + "\n"
+        bot.send_message(chat_id, 'Please select a menu option from below:')
+        bot.send_message(chat_id, display_text)
 
 def get_sharing_details(message):
     markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
