@@ -6,6 +6,7 @@ import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatChipInputEvent} from '@angular/material/chips';
 import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
+import { ExpenseService } from './expense/expense.service';
 
 
 @Component({
@@ -22,13 +23,17 @@ export class AppComponent {
   // constructor(private http: HttpClient){}
   title = 'SmartSpend';
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient, public expenseService: ExpenseService) {
   }
   serverData!: JSON;
   employeeData!: JSON;
   
   
-
+  ngOnInit() {
+    // this.expenseService.getExpenses();
+    // console.log(this.expenseService.expenseData);
+    
+  }
   sayHi() {
     this.httpClient.get('http://127.0.0.1:5002/').subscribe(data => {
       this.serverData = data as JSON;
@@ -42,18 +47,5 @@ export class AppComponent {
       console.log(this.employeeData);
     })
   }
-  // public httpOptions = {
-  //   headers: new HttpHeaders({
-  //     'Access-Control-Allow-Origin': '*',
-  //     Authorization: 'authkey',
-  //     userid: '1'
-  //   })
-  // };
 
-  // getJournals() {
-  //   return this.http.get<any>(
-  //     'http://localhost:8080/Practice/api/v1/journals',
-  //     this.httpOptions
-  //   );
-  // }
 }

@@ -1,11 +1,15 @@
 <div class="flex-row p-4"><div class="text-center text-3xl">Welcome to SmartSpend</div></div>
 <div>Input your telegram Id</div>
-<form class="example-form">
+<form class="example-form" (ngSubmit)="inputId()">
     <mat-form-field class="example-full-width">
       <mat-label>Message</mat-label>
-      <input matInput #message maxlength="256" placeholder="Ex. I need help with...">
+      <input [(ngModel)]="userId" name="id" matInput #message maxlength="256" placeholder="Ex. I need help with...">
     </mat-form-field>
+    <button id="basic" type="button" mat-button type="submit">
+      Enter->
+    </button>
   </form>
-  <div *ngFor="let ex of expenseData">{{ex.category}} - {{ex.cost}} - {{ex.timestamp}}</div>
+
+  <!-- <div *ngFor="let ex of expenseData">{{ex.category}} - {{ex.cost}} - {{ex.timestamp}}</div> -->
 
 

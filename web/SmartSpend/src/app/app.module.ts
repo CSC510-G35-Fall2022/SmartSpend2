@@ -22,10 +22,15 @@ import {MatCardModule} from '@angular/material/card';
 import { CategoryLimitsComponent } from './category-limits/category-limits.component';
 import { ExpenseComponent } from './expense/expense.component';
 import { ExpenseService } from './expense/expense.service';
+import {MatButtonModule} from '@angular/material/button';
+import { ReactiveFormsModule } from '@angular/forms';
+import { AppService } from './app.service';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { AddExpensePageComponent } from './add-expense-page/add-expense-page.component';
 
 @NgModule({
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
-  declarations: [AppComponent, HeaderComponent, HistoryComponent, HomepageComponent, CategoryLimitsComponent, ExpenseComponent],
+  declarations: [AppComponent, HeaderComponent, HistoryComponent, HomepageComponent, CategoryLimitsComponent, ExpenseComponent, DashboardComponent, AddExpensePageComponent],
   imports: [
     BrowserModule,
     MatChipsModule,
@@ -36,11 +41,13 @@ import { ExpenseService } from './expense/expense.service';
     MatProgressBarModule,
     MatRadioModule,
     MatIconModule,
+    ReactiveFormsModule,
     FormsModule,
+    MatButtonModule,
 MatCardModule,
     BrowserAnimationsModule,
   ],
-  providers: [ExpenseService],
+  providers: [ExpenseService, AppService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
