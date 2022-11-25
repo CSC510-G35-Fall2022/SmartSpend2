@@ -248,7 +248,7 @@ def post_sharing_selection(message):
 
 	elif response == "Yes":
 	    # handle multi-user scenario
-	    bot.send_message(message.chat.id, 'Enter the username of the other user: ')
+	    bot.send_message(message.chat.id, 'Enter the username of the other user: or Type Cancel to abort!!')
 	    bot.register_next_step_handler(message, handle_user_id_input_for_sharing)
 
 	else:
@@ -258,6 +258,16 @@ def post_sharing_selection(message):
 def handle_user_id_input_for_sharing(message):
     chat_id = message.chat.id
     username = str(message.text)
+
+    if username == "Cancel":
+    	bot.send_message(message.chat.id, 'Cancelling Record!!')
+    	display_text = ""
+    	for c in commands:  # generate help text out of the commands dictionary defined at the top
+    		display_text += "/" + c + ": "
+    		display_text += commands[c] + "\n"
+    	bot.send_message(chat_id, 'Please select a menu option from below:')
+    	bot.send_message(chat_id, display_text)
+    	return
 
     bot.send_message(chat_id, "User {} will be sent an update about the split".format(username))
 
