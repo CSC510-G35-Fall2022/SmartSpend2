@@ -593,7 +593,7 @@ def command_delete(message):
     # for mode in options:
     #     markup.add(mode)
     # db.user_bills.delete_many({'user_telegram_id': message.chat.id})
-    msg = bot.reply_to(message, 'Would you like to delete all data or a specific expense?', reply_markup=markup)
+    msg = bot.send_message(message.chat.id, 'Would you like to delete all data or a specific expense?', reply_markup=markup)
 
     bot.register_next_step_handler(msg, post_delete_selection)
 
@@ -610,8 +610,6 @@ def command_delete(message):
     #     num = bot.send_message(message.chat.id, "which transaction number would you like to delete")
     #     user_history = db.user_bills.find({'user_telegram_id' : message.chat.id, 'number': 2})
 
-    db.user_bills.delete_one({'number': 2 })
-
 def post_delete_selection(message):
         # print(message.text)
         try:
@@ -627,27 +625,8 @@ def post_delete_selection(message):
             elif (selected_delete_option == delete_options[1]):
                 print('delete one')
                 num = bot.send_message(message.chat.id, "which transaction number would you like to delete")
+                bot.register_next_step_handler(num, delete_one_handler)
                 user_history = db.user_bills.find({'user_telegram_id' : message.chat.id, 'number': 2})
-            # if not selected_delete_option in delete_options:
-            #     if 'New_Category' in spend_categories:
-            #         spend_categories.remove('New_Category')
-            #         spend_categories.append(selected_category)
-            #         user_bills['category'] = selected_category
-            #         message = bot.send_message(chat_id, 'How much did you spend on {}? \n(Enter numeric values only)'.format(str(selected_category)))
-            #         bot.register_next_step_handler(message, post_amount_input)
-            #     else:
-            #         msg = bot.send_message(chat_id, 'Invalid', reply_markup=types.ReplyKeyboardRemove())
-            #         raise Exception("Sorry I don't recognise this category \"{}\"!".format(selected_category))
-            # elif str(selected_category) == 'Others (Please Specify)':
-            #     spend_categories.append('New_Category')
-            #     message = bot.send_message(chat_id, 'Please type new category.')
-            #     bot.register_next_step_handler(message, post_category_selection)
-            # else:
-            #     user_bills['category'] = selected_category
-            #     message = bot.send_message(chat_id, 'How much did you spend on {}? \n(Enter numeric values only)'.format(str(selected_category)))
-            #     # print('message:', message)
-            #     bot.register_next_step_handler(message, post_amount_input)
-            #     # print(post_amount_input)
         except Exception as e:
             bot.reply_to(message, 'Oh no! ' + str(e))
             display_text = ""
@@ -657,6 +636,29 @@ def post_delete_selection(message):
             bot.send_message(chat_id, 'Please select a menu option from below:')
             bot.send_message(chat_id, display_text)
 
+def delete_one_handler(message):
+    chat_id = message.chat.id
+    record_to_delete = message.text
+    print(record_to_delete)
+    try:
+        db.user_bills.delete_one({'number': int(record_to_delete)})
+        bot.send_message(message.chat.id, 'Deleted record successfully')
+    except Exception as e:
+        bot.reply_to(message, 'Oh no! ' + str(e))
+
+
+    # if selected_limit_category != 'View Limits' and selected_limit_category in limit_categories:
+    #     global limit_category
+    #     limit_category = selected_limit_category
+    #     message = bot.send_message(chat_id, 'How much limit do you want to set on a {} basis? \n(Enter numeric values only)'.format(str(limit_category)))
+    #     bot.register_next_step_handler(message, post_limit_amount_input)
+    # elif selected_limit_category == 'View Limits':
+    #     # print("viewing limits for current user")
+    #     view_limits()
+    # else:
+    #     message = bot.send_message(chat_id, 'Entered wrong input')
+
+    
 
 @bot.message_handler(commands=['limit'])
 def command_limit(message):
