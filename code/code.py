@@ -48,7 +48,7 @@ commands = {
     'limit': 'Add daily/monthly/yearly limits for spending',
     'search':'Search a product and comapre prices',
     'settle': 'Settle an expense shared with you',
-    'limitcategory': 'Set limits for each spending categories'
+    'limitcategory': 'Set Monthly limits for each spending categories'
 }
 
 bot = telebot.TeleBot(api_token)
@@ -249,7 +249,7 @@ def add_bill_to_database(message):
     print('Added record '+ str(user_bills) +' to user_bills collection')
     bot.send_message(chat_id, 'The following expenditure has been recorded: You have spent $' + str(user_bills['cost']) + ' for ' + str(user_bills['category']) + ' on ' + str(user_bills['timestamp'].strftime(timestamp_format)))
     
-        # Check if limits are set and notify if they are crossed.
+    # Check if limits are set and notify if they are crossed.
     limit_history = db.user_limits.find({'user_telegram_id' : user_bills['user_telegram_id']})
     for limit in limit_history:
         if 'daily' in limit:
@@ -299,7 +299,92 @@ def add_bill_to_database(message):
                     total_spending += record['count']
                 if total_spending >= float(limit['yearly']):
                     bot.send_message(chat_id, 'YEARLY LIMIT EXCEEDED. Your Yearly limit is {}, but you spent {} this year'.format(limit['yearly'], total_spending))
-    
+
+        if 'Food' in limit:
+            start_timestamp = datetime.combine(date.today().replace(day=1), datetime.min.time())
+            end_timestamp = datetime.combine(date.today(), datetime.max.time())
+            records = db.user_bills.aggregate([
+                {'$match' : { 'user_telegram_id' : message.chat.id, 'category': 'Food' ,'timestamp' : {'$gte':start_timestamp,'$lt': end_timestamp}}},
+                {'$group' : {'_id':{'category':'$category'}, 'count':{'$sum':'$cost'}}}
+            ])
+            print(records)
+            if not records:
+                bot.send_message(chat_id, 'You have no Food records')
+            else:
+                total_spending = 0
+                for record in records:
+                    total_spending += record['count']
+                if total_spending >= float(limit['Food']):
+                    bot.send_message(chat_id, 'MONTHLY LIMIT EXCEEDED. Your Monthly Food limit is {}, but you spent {} this month'.format(limit['Food'], total_spending))
+
+        if 'Groceries' in limit:
+            start_timestamp = datetime.combine(date.today().replace(day=1), datetime.min.time())
+            end_timestamp = datetime.combine(date.today(), datetime.max.time())
+            records = db.user_bills.aggregate([
+                {'$match' : { 'user_telegram_id' : message.chat.id, 'category': 'Groceries' ,'timestamp' : {'$gte':start_timestamp,'$lt': end_timestamp}}},
+                {'$group' : {'_id':{'category':'$category'}, 'count':{'$sum':'$cost'}}}
+            ])
+            print(records)
+            if not records:
+                bot.send_message(chat_id, 'You have no Groceries records')
+            else:
+                total_spending = 0
+                for record in records:
+                    total_spending += record['count']
+                if total_spending >= float(limit['Groceries']):
+                    bot.send_message(chat_id, 'MONTHLY LIMIT EXCEEDED. Your Monthly Groceries limit is {}, but you spent {} this month'.format(limit['Groceries'], total_spending))
+
+        if 'Utilities' in limit:
+            start_timestamp = datetime.combine(date.today().replace(day=1), datetime.min.time())
+            end_timestamp = datetime.combine(date.today(), datetime.max.time())
+            records = db.user_bills.aggregate([
+                {'$match' : { 'user_telegram_id' : message.chat.id, 'category': 'Utilities' ,'timestamp' : {'$gte':start_timestamp,'$lt': end_timestamp}}},
+                {'$group' : {'_id':{'category':'$category'}, 'count':{'$sum':'$cost'}}}
+            ])
+            print(records)
+            if not records:
+                bot.send_message(chat_id, 'You have no Utilities records')
+            else:
+                total_spending = 0
+                for record in records:
+                    total_spending += record['count']
+                if total_spending >= float(limit['Utilities']):
+                    bot.send_message(chat_id, 'MONTHLY LIMIT EXCEEDED. Your Monthly Utilities limit is {}, but you spent {} this month'.format(limit['Utilities'], total_spending))
+
+        if 'Transport' in limit:
+            start_timestamp = datetime.combine(date.today().replace(day=1), datetime.min.time())
+            end_timestamp = datetime.combine(date.today(), datetime.max.time())
+            records = db.user_bills.aggregate([
+                {'$match' : { 'user_telegram_id' : message.chat.id, 'category': 'Transport' ,'timestamp' : {'$gte':start_timestamp,'$lt': end_timestamp}}},
+                {'$group' : {'_id':{'category':'$category'}, 'count':{'$sum':'$cost'}}}
+            ])
+            print(records)
+            if not records:
+                bot.send_message(chat_id, 'You have no Groceries records')
+            else:
+                total_spending = 0
+                for record in records:
+                    total_spending += record['count']
+                if total_spending >= float(limit['Transport']):
+                    bot.send_message(chat_id, 'MONTHLY LIMIT EXCEEDED. Your Monthly Transport limit is {}, but you spent {} this month'.format(limit['Transport'], total_spending))
+
+        if 'Shopping' in limit:
+            start_timestamp = datetime.combine(date.today().replace(day=1), datetime.min.time())
+            end_timestamp = datetime.combine(date.today(), datetime.max.time())
+            records = db.user_bills.aggregate([
+                {'$match' : { 'user_telegram_id' : message.chat.id, 'category': 'Shopping' ,'timestamp' : {'$gte':start_timestamp,'$lt': end_timestamp}}},
+                {'$group' : {'_id':{'category':'$category'}, 'count':{'$sum':'$cost'}}}
+            ])
+            if not records:
+                bot.send_message(chat_id, 'You have no Shopping records')
+            else:
+                total_spending = 0
+                for record in records:
+                    total_spending += record['count']
+                if total_spending >= float(limit['Shopping']):
+                    bot.send_message(chat_id, 'MONTHLY LIMIT EXCEEDED. Your Monthly Shopping limit is {}, but you spent {} this month'.format(limit['Shopping'], total_spending))
+
+
     user_bills.clear()
 
 def validate_entered_amount(amount_entered):
