@@ -225,24 +225,34 @@ def post_amount_input(message):
 
 def get_sharing_details(message):
     markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
-    markup.row_width = 2
+    markup.row_width = 3
     markup.add("Yes")
     markup.add("No")
+    markup.add("Cancel")
     bot.send_message(message.chat.id, 'Do you want to split this bill with any other users?', reply_markup=markup)
     bot.register_next_step_handler(message, post_sharing_selection)
 
 def post_sharing_selection(message):
-    chat_id = message.chat.id
-    response = message.text
+	chat_id = message.chat.id
+	response = message.text
 
-    if response == "Yes":
-        # handle multi-user scenario
-        bot.send_message(message.chat.id, 'Enter the username of the other user: ')
-        bot.register_next_step_handler(message, handle_user_id_input_for_sharing)
+	if response == "Cancel":
+		bot.send_message(message.chat.id, 'Cancelling Record!!')
+		display_text = ""
+		for c in commands:  # generate help text out of the commands dictionary defined at the top
+		    display_text += "/" + c + ": "
+		    display_text += commands[c] + "\n"
+		bot.send_message(chat_id, 'Please select a menu option from below:')
+		bot.send_message(chat_id, display_text)
 
-    else:
-        # handle direct commit scenario
-        add_bill_to_database(message)
+	elif response == "Yes":
+	    # handle multi-user scenario
+	    bot.send_message(message.chat.id, 'Enter the username of the other user: ')
+	    bot.register_next_step_handler(message, handle_user_id_input_for_sharing)
+
+	else:
+	    # handle direct commit scenario
+	    add_bill_to_database(message)
 
 def handle_user_id_input_for_sharing(message):
     chat_id = message.chat.id
