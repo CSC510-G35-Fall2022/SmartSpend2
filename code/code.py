@@ -88,7 +88,7 @@ def command_add(message):
     markup.row_width = 2
     for c in spend_categories:
         markup.add(c)
-    msg = bot.reply_to(message, 'Select Category', reply_markup=markup)
+    msg = bot.reply_to(message, 'Select Category \nType Cancel to abort.', reply_markup=markup)
     # print('category', message.text)
     bot.register_next_step_handler(msg, post_category_selection)
 	
@@ -148,7 +148,11 @@ def post_category_selection(message):
         try:
             chat_id = message.chat.id
             selected_category = message.text
-            if not selected_category in spend_categories:
+            if selected_category == 'Cancel':
+            	msg = bot.send_message(chat_id, 'Cancelling record', reply_markup=types.ReplyKeyboardRemove())
+            	raise Exception("Record Cancelled!!")
+
+            elif not selected_category in spend_categories:
                 if 'New_Category' in spend_categories:
                     spend_categories.remove('New_Category')
                     spend_categories.append(selected_category)
@@ -157,7 +161,7 @@ def post_category_selection(message):
                     bot.register_next_step_handler(message, post_amount_input)
                 else:
                     msg = bot.send_message(chat_id, 'Invalid', reply_markup=types.ReplyKeyboardRemove())
-                    raise Exception("Sorry I don't recognise this category \"{}\"!".format(selected_category))
+                    raise Exception("Oh no! Sorry I don't recognise this category \"{}\"!".format(selected_category))
             elif str(selected_category) == 'Others (Please Specify)':
                 spend_categories.append('New_Category')
                 message = bot.send_message(chat_id, 'Please type new category.')
@@ -169,7 +173,7 @@ def post_category_selection(message):
                 bot.register_next_step_handler(message, post_amount_input)
                 # print(post_amount_input)
         except Exception as e:
-            bot.reply_to(message, 'Oh no! ' + str(e))
+            bot.reply_to(message,str(e))
             display_text = ""
             for c in commands:  # generate help text out of the commands dictionary defined at the top
                 display_text += "/" + c + ": "
