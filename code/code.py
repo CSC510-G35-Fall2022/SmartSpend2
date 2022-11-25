@@ -37,6 +37,7 @@ spend_categories = ['Food', 'Groceries', 'Utilities', 'Transport', 'Shopping', '
 spend_display_option = ['Day', 'Month', 'All']
 timestamp_format = '%b %d %Y %I:%M%p'
 limit_categories = ['daily', 'monthly', 'yearly', 'View Limits']
+delete_options = ['Delete All', 'Delete a specific record']
 
 #set of implemented commands and their description
 commands = {
@@ -88,7 +89,7 @@ def command_add(message):
     for c in spend_categories:
         markup.add(c)
     msg = bot.reply_to(message, 'Select Category', reply_markup=markup)
-    # print('category', msg)
+    # print('category', message.text)
     bot.register_next_step_handler(msg, post_category_selection)
 	
 	
@@ -335,12 +336,14 @@ def validate_entered_amount(amount_entered):
 def show_history(message):
     try:
         user_history = db.user_bills.find({'user_telegram_id' : message.chat.id})
+        print(user_history)
         
         chat_id = message.chat.id
         if user_history is None:
             raise Exception("Sorry! No spending records found!")
         spend_total_str = "Here is your spending history : \n EXPENSE NUMBER |    DATE AND TIME   | CATEGORY | AMOUNT |\n-----------------------------------------------------------------------\n"
         for rec in user_history:
+            print(rec)
             spend_total_str += '\n{:20s} {:20s} {:20s} {:20s}\n'.format(str(rec['number']), str(rec['timestamp'].strftime(timestamp_format)),  str(rec['category']),  str(rec['cost']))
             if 'shared_with' in rec.keys():
                 spend_total_str += 'Shared With:'
@@ -579,8 +582,83 @@ def display_total(message):
 #handles "/delete" command
 @bot.message_handler(commands=['delete'])
 def command_delete(message):
-    db.user_bills.delete_many({'user_telegram_id': message.chat.id})
-    bot.send_message(message.chat.id, 'All data deleted.')
+
+    markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
+    markup.row_width = 2
+    for c in delete_options:
+        markup.add(c)
+    # markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
+    # markup.row_width = 2
+    # options = ["Delete all", "Delete a specific transaction"]
+    # for mode in options:
+    #     markup.add(mode)
+    # db.user_bills.delete_many({'user_telegram_id': message.chat.id})
+    msg = bot.send_message(message.chat.id, 'Would you like to delete all data or a specific expense?', reply_markup=markup)
+
+    bot.register_next_step_handler(msg, post_delete_selection)
+
+    # # msg = bot.send_message(message.chat.id, 'Would you like to delete all data or a specific expense?', reply_markup=markup)
+    # print("Message: "  + msg.text)
+    # if (msg.text ==delete_options[0]):
+    #     print('delete all')
+
+    #     # db.user_bills.delete_many({'user_telegram_id': message.chat.id})
+    #     db.user_bills.delete_many({})
+    #     bot.send_message(message.chat.id, 'All data deleted.')
+    # elif (msg == delete_options[1]):
+    #     print('delete one')
+    #     num = bot.send_message(message.chat.id, "which transaction number would you like to delete")
+    #     user_history = db.user_bills.find({'user_telegram_id' : message.chat.id, 'number': 2})
+
+def post_delete_selection(message):
+        # print(message.text)
+        try:
+            chat_id = message.chat.id
+            selected_delete_option = message.text
+
+            if (selected_delete_option ==delete_options[0]):
+                print('delete all')
+
+                db.user_bills.delete_many({'user_telegram_id': message.chat.id})
+                # db.user_bills.delete_many({})
+                bot.send_message(message.chat.id, 'All data deleted.')
+            elif (selected_delete_option == delete_options[1]):
+                print('delete one')
+                num = bot.send_message(message.chat.id, "which transaction number would you like to delete")
+                bot.register_next_step_handler(num, delete_one_handler)
+                user_history = db.user_bills.find({'user_telegram_id' : message.chat.id, 'number': 2})
+        except Exception as e:
+            bot.reply_to(message, 'Oh no! ' + str(e))
+            display_text = ""
+            for c in commands:  # generate help text out of the commands dictionary defined at the top
+                display_text += "/" + c + ": "
+                display_text += commands[c] + "\n"
+            bot.send_message(chat_id, 'Please select a menu option from below:')
+            bot.send_message(chat_id, display_text)
+
+def delete_one_handler(message):
+    chat_id = message.chat.id
+    record_to_delete = message.text
+    print(record_to_delete)
+    try:
+        db.user_bills.delete_one({'number': int(record_to_delete)})
+        bot.send_message(message.chat.id, 'Deleted record successfully')
+    except Exception as e:
+        bot.reply_to(message, 'Oh no! ' + str(e))
+
+
+    # if selected_limit_category != 'View Limits' and selected_limit_category in limit_categories:
+    #     global limit_category
+    #     limit_category = selected_limit_category
+    #     message = bot.send_message(chat_id, 'How much limit do you want to set on a {} basis? \n(Enter numeric values only)'.format(str(limit_category)))
+    #     bot.register_next_step_handler(message, post_limit_amount_input)
+    # elif selected_limit_category == 'View Limits':
+    #     # print("viewing limits for current user")
+    #     view_limits()
+    # else:
+    #     message = bot.send_message(chat_id, 'Entered wrong input')
+
+    
 
 @bot.message_handler(commands=['limit'])
 def command_limit(message):
@@ -591,7 +669,7 @@ def command_limit(message):
     for c in limit_categories:
         markup.add(c)
     msg = bot.reply_to(message, 'Select Category', reply_markup=markup)
-    # print('category', msg)
+    print('category', msg.text)
     bot.register_next_step_handler(msg, post_limit_category_selection)
 
 def post_limit_category_selection(message):
@@ -706,8 +784,9 @@ async def main():
     try:
         bot.polling(none_stop=True)
     except Exception as e:
+        print(e)
         time.sleep(3)
-        # print(e)
+       
 
 if __name__ == '__main__':
     asyncio.run(main())

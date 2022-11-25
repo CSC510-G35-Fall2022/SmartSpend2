@@ -1,0 +1,23 @@
+/* .mdc-linear-progress__buffer-bar {
+    height: 20px !important;
+    border-top-width: 10px !important;
+} */
+
+.mdc-linear-progress__bar-inner {
+        display: inline-block;
+        position: absolute;
+        width: 100%;
+        animation: none;
+        border-top-style: solid;
+        border-top-width: 10px !important;
+}
+
+/* 
+
+.mat-mdc-progress-bar {
+    display: block;
+    height: 10px !important;
+}
+.mdc-linear-progress__primary-bar {
+    height: 10px !important;
+} */
