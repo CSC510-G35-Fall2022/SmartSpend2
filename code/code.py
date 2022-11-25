@@ -88,7 +88,8 @@ def command_add(message):
     markup.row_width = 2
     for c in spend_categories:
         markup.add(c)
-    msg = bot.reply_to(message, 'Select Category \nType Cancel to abort.', reply_markup=markup)
+    markup.add("Cancel")
+    msg = bot.reply_to(message, 'Select Category \nSelect Cancel to abort.', reply_markup=markup)
     # print('category', message.text)
     bot.register_next_step_handler(msg, post_category_selection)
 	
@@ -148,7 +149,7 @@ def post_category_selection(message):
         try:
             chat_id = message.chat.id
             selected_category = message.text
-            if selected_category == 'Cancel':
+            if selected_category == "Cancel":
             	msg = bot.send_message(chat_id, 'Cancelling record', reply_markup=types.ReplyKeyboardRemove())
             	raise Exception("Record Cancelled!!")
 
