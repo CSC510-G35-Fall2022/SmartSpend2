@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+from bob_telegram_tools.bot import TelegramBot
+import matplotlib.pyplot as plt
 
 import logging
 import re
@@ -375,14 +377,28 @@ def show_history(message):
         if user_history is None:
             raise Exception("Sorry! No spending records found!")
         spend_total_str = "Here is your spending history : \n EXPENSE NUMBER |    DATE AND TIME   | CATEGORY | AMOUNT |\n-----------------------------------------------------------------------\n"
+        
+        cat=[]
+        amt=[]
+        B=TelegramBot(api_token, chat_id)
         for rec in user_history:
             print(rec)
+            cat.append(str(rec['category']))
+            amt.append(float(rec['cost']))
             spend_total_str += '\n{:20s} {:20s} {:20s} {:20s}\n'.format(str(rec['number']), str(rec['timestamp'].strftime(timestamp_format)),  str(rec['category']),  str(rec['cost']))
             if 'shared_with' in rec.keys():
                 spend_total_str += 'Shared With:'
                 for username in rec['shared_with']:
                     spend_total_str += ' {}'.format(str(username))
                 spend_total_str += '\n'
+        
+        s=sum(amt)
+        amt_per=[]
+        for i in amt:
+        	amt_per.append((i/s)*100)
+        plt.pie(amt_per, labels=cat, shadow=True, autopct='%1.1f%%')
+        B.send_plot(plt)
+        B.clean_tmp_dir()
         bot.send_message(chat_id, spend_total_str)
     except Exception as e:
         bot.reply_to(message, "Oops!" + str(e) + str(e.__cause__) + str(e.__context__))	
