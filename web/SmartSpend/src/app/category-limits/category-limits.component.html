@@ -1,51 +1,78 @@
-<mat-card class="example-card">
-    <mat-card-content>
-      <h2 class="example-h2">Progress bar configuration</h2>
-  
-     
-  
-  
-      <section class="example-section" *ngIf="mode === 'buffer'">
-        <label class="example-margin">Buffer:</label>
-        <mat-slider class="example-margin">
-          <input type="range" [(ngModel)]="bufferValue" matSliderThumb>
-        </mat-slider>
-      </section>
-    </mat-card-content>
-  </mat-card>
-  
+<div class="text-center text-3xl p-2">Spending limits</div>
+
+<div class="bg-gray-100 m-2 p-4">
+  <div class="text-blue-500 text-xl text-center py-2">Time limits</div>
+
   <mat-card class="example-card">
     <mat-card-content>
-      <h2 class="example-h2">Monthly Limit</h2>
-  
+      <h2 class="example-h2">Daily Limit</h2>
+
       <section class="example-section">
         <mat-progress-bar
-            class="example-margin"
-            [color]="color"
-            [mode]="mode"
-            [value]="monthlyValue"
-            [bufferValue]="bufferValue">
+          class="example-margin"
+          [color]="color"
+          [mode]="mode"
+          [value]="monthlyValue"
+          [bufferValue]="bufferValue"
+        >
         </mat-progress-bar>
       </section>
     </mat-card-content>
-
-    <mat-card class="example-card">
-        <mat-card-content>
-          <h2 class="example-h2">Yearly Limit</h2>
-      
-          <section class="example-section">
-            <mat-progress-bar
-                class="example-margin"
-                [color]="color"
-                [mode]="mode"
-                [value]="yearlyValue"
-                [bufferValue]="bufferValue">
-            </mat-progress-bar>
-          </section>
-        </mat-card-content>
   </mat-card>
 
-  <div class="w-full bg-green-100 h-6 flex"><div class="bg-green-600 basis-${value}%"></div></div>
+  <mat-card class="example-card">
+    <mat-card-content>
+      <h2 class="example-h2">Monthly Limit</h2>
+
+      <section class="example-section">
+        <mat-progress-bar
+          class="example-margin"
+          [color]="color"
+          [mode]="mode"
+          [value]="monthProgress"
+          [bufferValue]="bufferValue"
+        >
+        </mat-progress-bar>
+      </section>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="example-card">
+    <mat-card-content>
+      <h2 class="example-h2">Yearly Limit</h2>
+
+      <section class="example-section">
+        <mat-progress-bar
+          class="example-margin"
+          [color]="color"
+          [mode]="mode"
+          [value]="yearlyValue"
+          [bufferValue]="bufferValue"
+        >
+        </mat-progress-bar>
+      </section>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="example-card">
+    <mat-card-content>
+      <h2 class="example-h2">Yearly Limit</h2>
+
+      <section class="example-section">
+        <mat-progress-bar
+          class="example-margin"
+          [color]="color"
+          [mode]="mode"
+          [value]="yearlyValue"
+          [bufferValue]="bufferValue"
+        >
+        </mat-progress-bar>
+      </section>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<!-- <div class="w-full bg-green-100 h-6 flex"><div class="bg-green-600 basis-${value}%"></div></div>
 <div class="mdc-linear-progress__bar-inner"></div>
   <mat-card class="example-card">
     <mat-card-content>
@@ -60,21 +87,24 @@
             [bufferValue]="bufferValue">
         </mat-progress-bar>
       </section>
+    </mat-card-content> -->
+
+<div class="bg-gray-100 m-2 p-4">
+  <div class="text-blue-500 text-xl text-center py-2">Category limits</div>
+  <mat-card class="example-card">
+    <mat-card-content>
+      <h2 class="example-h2">Food Limit</h2>
+      <div>{{this.findFoodSpent('Food')}} / {{this.appService.userLimits.Food}}</div>
+      <section class="example-section">
+        <mat-progress-bar
+          class="example-margin"
+          [color]="color"
+          [mode]="mode"
+          [value]="foodProgress"
+          [bufferValue]="bufferValue"
+        >
+        </mat-progress-bar>
+      </section>
     </mat-card-content>
-<div>Category limits:</div>
-    <mat-card class="example-card">
-        <mat-card-content>
-          <h2 class="example-h2">Food Limit</h2>
-      
-          <section class="example-section">
-            <mat-progress-bar
-                class="example-margin"
-                [color]="color"
-                [mode]="mode"
-                [value]="dailyValue"
-                [bufferValue]="bufferValue">
-            </mat-progress-bar>
-          </section>
-        </mat-card-content>
-</mat-card>
-  
+  </mat-card>
+</div>

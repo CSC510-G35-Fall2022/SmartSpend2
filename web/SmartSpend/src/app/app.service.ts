@@ -16,10 +16,14 @@ export class AppService {
   static userId: number;
   constructor(private http: HttpClient) {}
   expenseData:any;
+  userLimits:any;
   userData:any;
+  nextNumber = -1;
     userId!: any;
   rootURL = '/api';
 
+
+  
   sendExpense(expense: any) {
     this.http.post('http://127.0.0.1:5002/tests', expense).subscribe(data => {
         console.log(data);
@@ -35,14 +39,24 @@ export class AppService {
     })
   }
 
+  getLimitsForUser() {
+    this.http.get(`http://127.0.0.1:5002/limits/${this.userId}`).subscribe(data => {
+      this.userLimits = data;
+      console.log(this.userLimits);
+
+    })
+  }
   getExpensesById() {
     this.http.get(`http://127.0.0.1:5002/id/${this.userId}`).subscribe(data => {
       this.userData = data;
-      
       // this.expenseData = data as JSON;
-      console.log(this.userData);
+      const nums = this.userData.map((dat:any) => dat.number ?? -1);
+      console.log("nums", nums);
 
-
+      console.log(Math.max(... nums));
+      this.nextNumber = (Math.max(...nums)) + 1;
+      console.log("next number", this.nextNumber);
+      // console.log([...nums.entries()].reduce((a, e ) => e[1] > a[1] ? e : a))
     })
   }
 
