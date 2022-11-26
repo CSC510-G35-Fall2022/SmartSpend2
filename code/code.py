@@ -615,8 +615,12 @@ def display_total(message):
             raise Exception("Oops! Looks like you do not have any spending records!")
 
         total_text = ''
+        cat=[]
+        amt=[]
         for record in records:
             total_text += '{:25s} {}\n'.format(record['_id']['category'],  str(record['count']))
+            cat.append(record['_id']['category'])
+            amt.append(float(record['count']))
 
         spending_text = ""
         if len(total_text) == 0:
@@ -625,6 +629,14 @@ def display_total(message):
             spending_text = "Here are your {} total spendings:\n | CATEGORIES | AMOUNT |\n----------------------------------------\n{}".format(display_option.lower(), total_text)
 
         bot.send_message(chat_id, spending_text)
+        amt_per=[]
+        s=sum(amt)
+        for i in amt:
+        	amt_per.append((i/s)*100)
+        B=TelegramBot(api_token, chat_id)
+        plt.pie(amt_per, labels=cat, shadow=True, autopct='%1.1f%%')
+        B.send_plot(plt)
+        B.clean_tmp_dir()
     except Exception as e:
         bot.reply_to(message, str(e) + str(e.__cause__))
 
