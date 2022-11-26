@@ -58,6 +58,7 @@ bot = telebot.TeleBot(api_token)
 
 telebot.logger.setLevel(logging.INFO)
 
+
 # #Define listener for requests by user
 # def listener(user_requests):
 # 	for req in user_requests:
@@ -380,11 +381,16 @@ def show_history(message):
         
         cat=[]
         amt=[]
+        hist_dict={}
         B=TelegramBot(api_token, chat_id)
         for rec in user_history:
             print(rec)
             cat.append(str(rec['category']))
             amt.append(float(rec['cost']))
+            if str(rec['timestamp'].strftime(timestamp_format))[:3] in hist_dict:
+            	hist_dict[str(rec['timestamp'].strftime(timestamp_format))[:3]] += float(rec['cost'])
+            else:
+            	hist_dict[str(rec['timestamp'].strftime(timestamp_format))[:3]] = float(rec['cost'])
             spend_total_str += '\n{:20s} {:20s} {:20s} {:20s}\n'.format(str(rec['number']), str(rec['timestamp'].strftime(timestamp_format)),  str(rec['category']),  str(rec['cost']))
             if 'shared_with' in rec.keys():
                 spend_total_str += 'Shared With:'
@@ -392,11 +398,10 @@ def show_history(message):
                     spend_total_str += ' {}'.format(str(username))
                 spend_total_str += '\n'
         
-        s=sum(amt)
-        amt_per=[]
-        for i in amt:
-        	amt_per.append((i/s)*100)
-        plt.pie(amt_per, labels=cat, shadow=True, autopct='%1.1f%%')
+        plt.clf()
+        month = list(hist_dict.keys())
+        exp = list(hist_dict.values())
+        plt.bar(range(len(hist_dict)),exp, tick_label=month)
         B.send_plot(plt)
         B.clean_tmp_dir()
         bot.send_message(chat_id, spend_total_str)
@@ -634,6 +639,7 @@ def display_total(message):
         for i in amt:
         	amt_per.append((i/s)*100)
         B=TelegramBot(api_token, chat_id)
+        plt.clf()
         plt.pie(amt_per, labels=cat, shadow=True, autopct='%1.1f%%')
         B.send_plot(plt)
         B.clean_tmp_dir()
