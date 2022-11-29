@@ -33,7 +33,7 @@ With simple commands, this bot allows you to:
 - <u>Feature</u> -> Add 'share' feature to share expense with other telegram users.
 - - Sends a notification message to the other user indicating the added expense.
 - - Added persistent storage for future tracking and settlement of balances.
-- <u>Feature</u> -> Add 'limit' faeture to work as an alarm when spending exceed preset limits.
+- <u>Feature</u> -> Add 'limit' feature to work as an alarm when spending exceed preset limits.
 - - Users can create limits on a daily, monthly, and yearly basis.
 - - When user adds an expense, all three limits are checked.
 
