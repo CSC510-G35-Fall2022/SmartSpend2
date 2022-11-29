@@ -1,5 +1,7 @@
 
 # -*- coding: utf-8 -*-
+from bob_telegram_tools.bot import TelegramBot
+import matplotlib.pyplot as plt
 
 import logging
 import re
@@ -58,6 +60,7 @@ bot = telebot.TeleBot(api_token)
 
 telebot.logger.setLevel(logging.INFO)
 
+
 # #Define listener for requests by user
 # def listener(user_requests):
 # 	for req in user_requests:
@@ -90,7 +93,8 @@ def command_add(message):
     markup.row_width = 2
     for c in spend_categories:
         markup.add(c)
-    msg = bot.reply_to(message, 'Select Category', reply_markup=markup)
+    markup.add("Cancel")
+    msg = bot.reply_to(message, 'Select Category \nSelect Cancel to abort.', reply_markup=markup)
     # print('category', message.text)
     bot.register_next_step_handler(msg, post_category_selection)
 	
@@ -150,28 +154,32 @@ def post_category_selection(message):
         try:
             chat_id = message.chat.id
             selected_category = message.text
-            if not selected_category in spend_categories:
+            if selected_category == "Cancel":
+            	msg = bot.send_message(chat_id, 'Cancelling record', reply_markup=types.ReplyKeyboardRemove())
+            	raise Exception("Record Cancelled!!")
+
+            elif not selected_category in spend_categories:
                 if 'New_Category' in spend_categories:
                     spend_categories.remove('New_Category')
                     spend_categories.append(selected_category)
                     user_bills['category'] = selected_category
-                    message = bot.send_message(chat_id, 'How much did you spend on {}? \n(Enter numeric values only)'.format(str(selected_category)))
+                    message = bot.send_message(chat_id, 'How much did you spend on {}? \n(Enter numeric values only Type Cancel to abort!)'.format(str(selected_category)))
                     bot.register_next_step_handler(message, post_amount_input)
                 else:
                     msg = bot.send_message(chat_id, 'Invalid', reply_markup=types.ReplyKeyboardRemove())
-                    raise Exception("Sorry I don't recognise this category \"{}\"!".format(selected_category))
+                    raise Exception("Oh no! Sorry I don't recognise this category \"{}\"!".format(selected_category))
             elif str(selected_category) == 'Others (Please Specify)':
                 spend_categories.append('New_Category')
                 message = bot.send_message(chat_id, 'Please type new category.')
                 bot.register_next_step_handler(message, post_category_selection)
             else:
                 user_bills['category'] = selected_category
-                message = bot.send_message(chat_id, 'How much did you spend on {}? \n(Enter numeric values only)'.format(str(selected_category)))
+                message = bot.send_message(chat_id, 'How much did you spend on {}? \n(Enter numeric values only or Type Cancel to abort!)'.format(str(selected_category)))
                 # print('message:', message)
                 bot.register_next_step_handler(message, post_amount_input)
                 # print(post_amount_input)
         except Exception as e:
-            bot.reply_to(message, 'Oh no! ' + str(e))
+            bot.reply_to(message,str(e))
             display_text = ""
             for c in commands:  # generate help text out of the commands dictionary defined at the top
                 display_text += "/" + c + ": "
@@ -181,62 +189,90 @@ def post_category_selection(message):
 
 def post_amount_input(message):
     # print(message.text)
-    # try:
-    chat_id = message.chat.id
-    amount_entered = message.text
-    amount_value = validate_entered_amount(amount_entered)  # validate
-    if amount_value == 0:  # cannot be $0 spending
-        raise Exception("Spent amount has to be a non-zero number.")
+    try:
+	    chat_id = message.chat.id
+	    amount_entered = message.text
+	    if amount_entered=='Cancel':
+	    	raise Exception("Cancelling record!!")
+	    amount_value = validate_entered_amount(amount_entered)  # validate
+	    if amount_value == 0:  # cannot be $0 spending
+	        raise Exception("Spent amount has to be a non-zero number.")
 
-    user_bills['cost'] = float(amount_value)
-    # print(user_bills)
-    # print(user_bills['cost'])
+	    user_bills['cost'] = float(amount_value)
+	    # print(user_bills)
+	    # print(user_bills['cost'])
 
-    user_bills['timestamp'] = datetime.now()
-    # print(user_bills['timestamp'])
-    # print(count)
-    # print(user_çcbills['number'])
+	    user_bills['timestamp'] = datetime.now()
+	    # print(user_bills['timestamp'])
+	    # print(count)
+	    # print(user_çcbills['number'])
 
-    user_history = db.user_bills.find({'user_telegram_id' : message.chat.id})
-    maximum = 0
-    for rec in user_history:
-        maximum = max(maximum, rec['number'])
-        # print(maximum)
-    # print('done')
+	    user_history = db.user_bills.find({'user_telegram_id' : message.chat.id})
+	    maximum = 0
+	    for rec in user_history:
+	        maximum = max(maximum, rec['number'])
+	        # print(maximum)
+	    # print('done')
 
-    # global count_
-    user_bills['number'] = maximum+1
-    # count_ += 1
+	    # global count_
+	    user_bills['number'] = maximum+1
+	    # count_ += 1
 
-    get_sharing_details(message)
+	    get_sharing_details(message)
 
-    # except Exception as e:
-        # bot.reply_to(message, 'Oh no. ' + str(e) + str(e.__cause__) + str(e.__context__))
+    except Exception as e:
+        bot.reply_to(message,str(e))
+        display_text = ""
+        for c in commands:  # generate help text out of the commands dictionary defined at the top
+            display_text += "/" + c + ": "
+            display_text += commands[c] + "\n"
+        bot.send_message(chat_id, 'Please select a menu option from below:')
+        bot.send_message(chat_id, display_text)
 
 def get_sharing_details(message):
     markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
-    markup.row_width = 2
+    markup.row_width = 3
     markup.add("Yes")
     markup.add("No")
+    markup.add("Cancel")
     bot.send_message(message.chat.id, 'Do you want to split this bill with any other users?', reply_markup=markup)
     bot.register_next_step_handler(message, post_sharing_selection)
 
 def post_sharing_selection(message):
-    chat_id = message.chat.id
-    response = message.text
+	chat_id = message.chat.id
+	response = message.text
 
-    if response == "Yes":
-        # handle multi-user scenario
-        bot.send_message(message.chat.id, 'Enter the username of the other user: ')
-        bot.register_next_step_handler(message, handle_user_id_input_for_sharing)
+	if response == "Cancel":
+		bot.send_message(message.chat.id, 'Cancelling Record!!')
+		display_text = ""
+		for c in commands:  # generate help text out of the commands dictionary defined at the top
+		    display_text += "/" + c + ": "
+		    display_text += commands[c] + "\n"
+		bot.send_message(chat_id, 'Please select a menu option from below:')
+		bot.send_message(chat_id, display_text)
 
-    else:
-        # handle direct commit scenario
-        add_bill_to_database(message)
+	elif response == "Yes":
+	    # handle multi-user scenario
+	    bot.send_message(message.chat.id, 'Enter the username of the other user: or Type Cancel to abort!!')
+	    bot.register_next_step_handler(message, handle_user_id_input_for_sharing)
+
+	else:
+	    # handle direct commit scenario
+	    add_bill_to_database(message)
 
 def handle_user_id_input_for_sharing(message):
     chat_id = message.chat.id
     username = str(message.text)
+
+    if username == "Cancel":
+    	bot.send_message(message.chat.id, 'Cancelling Record!!')
+    	display_text = ""
+    	for c in commands:  # generate help text out of the commands dictionary defined at the top
+    		display_text += "/" + c + ": "
+    		display_text += commands[c] + "\n"
+    	bot.send_message(chat_id, 'Please select a menu option from below:')
+    	bot.send_message(chat_id, display_text)
+    	return
 
     bot.send_message(chat_id, "User {} will be sent an update about the split".format(username))
 
@@ -429,14 +465,32 @@ def show_history(message):
         if user_history is None:
             raise Exception("Sorry! No spending records found!")
         spend_total_str = "Here is your spending history : \n EXPENSE NUMBER |    DATE AND TIME   | CATEGORY | AMOUNT |\n-----------------------------------------------------------------------\n"
+        
+        cat=[]
+        amt=[]
+        hist_dict={}
+        B=TelegramBot(api_token, chat_id)
         for rec in user_history:
             print(rec)
+            cat.append(str(rec['category']))
+            amt.append(float(rec['cost']))
+            if str(rec['timestamp'].strftime(timestamp_format))[:3] in hist_dict:
+            	hist_dict[str(rec['timestamp'].strftime(timestamp_format))[:3]] += float(rec['cost'])
+            else:
+            	hist_dict[str(rec['timestamp'].strftime(timestamp_format))[:3]] = float(rec['cost'])
             spend_total_str += '\n{:20s} {:20s} {:20s} {:20s}\n'.format(str(rec['number']), str(rec['timestamp'].strftime(timestamp_format)),  str(rec['category']),  str(rec['cost']))
             if 'shared_with' in rec.keys():
                 spend_total_str += 'Shared With:'
                 for username in rec['shared_with']:
                     spend_total_str += ' {}'.format(str(username))
                 spend_total_str += '\n'
+        
+        plt.clf()
+        month = list(hist_dict.keys())
+        exp = list(hist_dict.values())
+        plt.bar(range(len(hist_dict)),exp, tick_label=month)
+        B.send_plot(plt)
+        B.clean_tmp_dir()
         bot.send_message(chat_id, spend_total_str)
     except Exception as e:
         bot.reply_to(message, "Oops!" + str(e) + str(e.__cause__) + str(e.__context__))	
@@ -653,8 +707,12 @@ def display_total(message):
             raise Exception("Oops! Looks like you do not have any spending records!")
 
         total_text = ''
+        cat=[]
+        amt=[]
         for record in records:
             total_text += '{:25s} {}\n'.format(record['_id']['category'],  str(record['count']))
+            cat.append(record['_id']['category'])
+            amt.append(float(record['count']))
 
         spending_text = ""
         if len(total_text) == 0:
@@ -663,6 +721,15 @@ def display_total(message):
             spending_text = "Here are your {} total spendings:\n | CATEGORIES | AMOUNT |\n----------------------------------------\n{}".format(display_option.lower(), total_text)
 
         bot.send_message(chat_id, spending_text)
+        amt_per=[]
+        s=sum(amt)
+        for i in amt:
+        	amt_per.append((i/s)*100)
+        B=TelegramBot(api_token, chat_id)
+        plt.clf()
+        plt.pie(amt_per, labels=cat, shadow=True, autopct='%1.1f%%')
+        B.send_plot(plt)
+        B.clean_tmp_dir()
     except Exception as e:
         bot.reply_to(message, str(e) + str(e.__cause__))
 
