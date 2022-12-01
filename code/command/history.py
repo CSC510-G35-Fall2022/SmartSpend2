@@ -1,5 +1,5 @@
-# from bob_telegram_tools.bot import TelegramBot
-# import matplotlib.pyplot as plt
+from bob_telegram_tools.bot import TelegramBot
+import matplotlib.pyplot as plt
 import logging
 import re
 import os
@@ -64,7 +64,7 @@ def show_history(message, bot):
         cat = []
         amt = []
         hist_dict = {}
-        B = bot
+        B = TelegramBot(api_token, chat_id)
         for rec in user_history:
             print(rec)
             cat.append(str(rec['category']))

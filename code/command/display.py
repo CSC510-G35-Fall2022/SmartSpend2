@@ -1,5 +1,5 @@
-# from bob_telegram_tools.bot import TelegramBot
-# import matplotlib.pyplot as plt
+from bob_telegram_tools.bot import TelegramBot
+import matplotlib.pyplot as plt
 import logging
 import re
 import os
