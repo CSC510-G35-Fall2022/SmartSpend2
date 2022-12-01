@@ -44,7 +44,8 @@ commands = {
     'delete': 'Clear/Erase all your records',
     'edit': 'Edit/Change spending details',
     'limit': 'Add daily/monthly/yearly limits for spending',
-    'search':'Search a product and comapre prices',
+    'limitcategory': 'Add daily/monthly/yearly limits for spending in a specific category',
+    'search':'Search a product and compare prices',
     'settle': 'Settle an expense shared with you'
 }
 

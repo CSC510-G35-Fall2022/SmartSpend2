@@ -27,6 +27,8 @@ from command.history import show_history
 from command.display import command_display
 from command.edit import edit1
 from command.delete import command_delete
+from command.limit import command_limit
+from command.limit_cat import command_limitcategory
 
 
 load_dotenv()
@@ -87,6 +89,7 @@ telebot.logger.setLevel(logging.INFO)
 def smart_menu(m):
     return start_and_menu_command(m)
 
+
 @bot.message_handler(commands=['add'])
 def smart_add(message):
     command_add(message, bot)
@@ -118,15 +121,11 @@ def smart_search(message):
 #     except Exception as e:
 #         print("Failed to search user, details: ", e)
 
-# # function to fetch expenditure history of the user
-
-
 @bot.message_handler(commands=['history'])
 def smart_history(message):
     show_history(message, bot)
 
 
-# function to edit date, category or cost of a transaction
 @bot.message_handler(commands=['edit'])
 def smart_edit(message):
     edit1(message, bot)
@@ -145,160 +144,24 @@ def smart_edit(message):
 #     except Exception as e:
 #         print("Error during message send to remote user : ", e)
 
-
-# function to display total expenditure
 @bot.message_handler(commands=['display'])
 def smart_display(message):
     command_display(message, bot)
-
-# handles "/delete" command
 
 
 @bot.message_handler(commands=['delete'])
 def smart_delete(message):
     command_delete(message, bot)
 
+
 @bot.message_handler(commands=['limit'])
-def command_limit(message):
-    chat_id = message.chat.id
-    user_limits['user_telegram_id'] = chat_id
-    markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
-    markup.row_width = 2
-    for c in limit_categories:
-        markup.add(c)
-    msg = bot.reply_to(message, 'Select Category', reply_markup=markup)
-    print('category', msg.text)
-    bot.register_next_step_handler(msg, post_limit_category_selection)
-
-
-def post_limit_category_selection(message):
-    chat_id = message.chat.id
-    selected_limit_category = message.text
-    if selected_limit_category != 'View Limits' and selected_limit_category in limit_categories:
-        global limit_category
-        limit_category = selected_limit_category
-        message = bot.send_message(
-            chat_id, 'How much limit do you want to set on a {} basis? \n(Enter numeric values only)'.format(str(limit_category)))
-        bot.register_next_step_handler(message, post_limit_amount_input)
-    elif selected_limit_category == 'View Limits':
-        # print("viewing limits for current user")
-        view_limits()
-    else:
-        message = bot.send_message(chat_id, 'Entered wrong input')
-
-
-def post_limit_amount_input(message):
-    chat_id = message.chat.id
-    amount_entered = message.text
-    amount_value = validate_entered_amount(amount_entered)
-
-    #db.user_limits.delete_many({'user_telegram_id': message.chat.id})
-
-    user_history = list(db.user_limits.find(
-        {'user_telegram_id': user_limits['user_telegram_id']}))
-
-    if len(user_history) == 0:
-        user_limits[limit_category] = amount_value
-        db.user_limits.insert_one(user_limits)
-        # print('Added Limit record '+ str(user_limits) +' to user_limits collection')
-    else:
-        db.user_limits.find_one_and_update({"user_telegram_id": user_limits['user_telegram_id']}, {
-                                           '$set': {limit_category: amount_value}}, return_document=ReturnDocument.AFTER)
-
-
-def view_limits():
-    user_history_obj = db.user_limits.find(
-        {'user_telegram_id': user_limits['user_telegram_id']})
-    for user_history in user_history_obj:
-        if 'daily' in user_history and user_history['daily']:
-            message = bot.send_message(
-                user_limits['user_telegram_id'], 'Your Daily Limit is - {}'.format(user_history['daily']))
-        if 'monthly' in user_history and user_history['monthly']:
-            message = bot.send_message(
-                user_limits['user_telegram_id'], 'Your Montly Limit is - {}'.format(user_history['monthly']))
-        if 'yearly' in user_history and user_history['yearly']:
-            message = bot.send_message(
-                user_limits['user_telegram_id'], 'Your Yearly Limit is - {}'.format(user_history['yearly']))
+def smart_limit(message):
+    command_limit(message, bot)
 
 
 @bot.message_handler(commands=['limitcategory'])
-def command_limitcategory(message):
-    chat_id = message.chat.id
-    user_limits['user_telegram_id'] = chat_id
-    markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
-    markup.row_width = 2
-    for c in spendlimit_categories:
-        markup.add(c)
-    msg = bot.reply_to(message, 'Select Category', reply_markup=markup)
-    # print('category', msg)
-    bot.register_next_step_handler(msg, post_limit_spendcategory_selection)
-
-
-def post_limit_spendcategory_selection(message):
-    chat_id = message.chat.id
-    selected_spend_category = message.text
-    if selected_spend_category != 'View Limits' and selected_spend_category in spend_categories:
-        global spend_category
-        spend_category = selected_spend_category
-        message = bot.send_message(
-            chat_id, 'How much limit do you want to set for {} category? \n(Enter numeric values only)'.format(str(spend_category)))
-        bot.register_next_step_handler(message, post_spendlimit_amount_input)
-    elif selected_spend_category == 'View Limits':
-        print("viewing Category limits for current user")
-        view_spendlimits()
-    else:
-        message = bot.send_message(chat_id, 'Entered wrong input')
-
-
-def post_spendlimit_amount_input(message):
-    chat_id = message.chat.id
-    amount_entered = message.text
-    amount_value = validate_entered_amount(amount_entered)
-
-    #db.user_limits.delete_many({'user_telegram_id': message.chat.id})
-
-    user_history = list(db.user_limits.find(
-        {'user_telegram_id': user_limits['user_telegram_id']}))
-
-    if len(user_history) == 0:
-        user_limits[spend_category] = amount_value
-        db.user_limits.insert_one(user_limits)
-        print('Added Spend Category Limit record ' +
-              str(user_limits) + ' to user_limits collection')
-        message = bot.send_message(
-            chat_id, 'Added Limit for ' + spend_category+": " + str(amount_value))
-    else:
-        db.user_limits.find_one_and_update({"user_telegram_id": user_limits['user_telegram_id']}, {
-                                           '$set': {spend_category: amount_value}}, return_document=ReturnDocument.AFTER)
-        print('Updated Spend Category Limit record ' +
-              str(user_limits) + ' to user_limits collection')
-        message = bot.send_message(
-            chat_id, 'Updated Limit for ' + spend_category+": " + str(amount_value))
-
-
-def view_spendlimits():
-    user_history_obj = db.user_limits.find(
-        {'user_telegram_id': user_limits['user_telegram_id']})
-    for user_history in user_history_obj:
-        if 'Food' in user_history and user_history['Food']:
-            message = bot.send_message(
-                user_limits['user_telegram_id'], 'Your Food Limit is - {}'.format(user_history['Food']))
-        if 'Groceries' in user_history and user_history['Groceries']:
-            message = bot.send_message(
-                user_limits['user_telegram_id'], 'Your Groceries Limit is - {}'.format(user_history['Groceries']))
-        if 'Utilities' in user_history and user_history['Utilities']:
-            message = bot.send_message(
-                user_limits['user_telegram_id'], 'Your Utilities Limit is - {}'.format(user_history['Utilities']))
-        if 'Transport' in user_history and user_history['Transport']:
-            message = bot.send_message(
-                user_limits['user_telegram_id'], 'Your Transport Limit is - {}'.format(user_history['Transport']))
-        if 'Shopping' in user_history and user_history['Shopping']:
-            message = bot.send_message(
-                user_limits['user_telegram_id'], 'Your Shopping Limit is - {}'.format(user_history['Shopping']))
-        if 'Miscellaneous' in user_history and user_history['Miscellaneous']:
-            message = bot.send_message(
-                user_limits['user_telegram_id'], 'Your Miscellaneous Limit is - {}'.format(user_history['Miscellaneous']))
-
+def smart_limit_cat(message):
+    command_limitcategory(message, bot)
 
 # Handling /settle command
 @bot.message_handler(commands=['settle'])
