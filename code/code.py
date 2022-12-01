@@ -23,6 +23,8 @@ from tabulate import tabulate
 from command.start import start_and_menu_command
 from command.add import command_add
 from command.search import command_select
+from command.history import show_history
+from command.edit import edit1
 
 
 load_dotenv()
@@ -78,13 +80,10 @@ telebot.logger.setLevel(logging.INFO)
 
 # bot.set_update_listener(listener)
 
-# defines how the /start and /help commands have to be handled/processed
+
 @bot.message_handler(commands=['start', 'menu'])
 def smart_menu(m):
     return start_and_menu_command(m)
-
-# defines how the /new command has to be handled/processed
-
 
 @bot.message_handler(commands=['add'])
 def smart_add(message):
@@ -96,260 +95,53 @@ def smart_search(message):
     command_select(message, bot)
 
 
-def validate_entered_amount(amount_entered):
-    if len(amount_entered) > 0 and len(amount_entered) <= 15:
-        if amount_entered.isdigit:
-            if re.match("^[0-9]*\\.?[0-9]*$", amount_entered):
-                amount = round(float(amount_entered), 2)
-                if amount > 0:
-                    return str(amount)
-    return 0
+# def validate_entered_amount(amount_entered):
+#     if len(amount_entered) > 0 and len(amount_entered) <= 15:
+#         if amount_entered.isdigit:
+#             if re.match("^[0-9]*\\.?[0-9]*$", amount_entered):
+#                 amount = round(float(amount_entered), 2)
+#                 if amount > 0:
+#                     return str(amount)
+#     return 0
 
 
-async def find_user_by_username(username):
-    try:
-        async with TelegramClient(api_username, api_id, api_hash) as client:
-            await client.start()
-            if not await client.is_user_authorized():
-                client.send_code_request(api_id)
-            user = await client.get_entity(username)
-            return user
-    except Exception as e:
-        print("Failed to search user, details: ", e)
+# async def find_user_by_username(username):
+#     try:
+#         async with TelegramClient(api_username, api_id, api_hash) as client:
+#             await client.start()
+#             if not await client.is_user_authorized():
+#                 client.send_code_request(api_id)
+#             user = await client.get_entity(username)
+#             return user
+#     except Exception as e:
+#         print("Failed to search user, details: ", e)
 
-# function to fetch expenditure history of the user
+# # function to fetch expenditure history of the user
 
 
 @bot.message_handler(commands=['history'])
-def show_history(message):
-    try:
-        user_history = db.user_bills.find(
-            {'user_telegram_id': message.chat.id})
-        print(user_history)
-
-        chat_id = message.chat.id
-        if user_history is None:
-            raise Exception("Sorry! No spending records found!")
-        spend_total_str = "Here is your spending history : \n EXPENSE NUMBER |    DATE AND TIME   | CATEGORY | AMOUNT |\n-----------------------------------------------------------------------\n"
-
-        cat = []
-        amt = []
-        hist_dict = {}
-        B = TelegramBot(api_token, chat_id)
-        for rec in user_history:
-            print(rec)
-            cat.append(str(rec['category']))
-            amt.append(float(rec['cost']))
-            if str(rec['timestamp'].strftime(timestamp_format))[:3] in hist_dict:
-                hist_dict[str(rec['timestamp'].strftime(timestamp_format))[
-                    :3]] += float(rec['cost'])
-            else:
-                hist_dict[str(rec['timestamp'].strftime(timestamp_format))[
-                    :3]] = float(rec['cost'])
-            spend_total_str += '\n{:20s} {:20s} {:20s} {:20s}\n'.format(str(rec['number']), str(
-                rec['timestamp'].strftime(timestamp_format)),  str(rec['category']),  str(rec['cost']))
-            if 'shared_with' in rec.keys():
-                spend_total_str += 'Shared With:'
-                for username in rec['shared_with']:
-                    spend_total_str += ' {}'.format(str(username))
-                spend_total_str += '\n'
-
-        plt.clf()
-        month = list(hist_dict.keys())
-        exp = list(hist_dict.values())
-        plt.bar(range(len(hist_dict)), exp, tick_label=month)
-        B.send_plot(plt)
-        B.clean_tmp_dir()
-        bot.send_message(chat_id, spend_total_str)
-    except Exception as e:
-        bot.reply_to(message, "Oops!" + str(e) +
-                     str(e.__cause__) + str(e.__context__))
+def smart_history(message):
+    show_history(message, bot)
 
 
 # function to edit date, category or cost of a transaction
 @bot.message_handler(commands=['edit'])
-def edit1(m):
-    # info = bot.reply_to(m, "Please enter the date and time of the transaction you made in the following format, Eg: Sep 21 2022 1:33PM")
-  # show show_history
-    user_history = db.user_bills.find({'user_telegram_id':  m.chat.id})
-    chat_id = m.chat.id
-    if user_history is None:
-        raise Exception("Sorry! No spending records found!")
-    spend_total_str = "Here is your spending history : \n EXPENSE NUMBER |    DATE AND TIME   | CATEGORY | AMOUNT |\n-----------------------------------------------------------------------\n"
-    for rec in user_history:
-        spend_total_str += '\n{:20s} {:20s} {:20s} {:20s}\n'.format(str(rec['number']), str(
-            rec['timestamp'].strftime(timestamp_format)),  str(rec['category']),  str(rec['cost']))
-        if 'shared_with' in rec.keys():
-            spend_total_str += 'Shared With:'
-            for username in rec['shared_with']:
-                spend_total_str += ' {}'.format(str(username))
-            spend_total_str += '\n'
-    bot.send_message(m.chat.id, spend_total_str)
-    number = bot.reply_to(
-        m, "Please type the transaction number you want to edit")
-    # print(number)
-    bot.register_next_step_handler(number, edit3)
+def smart_edit(message):
+    edit1(message, bot)
 
 
-def edit2(m):
-    try:
-        global user_bills
-        user_bills['number'] = m.text
-        # print()
-        # print(user_bills['number'])
-        # print("number " + str(m.text))
-        # user_bills['timestamp'] = datetime.strptime(m.text, timestamp_format)
-        # print(user_bills['timestamp'])
-        info = bot.reply_to(
-            m, "Please enter the category of the transaction you made.")
-        bot.register_next_step_handler(info, edit3)
-    except Exception as e:
-        if 'does not match format' in str(e):
-            bot.reply_to(
-                m, 'Date format is not correct. Please give /edit command again and enter the date and time in the format, Eg: Sep 21 2022 1:33PM')
-        else:
-            print(str(e))
+# # To send the shared users the updated expense
+# async def updating_user_with_updated_expense(message, user_name, user_bills):
+#     try:
+#         user = await find_user_by_username(user_name)
 
+#         if user == None:
+#             return
 
-def edit3(m):
-    global user_bills
-    # user_history = list(db.user_bills.find({'user_telegram_id' : m.chat.id, 'timestamp': {'$gte': user_bills['timestamp'], '$lt': user_bills['timestamp'] + timedelta(seconds=59)}, 'category': m.text}))
-    user_history = list(db.user_bills.find(
-        {'user_telegram_id': m.chat.id, 'number': int(m.text)}))
-
-    if len(list(user_history)) == 0:
-
-        bot.reply_to(m, 'No data found.')
-    else:
-        markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
-        markup.row_width = 2
-        choices = ['Date & Time', 'Category', 'Cost']
-        for c in choices:
-            markup.add(c)
-        bot.send_message(m.chat.id, 'Here are the details of your transaction: \n\nDate & Time: {}\nCategory: {}\nCost: ${}'.format(
-            user_history[0]['timestamp'], user_history[0]['category'], user_history[0]['cost']))
-
-        choice = bot.send_message(
-            m.chat.id, "What do you want to update?", reply_markup=markup)
-        user_bills = user_history[0]
-        bot.register_next_step_handler(choice, edit4)
-
-
-def edit4(m):
-    choice1 = m.text
-    markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
-    markup.row_width = 2
-    for cat in spend_categories:
-        markup.add(cat)
-
-    if (choice1 == 'Date & Time'):
-        new_date = bot.reply_to(
-            m, "Please enter the new date in format, Eg: Sep 21 2022 1:33PM")
-        bot.register_next_step_handler(new_date, edit_date)
-
-    if (choice1 == 'Category'):
-        new_cat = bot.reply_to(
-            m, "Please select the new category", reply_markup=markup)
-        # print("category", new_cat)
-        bot.register_next_step_handler(new_cat, edit_cat)
-
-    if (choice1 == 'Cost'):
-        new_cost = bot.reply_to(m, "Please type the new cost")
-        # print(new_cost)
-        bot.register_next_step_handler(new_cost, edit_cost)
-
-
-def edit_date(m):
-    global user_bills
-    timestamp = datetime.strptime(m.text, timestamp_format)
-    user_bills = db.user_bills.find_one_and_update({"_id": user_bills['_id']}, {
-                                                   '$set': {"timestamp": timestamp}}, return_document=ReturnDocument.AFTER)
-    bot.reply_to(m, "Date is updated")
-    # print(user_bills)
-    # print(user_bills['shared_with'])
-    if user_bills['shared_with'] != 'NULL':
-        for x in user_bills['shared_with']:
-            # print(x)
-            spend_total_str = "Here is the modified expense : \n|    DATE AND TIME   | CATEGORY | AMOUNT \n-----------------------------------------------------------------------\n"
-            spend_total_str += '{:20s} {:20s} {:20s} \n'.format(str(user_bills['timestamp'].strftime(
-                timestamp_format)),  str(user_bills['category']),  str(user_bills['cost']))
-            try:
-                asyncio.run(
-                    updating_user_with_updated_expense(m, x, user_bills))
-            except:
-                time.sleep(5)
-            bot.send_message(user_bills['user_telegram_id'], spend_total_str)
-
-    # print('Updated record '+ str(user_bills) +' to user_bills collection')
-
-
-def edit_cat(m):
-    global user_bills
-    # print(user_bills)
-    category = m.text
-    if category == 'Others (Please Specify)':
-        message = bot.reply_to(m, 'Please type new category.')
-        bot.register_next_step_handler(message, edit_cat)
-    else:
-        updated_user_bill = db.user_bills.find_one_and_update({"_id": user_bills['_id']}, {
-                                                              '$set': {"category": category}}, return_document=ReturnDocument.AFTER)
-        bot.reply_to(m, "Category is updated")
-        # print(user_bills['shared_with'])
-        if updated_user_bill['shared_with']:
-            for x in updated_user_bill['shared_with']:
-                # print("jere")
-                # print(x)
-                spend_total_str = "Here is the modified expense : \n|    DATE AND TIME   | CATEGORY | AMOUNT \n-----------------------------------------------------------------------\n"
-                spend_total_str += '{:20s} {:20s} {:20s} \n'.format(str(updated_user_bill['timestamp'].strftime(
-                    timestamp_format)),  str(updated_user_bill['category']),  str(updated_user_bill['cost']))
-                asyncio.run(updating_user_with_updated_expense(
-                    m, x, updated_user_bill))
-                bot.send_message(
-                    user_bills['user_telegram_id'], spend_total_str)
-
-        # print('Updated record '+ str(user_bills) +' to user_bills collection')
-
-
-def edit_cost(m):
-    global user_bills
-    new_cost = m.text
-    try:
-        if (validate_entered_amount(new_cost) != 0):
-            updated_user_bill = db.user_bills.find_one_and_update({"_id": user_bills['_id']}, {
-                                                                  '$set': {"cost": float(new_cost)}}, return_document=ReturnDocument.AFTER)
-            bot.reply_to(m, "Cost is updated")
-            # update the shared user
-            if updated_user_bill['shared_with'] != 'NULL':
-                for x in updated_user_bill['shared_with']:
-                    # print(x)
-                    spend_total_str = "Here is the modified expense : \n|    DATE AND TIME   | CATEGORY | AMOUNT \n-----------------------------------------------------------------------\n"
-                    spend_total_str += '{:20s} {:20s} {:20s} \n'.format(str(updated_user_bill['timestamp'].strftime(
-                        timestamp_format)),  str(updated_user_bill['category']),  str(updated_user_bill['cost']))
-                    asyncio.run(updating_user_with_updated_expense(
-                        m, x, updated_user_bill))
-                    bot.send_message(
-                        user_bills['user_telegram_id'], spend_total_str)
-            # print('Updated record '+ str(user_bills) +' to user_bills collection')
-        else:
-            bot.reply_to(m, "The cost is invalid")
-            return
-    except Exception as e:
-        bot.reply_to(m, "Oops!" + str(e) +
-                     str(e.__cause__) + str(e.__context__))
-
-
-# To send the shared users the updated expense
-async def updating_user_with_updated_expense(message, user_name, user_bills):
-    try:
-        user = await find_user_by_username(user_name)
-
-        if user == None:
-            return
-
-        bot.send_message(user.id, 'An expense has been modified.\n The new expense for {} on {} with value of {} was shared with you.'.format(
-            str(user_bills['number']), str(user_bills['category']), str(user_bills['timestamp'].strftime(timestamp_format)), str(user_bills['cost'])))
-    except Exception as e:
-        print("Error during message send to remote user : ", e)
+#         bot.send_message(user.id, 'An expense has been modified.\n The new expense for {} on {} with value of {} was shared with you.'.format(
+#             str(user_bills['number']), str(user_bills['category']), str(user_bills['timestamp'].strftime(timestamp_format)), str(user_bills['cost'])))
+#     except Exception as e:
+#         print("Error during message send to remote user : ", e)
 
 
 # function to display total expenditure
