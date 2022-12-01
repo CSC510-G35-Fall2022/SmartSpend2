@@ -24,7 +24,9 @@ from command.start import start_and_menu_command
 from command.add import command_add
 from command.search import command_select
 from command.history import show_history
+from command.display import command_display
 from command.edit import edit1
+from command.delete import command_delete
 
 
 load_dotenv()
@@ -146,180 +148,15 @@ def smart_edit(message):
 
 # function to display total expenditure
 @bot.message_handler(commands=['display'])
-def command_display(message):
-    chat_id = message.chat.id
-    user_history = db.user_bills.find({'user_telegram_id': message.chat.id})
-
-    if user_history == None:
-        bot.send_message(
-            chat_id, "Oops! Looks like you do not have any spending records!")
-    else:
-        # print(user_history)
-        markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
-        markup.row_width = 2
-        for mode in spend_display_option:
-            markup.add(mode)
-        msg = bot.reply_to(
-            message, 'Please select a category to see the total expense', reply_markup=markup)
-        bot.register_next_step_handler(msg, display_total)
-
-
-def display_total(message):
-    try:
-        chat_id = message.chat.id
-        display_option = message.text
-
-        if not display_option in spend_display_option:
-            raise Exception(
-                "Sorry I can't show spendings for \"{}\"!".format(display_option))
-
-        if display_option == 'Day':
-            start_timestamp = datetime.combine(
-                date.today(), datetime.min.time())
-            end_timestamp = start_timestamp + timedelta(days=1)
-            records = db.user_bills.aggregate([
-                {'$match': {'user_telegram_id': message.chat.id, 'timestamp': {
-                    '$gte': start_timestamp, '$lt': end_timestamp}}},
-                {'$group': {'_id': {'category': '$category'}, 'count': {'$sum': '$cost'}}}
-            ])
-        elif display_option == 'Month':
-            start_timestamp = datetime.combine(
-                date.today().replace(day=1), datetime.min.time())
-            end_timestamp = datetime.combine(date.today(), datetime.max.time())
-            records = db.user_bills.aggregate([
-                {'$match': {'user_telegram_id': message.chat.id, 'timestamp': {
-                    '$gte': start_timestamp, '$lt': end_timestamp}}},
-                {'$group': {'_id': {'category': '$category'}, 'count': {'$sum': '$cost'}}}
-            ])
-        elif display_option == 'All':
-            # print( db.user_bills.find({'number'}))
-
-            records = db.user_bills.aggregate([
-                {'$match': {'user_telegram_id': message.chat.id}},
-                {'$group': {'_id': {'category': '$category'}, 'count': {'$sum': '$cost'}}},
-                {'$sort': {'number': pymongo.ASCENDING}}
-            ])
-
-        if records is None:
-            raise Exception(
-                "Oops! Looks like you do not have any spending records!")
-
-        total_text = ''
-        cat = []
-        amt = []
-        for record in records:
-            total_text += '{:25s} {}\n'.format(
-                record['_id']['category'],  str(record['count']))
-            cat.append(record['_id']['category'])
-            amt.append(float(record['count']))
-
-        spending_text = ""
-        if len(total_text) == 0:
-            spending_text = "You have no spendings for {}!".format(
-                display_option)
-        else:
-            spending_text = "Here are your {} total spendings:\n | CATEGORIES | AMOUNT |\n----------------------------------------\n{}".format(
-                display_option.lower(), total_text)
-
-        bot.send_message(chat_id, spending_text)
-        amt_per = []
-        s = sum(amt)
-        for i in amt:
-            amt_per.append((i/s)*100)
-
-        B = TelegramBot(api_token, chat_id)
-        plt.clf()
-        plt.pie(amt_per, labels=cat, shadow=True, autopct='%1.1f%%')
-        B.send_plot(plt)
-        B.clean_tmp_dir()
-    except Exception as e:
-        bot.reply_to(message, str(e) + str(e.__cause__))
+def smart_display(message):
+    command_display(message, bot)
 
 # handles "/delete" command
 
 
 @bot.message_handler(commands=['delete'])
-def command_delete(message):
-
-    markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
-    markup.row_width = 2
-    for c in delete_options:
-        markup.add(c)
-    # markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
-    # markup.row_width = 2
-    # options = ["Delete all", "Delete a specific transaction"]
-    # for mode in options:
-    #     markup.add(mode)
-    # db.user_bills.delete_many({'user_telegram_id': message.chat.id})
-    msg = bot.send_message(
-        message.chat.id, 'Would you like to delete all data or a specific expense?', reply_markup=markup)
-
-    bot.register_next_step_handler(msg, post_delete_selection)
-
-    # # msg = bot.send_message(message.chat.id, 'Would you like to delete all data or a specific expense?', reply_markup=markup)
-    # print("Message: "  + msg.text)
-    # if (msg.text ==delete_options[0]):
-    #     print('delete all')
-
-    #     # db.user_bills.delete_many({'user_telegram_id': message.chat.id})
-    #     db.user_bills.delete_many({})
-    #     bot.send_message(message.chat.id, 'All data deleted.')
-    # elif (msg == delete_options[1]):
-    #     print('delete one')
-    #     num = bot.send_message(message.chat.id, "which transaction number would you like to delete")
-    #     user_history = db.user_bills.find({'user_telegram_id' : message.chat.id, 'number': 2})
-
-
-def post_delete_selection(message):
-    # print(message.text)
-    try:
-        chat_id = message.chat.id
-        selected_delete_option = message.text
-
-        if (selected_delete_option == delete_options[0]):
-            print('delete all')
-
-            db.user_bills.delete_many({'user_telegram_id': message.chat.id})
-            # db.user_bills.delete_many({})
-            bot.send_message(message.chat.id, 'All data deleted.')
-        elif (selected_delete_option == delete_options[1]):
-            print('delete one')
-            num = bot.send_message(
-                message.chat.id, "which transaction number would you like to delete")
-            bot.register_next_step_handler(num, delete_one_handler)
-            user_history = db.user_bills.find(
-                {'user_telegram_id': message.chat.id, 'number': 2})
-    except Exception as e:
-        bot.reply_to(message, 'Oh no! ' + str(e))
-        display_text = ""
-        for c in commands:  # generate help text out of the commands dictionary defined at the top
-            display_text += "/" + c + ": "
-            display_text += commands[c] + "\n"
-        bot.send_message(chat_id, 'Please select a menu option from below:')
-        bot.send_message(chat_id, display_text)
-
-
-def delete_one_handler(message):
-    chat_id = message.chat.id
-    record_to_delete = message.text
-    print(record_to_delete)
-    try:
-        db.user_bills.delete_one({'number': int(record_to_delete)})
-        bot.send_message(message.chat.id, 'Deleted record successfully')
-    except Exception as e:
-        bot.reply_to(message, 'Oh no! ' + str(e))
-
-    # if selected_limit_category != 'View Limits' and selected_limit_category in limit_categories:
-    #     global limit_category
-    #     limit_category = selected_limit_category
-    #     message = bot.send_message(chat_id, 'How much limit do you want to set on a {} basis? \n(Enter numeric values only)'.format(str(limit_category)))
-    #     bot.register_next_step_handler(message, post_limit_amount_input)
-    # elif selected_limit_category == 'View Limits':
-    #     # print("viewing limits for current user")
-    #     view_limits()
-    # else:
-    #     message = bot.send_message(chat_id, 'Entered wrong input')
-
+def smart_delete(message):
+    command_delete(message, bot)
 
 @bot.message_handler(commands=['limit'])
 def command_limit(message):
