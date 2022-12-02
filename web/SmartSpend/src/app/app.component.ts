@@ -7,6 +7,7 @@ import {MatChipInputEvent} from '@angular/material/chips';
 import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
 import { ExpenseService } from './expense/expense.service';
+import { AppService } from './app.service';
 
 
 @Component({
@@ -23,7 +24,7 @@ export class AppComponent {
   // constructor(private http: HttpClient){}
   title = 'SmartSpend';
 
-  constructor(private httpClient: HttpClient, public expenseService: ExpenseService) {
+  constructor(private httpClient: HttpClient, public expenseService: ExpenseService, public appService: AppService) {
   }
   serverData!: JSON;
   employeeData!: JSON;

@@ -11,7 +11,7 @@ import { ExpenseService } from '../expense/expense.service';
 })
 export class HomepageComponent {
 
-  constructor(private httpClient: HttpClient, public appService: AppService,     private router: Router) {
+  constructor(private httpClient: HttpClient, public appService: AppService, private router: Router) {
   }
   serverData!: JSON;
   employeeData!: JSON;
@@ -26,6 +26,7 @@ export class HomepageComponent {
     console.log(parseInt(this.userId) - 2)
     this.appService.userId = parseInt(this.userId);
     this.appService.getExpensesById();
+    this.appService.getLimitsForUser();
     this.router.navigate(['dashboard/']);
 
   }

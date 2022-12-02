@@ -20,18 +20,19 @@ export class AddExpensePageComponent {
   });
 
   addExpense() {
+    
+    console.log(Date.now())
+
     let expense = {
       'user_telegram_id': this.appService.userId,
       'category':  this.expenseForm.controls['category'].value,
       'cost': this.expenseForm.controls['cost'].value,
       'timestamp': Date.now(),
-      
+      'number': this.appService.nextNumber
     }
     console.log(expense);
     this.appService.sendExpense(expense);
-    // this.httpClient.post('http://127.0.0.1:5002/tests', expense).subscribe(data => {
-    //   console.log(data);
-    // })
+
 
   }
 }

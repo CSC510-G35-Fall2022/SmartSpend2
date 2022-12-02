@@ -42,11 +42,12 @@ def my_test_endpoint():
     date = datetime.now()
     print(date)
     db.user_bills.insert_one(request.get_json());
+    return {'success': 'true'}
     
-    return jsonify(request.get_json())
+    # return jsonify(request.get_json())
 
 @app.route("/")
-def hello():
+def getAllExpenses():
     # return jsonify({'text':'Hello World!'})
     # return jsonify(db.user_bills);
     # print(cluster)
@@ -69,20 +70,9 @@ def hello():
     return dumps(list(db['user_bills'].find({})))
     # return jsonify({'text':'Hello World!'})
 
-# class Employees(Resource):
-#     def get(self):
-#         return {'employees': [{'id':1, 'name':'Balram'},{'id':2, 'name':'Tom'}]} 
-
-# class Employees_Name(Resource):
-#     def get(self, employee_id):
-#         print('Employee id:' + employee_id)
-#         result = {'data': {'id':1, 'name':'Balram'}}
-#         return jsonify(result)       
-
-
-# api.add_resource(Employees, '/employees') # Route_1
-# api.add_resource(Employees_Name, '/employees/<employee_id>') # Route_3
-
+@app.route("/limits/<id>")
+def getLimitsForUser(id):
+   return dumps(list(db['user_limits'].find({'user_telegram_id': int(id)})));
 
 if __name__ == '__main__':
    app.run(port=5002)

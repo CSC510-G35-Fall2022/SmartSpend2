@@ -8,6 +8,9 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
+import {MatTableModule} from '@angular/material/table';
+import {MatSortModule} from '@angular/material/sort';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MatIconModule } from '@angular/material/icon';
@@ -18,6 +21,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HeaderComponent } from './header/header.component';
 import { HistoryComponent } from './history/history.component';
 import { HomepageComponent } from './homepage/homepage.component';
+import {MatPaginatorModule} from '@angular/material/paginator';
+
 import {MatCardModule} from '@angular/material/card';
 import { CategoryLimitsComponent } from './category-limits/category-limits.component';
 import { ExpenseComponent } from './expense/expense.component';
@@ -43,7 +48,10 @@ import { AddExpensePageComponent } from './add-expense-page/add-expense-page.com
     MatIconModule,
     ReactiveFormsModule,
     FormsModule,
+    MatSortModule,
     MatButtonModule,
+    MatTableModule,
+    MatPaginatorModule,
 MatCardModule,
     BrowserAnimationsModule,
   ],
