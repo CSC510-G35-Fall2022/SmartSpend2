@@ -11,6 +11,7 @@ import telebot
 import time
 from telebot import types
 from datetime import datetime, date, timedelta
+from telegram import ParseMode
 from telethon import TelegramClient
 import asyncio
 from pymongo import MongoClient, ReturnDocument
@@ -53,7 +54,8 @@ commands = {
     'limit': 'Add daily/monthly/yearly limits for spending',
     'search':'Search a product and comapre prices',
     'settle': 'Settle an expense shared with you',
-    'limitcategory': 'Set Monthly limits for each spending categories'
+    'limitcategory': 'Set Monthly limits for each spending categories',
+    'website': 'Visit website to help you manage your expenses better'
 }
 
 bot = telebot.TeleBot(api_token)
@@ -63,11 +65,11 @@ telebot.logger.setLevel(logging.INFO)
 
 # #Define listener for requests by user
 # def listener(user_requests):
-# 	for req in user_requests:
-# 		if(req.content_type=='text'):
-# 			print("{} name: {} chat_id: {} message: {}".format(str(datetime.now()),str(req.chat.first_name),str(req.chat.id),str(req.text)))
+#     for req in user_requests:
+#         if(req.content_type=='text'):
+#             print("{} name: {} chat_id: {} message: {}".format(str(datetime.now()),str(req.chat.first_name),str(req.chat.id),str(req.text)))
            
-# 			# print("{} name: {} chat_id: {} message: {}".format(str(datetime.now()),str(req.chat.first_name),str(req.chat.id)))
+#             # print("{} name: {} chat_id: {} message: {}".format(str(datetime.now()),str(req.chat.first_name),str(req.chat.id)))
 
 # bot.set_update_listener(listener)
 
@@ -84,6 +86,17 @@ def start_and_menu_command(m):
     bot.send_message(chat_id, text_intro)
     return True
 
+
+#defines how the /start and /help commands have to be handled/processed
+@bot.message_handler(commands=['website'])
+def website_command(m):
+    chat_id = m.chat.id
+    # print(cluster)
+    # print('https://localhost:4200/{}'.format(chat_id))
+    url = 'https://localhost:4200/{}'.format(chat_id)
+    bot.send_message(chat_id, text="Check out the website:\n http://localhost:4200/{}".format(chat_id),parse_mode=ParseMode.MARKDOWN)
+    return True
+
 #defines how the /new command has to be handled/processed
 @bot.message_handler(commands=['add'])
 def command_add(message):
@@ -97,8 +110,8 @@ def command_add(message):
     msg = bot.reply_to(message, 'Select Category \nSelect Cancel to abort.', reply_markup=markup)
     # print('category', message.text)
     bot.register_next_step_handler(msg, post_category_selection)
-	
-	
+    
+    
 @bot.message_handler(commands=['search'])
 def command_select(message):
     chat_id = message.chat.id
@@ -136,8 +149,8 @@ def product_table(message):
         bot.send_message(chat_id, tabulate(results, headers="keys", tablefmt="github"))
     except Exception as e:
         bot.reply_to(message, 'Oh no. ' + str(e))
-	
-	
+    
+    
 async def find_user_by_username(username):
     try:
         async with TelegramClient(api_username, api_id, api_hash) as client:
@@ -155,9 +168,8 @@ def post_category_selection(message):
             chat_id = message.chat.id
             selected_category = message.text
             if selected_category == "Cancel":
-            	msg = bot.send_message(chat_id, 'Cancelling record', reply_markup=types.ReplyKeyboardRemove())
-            	raise Exception("Record Cancelled!!")
-
+                msg = bot.send_message(chat_id, 'Cancelling record', reply_markup=types.ReplyKeyboardRemove())
+                raise Exception("Record Cancelled!!")
             elif not selected_category in spend_categories:
                 if 'New_Category' in spend_categories:
                     spend_categories.remove('New_Category')
@@ -190,35 +202,35 @@ def post_category_selection(message):
 def post_amount_input(message):
     # print(message.text)
     try:
-	    chat_id = message.chat.id
-	    amount_entered = message.text
-	    if amount_entered=='Cancel':
-	    	raise Exception("Cancelling record!!")
-	    amount_value = validate_entered_amount(amount_entered)  # validate
-	    if amount_value == 0:  # cannot be $0 spending
-	        raise Exception("Spent amount has to be a non-zero number.")
+        chat_id = message.chat.id
+        amount_entered = message.text
+        if amount_entered=='Cancel':
+            raise Exception("Cancelling record!!")
+        amount_value = validate_entered_amount(amount_entered)  # validate
+        if amount_value == 0:  # cannot be $0 spending
+            raise Exception("Spent amount has to be a non-zero number.")
 
-	    user_bills['cost'] = float(amount_value)
-	    # print(user_bills)
-	    # print(user_bills['cost'])
+        user_bills['cost'] = float(amount_value)
+        # print(user_bills)
+        # print(user_bills['cost'])
 
-	    user_bills['timestamp'] = datetime.now()
-	    # print(user_bills['timestamp'])
-	    # print(count)
-	    # print(user_çcbills['number'])
+        user_bills['timestamp'] = datetime.now()
+        # print(user_bills['timestamp'])
+        # print(count)
+        # print(user_çcbills['number'])
 
-	    user_history = db.user_bills.find({'user_telegram_id' : message.chat.id})
-	    maximum = 0
-	    for rec in user_history:
-	        maximum = max(maximum, rec['number'])
-	        # print(maximum)
-	    # print('done')
+        user_history = db.user_bills.find({'user_telegram_id' : message.chat.id})
+        maximum = 0
+        for rec in user_history:
+            maximum = max(maximum, rec['number'])
+            # print(maximum)
+        # print('done')
 
-	    # global count_
-	    user_bills['number'] = maximum+1
-	    # count_ += 1
+        # global count_
+        user_bills['number'] = maximum+1
+        # count_ += 1
 
-	    get_sharing_details(message)
+        get_sharing_details(message)
 
     except Exception as e:
         bot.reply_to(message,str(e))
@@ -239,40 +251,40 @@ def get_sharing_details(message):
     bot.register_next_step_handler(message, post_sharing_selection)
 
 def post_sharing_selection(message):
-	chat_id = message.chat.id
-	response = message.text
+    chat_id = message.chat.id
+    response = message.text
 
-	if response == "Cancel":
-		bot.send_message(message.chat.id, 'Cancelling Record!!')
-		display_text = ""
-		for c in commands:  # generate help text out of the commands dictionary defined at the top
-		    display_text += "/" + c + ": "
-		    display_text += commands[c] + "\n"
-		bot.send_message(chat_id, 'Please select a menu option from below:')
-		bot.send_message(chat_id, display_text)
+    if response == "Cancel":
+        bot.send_message(message.chat.id, 'Cancelling Record!!')
+        display_text = ""
+        for c in commands:  # generate help text out of the commands dictionary defined at the top
+            display_text += "/" + c + ": "
+            display_text += commands[c] + "\n"
+        bot.send_message(chat_id, 'Please select a menu option from below:')
+        bot.send_message(chat_id, display_text)
 
-	elif response == "Yes":
-	    # handle multi-user scenario
-	    bot.send_message(message.chat.id, 'Enter the username of the other user: or Type Cancel to abort!!')
-	    bot.register_next_step_handler(message, handle_user_id_input_for_sharing)
+    elif response == "Yes":
+        # handle multi-user scenario
+        bot.send_message(message.chat.id, 'Enter the username of the other user: or Type Cancel to abort!!')
+        bot.register_next_step_handler(message, handle_user_id_input_for_sharing)
 
-	else:
-	    # handle direct commit scenario
-	    add_bill_to_database(message)
+    else:
+        # handle direct commit scenario
+        add_bill_to_database(message)
 
 def handle_user_id_input_for_sharing(message):
     chat_id = message.chat.id
     username = str(message.text)
 
     if username == "Cancel":
-    	bot.send_message(message.chat.id, 'Cancelling Record!!')
-    	display_text = ""
-    	for c in commands:  # generate help text out of the commands dictionary defined at the top
-    		display_text += "/" + c + ": "
-    		display_text += commands[c] + "\n"
-    	bot.send_message(chat_id, 'Please select a menu option from below:')
-    	bot.send_message(chat_id, display_text)
-    	return
+        bot.send_message(message.chat.id, 'Cancelling Record!!')
+        display_text = ""
+        for c in commands:  # generate help text out of the commands dictionary defined at the top
+            display_text += "/" + c + ": "
+            display_text += commands[c] + "\n"
+        bot.send_message(chat_id, 'Please select a menu option from below:')
+        bot.send_message(chat_id, display_text)
+        return
 
     bot.send_message(chat_id, "User {} will be sent an update about the split".format(username))
 
@@ -475,9 +487,9 @@ def show_history(message):
             cat.append(str(rec['category']))
             amt.append(float(rec['cost']))
             if str(rec['timestamp'].strftime(timestamp_format))[:3] in hist_dict:
-            	hist_dict[str(rec['timestamp'].strftime(timestamp_format))[:3]] += float(rec['cost'])
+                hist_dict[str(rec['timestamp'].strftime(timestamp_format))[:3]] += float(rec['cost'])
             else:
-            	hist_dict[str(rec['timestamp'].strftime(timestamp_format))[:3]] = float(rec['cost'])
+                hist_dict[str(rec['timestamp'].strftime(timestamp_format))[:3]] = float(rec['cost'])
             spend_total_str += '\n{:20s} {:20s} {:20s} {:20s}\n'.format(str(rec['number']), str(rec['timestamp'].strftime(timestamp_format)),  str(rec['category']),  str(rec['cost']))
             if 'shared_with' in rec.keys():
                 spend_total_str += 'Shared With:'
@@ -493,8 +505,8 @@ def show_history(message):
         B.clean_tmp_dir()
         bot.send_message(chat_id, spend_total_str)
     except Exception as e:
-        bot.reply_to(message, "Oops!" + str(e) + str(e.__cause__) + str(e.__context__))	
-				
+        bot.reply_to(message, "Oops!" + str(e) + str(e.__cause__) + str(e.__context__))    
+                
 
 #function to edit date, category or cost of a transaction
 @bot.message_handler(commands=['edit'])
@@ -594,7 +606,7 @@ def edit_date(m):
             except:
                 time.sleep(5)
             bot.send_message(user_bills['user_telegram_id'], spend_total_str)
-	
+    
     # print('Updated record '+ str(user_bills) +' to user_bills collection')
     
 def edit_cat(m):
@@ -616,7 +628,7 @@ def edit_cat(m):
                 spend_total_str += '{:20s} {:20s} {:20s} \n'.format(str(updated_user_bill['timestamp'].strftime(timestamp_format)),  str(updated_user_bill['category']),  str(updated_user_bill['cost'])) 
                 asyncio.run(updating_user_with_updated_expense(m, x, updated_user_bill))
                 bot.send_message(user_bills['user_telegram_id'], spend_total_str)
-		
+        
         # print('Updated record '+ str(user_bills) +' to user_bills collection')
 
 def edit_cost(m):
@@ -626,7 +638,7 @@ def edit_cost(m):
         if(validate_entered_amount(new_cost) != 0):
             updated_user_bill=db.user_bills.find_one_and_update({"_id" : user_bills['_id']}, { '$set': { "cost" : float(new_cost)} }, return_document = ReturnDocument.AFTER)
             bot.reply_to(m, "Cost is updated")
-	    #update the shared user 
+        #update the shared user 
             if updated_user_bill['shared_with'] != 'NULL':
                 for x in updated_user_bill['shared_with']:
                     # print(x)
@@ -640,8 +652,8 @@ def edit_cost(m):
             return
     except Exception as e:
         bot.reply_to(m, "Oops!" + str(e) + str(e.__cause__) + str(e.__context__))
-	
-	
+    
+    
 # To send the shared users the updated expense
 async def updating_user_with_updated_expense(message,user_name, user_bills):
     try:
@@ -653,7 +665,7 @@ async def updating_user_with_updated_expense(message,user_name, user_bills):
         bot.send_message(user.id, 'An expense has been modified.\n The new expense for {} on {} with value of {} was shared with you.'.format(str(user_bills['number']), str(user_bills['category']), str(user_bills['timestamp'].strftime(timestamp_format)), str(user_bills['cost'])))
     except Exception as e:
         print("Error during message send to remote user : ", e)
-		
+        
 
 #function to display total expenditure
 @bot.message_handler(commands=['display'])
@@ -724,7 +736,7 @@ def display_total(message):
         amt_per=[]
         s=sum(amt)
         for i in amt:
-        	amt_per.append((i/s)*100)
+            amt_per.append((i/s)*100)
         B=TelegramBot(api_token, chat_id)
         plt.clf()
         plt.pie(amt_per, labels=cat, shadow=True, autopct='%1.1f%%')
