@@ -6,6 +6,7 @@ import telebot
 import time
 from telebot import types
 from datetime import datetime, date, timedelta
+from telegram import ParseMode
 from telethon import TelegramClient
 import asyncio
 from pymongo import MongoClient, ReturnDocument
@@ -44,21 +45,16 @@ commands = {
     'delete': 'Clear/Erase all your records',
     'edit': 'Edit/Change spending details',
     'limit': 'Add daily/monthly/yearly limits for spending',
-    'limitcategory': 'Add daily/monthly/yearly limits for spending in a specific category',
     'search':'Search a product and compare prices',
-    'settle': 'Settle an expense shared with you',
-    'website': 'Website'
+    'settle': 'Settle an expense shared with you'
 }
 
-bot = telebot.TeleBot(api_token)
-
-def start_and_menu_command(m):
-    chat_id = m.chat.id
+def command_website(message, bot):
+    chat_id = message.chat.id
     # print(cluster)
-   
-    text_intro = "Welcome to SmartSpend - a simple solution to spend money smartly on your expenses! \nHere is a list of available commands, please enter a command of your choice so that I can assist you further: \n\n"
-    for c in commands:  # generate help text out of the commands dictionary defined at the top
-        text_intro += "/" + c + ": "
-        text_intro += commands[c] + "\n\n"
-    bot.send_message(chat_id, text_intro)
+    # print('https://localhost:4200/{}'.format(chat_id))
+    url = 'https://localhost:4200/{}'.format(chat_id)
+    bot.send_message(chat_id, text="Check out the website:\n http://localhost:4200/{}".format(chat_id),parse_mode=ParseMode.MARKDOWN)
     return True
+
+

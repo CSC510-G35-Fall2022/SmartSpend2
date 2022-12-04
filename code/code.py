@@ -30,6 +30,7 @@ from command.delete import command_delete
 from command.limit import command_limit
 from command.limit_cat import command_limitcategory
 from command.settle import command_settle
+from command.website import command_website
 
 
 load_dotenv()
@@ -108,6 +109,11 @@ def smart_limit_cat(message):
 @bot.message_handler(commands=['settle'])
 def smart_settle(message):
     command_settle(message, bot)
+
+    # Handling /settle command
+@bot.message_handler(commands=['website'])
+def smart_website(message):
+    command_website(message, bot)
 
 async def main():
     try:
