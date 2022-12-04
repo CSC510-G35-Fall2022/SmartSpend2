@@ -32,6 +32,8 @@ from command.limit_cat import command_limitcategory
 from command.settle import command_settle
 from command.website import command_website
 
+import matplotlib.pyplot as plt
+plt.switch_backend('Agg') 
 
 load_dotenv()
 
@@ -60,6 +62,18 @@ delete_options = ['Delete All', 'Delete a specific record']
 bot = telebot.TeleBot(api_token)
 
 telebot.logger.setLevel(logging.INFO)
+bot.set_my_commands([
+    telebot.types.BotCommand("/start", "Main menu"),
+    telebot.types.BotCommand("/add", "Add a new expense"),
+    telebot.types.BotCommand("/delete", "Clear/Erase your records"),
+    telebot.types.BotCommand("/limit", "Sets limits for a day, month, or year"),
+    telebot.types.BotCommand("/limitcategory", "Sets limits for a specific category"),
+    telebot.types.BotCommand("/display", "Displays a summary of your expenses"),
+    telebot.types.BotCommand("/edit", "Edit one of your display entries"),
+    telebot.types.BotCommand("/history", "Shows past expenses"),
+    telebot.types.BotCommand("/search", "Scrapes the web for specific items and compares price"),
+    telebot.types.BotCommand("/settle", "Settle and expense shared with you"),
+])
 
 @bot.message_handler(commands=['start', 'menu'])
 def smart_menu(m):
