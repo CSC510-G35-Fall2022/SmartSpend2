@@ -8,14 +8,16 @@ import { HeaderComponent } from './header/header.component';
 import { HistoryComponent } from './history/history.component';
 import { HomepageComponent } from './homepage/homepage.component';
 
-const routes: Routes = [
-  { path: 'homepage', component: HomepageComponent },
-  {path: 'history', component: HistoryComponent},
-  {path: 'limits', component: CategoryLimitsComponent},
-  {path: 'dashboard', component: DashboardComponent},
-  {path: 'addExpensePage', component: AddExpensePageComponent},
 
-  {path: '', redirectTo: 'homepage', pathMatch:'full'},
+const routes: Routes = [
+  // {path: ':id/homepage', component: HomepageComponent },
+  {path: ':id/history', component: HistoryComponent},
+  {path: ':id/limits', component: CategoryLimitsComponent},
+  {path: ':id/dashboard', component: DashboardComponent},
+  {path: ':id/addExpensePage', component: AddExpensePageComponent},
+
+  {path: ':id', redirectTo: ':id/dashboard', pathMatch:'full'},
+  {path: '', component: AppComponent},
 
 ];
 

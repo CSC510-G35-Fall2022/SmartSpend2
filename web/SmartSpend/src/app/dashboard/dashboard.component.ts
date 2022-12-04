@@ -1,5 +1,5 @@
 import {HttpClient} from '@angular/common/http';
-import {Component, ViewChild, AfterViewInit} from '@angular/core';
+import {Component, ViewChild, AfterViewInit, OnInit} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort, SortDirection} from '@angular/material/sort';
 import {merge, Observable, of as observableOf} from 'rxjs';
@@ -8,13 +8,14 @@ import { AppService } from '../app.service';
 
 import {MatTableDataSource} from '@angular/material/table';
 import { Time } from '@angular/common';
+import { ParamMap, ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent {
+export class DashboardComponent  implements OnInit {
   displayedColumns: string[] = ['id', 'name', 'progress', 'fruit'];
   columns: string[] = ['number', 'category', 'cost'];
   dataSource: MatTableDataSource<UserData>;
@@ -25,11 +26,27 @@ export class DashboardComponent {
   sort!: MatSort;
   expenses: any[] = [];
   expense!: [];
+  ngOnInit():void {
+    // console.log(this.userId);
+    
+      this.route.paramMap.subscribe((params: ParamMap) => {
+        // this.userId = params.get('id')
+        this.appService.userId = Number(params.get('id'));
+        console.log(params)
+        this.appService.getExpensesById().subscribe((expenses: any) => {
+          // console.log('logging expenses homepage', expenses);
+          this.appService.userData = expenses;
+        })
+        // console.log('userId',this.appService.userId)
+        // this.router.navigate([`${this.appService.userId}/dashboard/`]);
+      })
+    
+  }
 
 
-  constructor(public appService: AppService, private http: HttpClient) {
+  constructor(public appService: AppService, private http: HttpClient, public route: ActivatedRoute, public router: Router)  {
     // Create 100 users
-    appService.getExpenses();
+    // appService.getExpenses();
 
     this.http.get('http://127.0.0.1:5002/').subscribe(data => {this.expenses = Array(data); console.log(this.expenses);})
 

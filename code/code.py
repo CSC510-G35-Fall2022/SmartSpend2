@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from bob_telegram_tools.bot import TelegramBot
 import matplotlib.pyplot as plt
-
+plt.switch_backend('Agg')
 import logging
 import re
 import os
@@ -101,6 +101,7 @@ def website_command(m):
 @bot.message_handler(commands=['add'])
 def command_add(message):
     chat_id = message.chat.id
+    print(message.from_user.username)
     user_bills['user_telegram_id'] = chat_id
     markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
     markup.row_width = 2
@@ -211,24 +212,19 @@ def post_amount_input(message):
             raise Exception("Spent amount has to be a non-zero number.")
 
         user_bills['cost'] = float(amount_value)
-        # print(user_bills)
-        # print(user_bills['cost'])
+       
+        print(str(datetime.now()))
+        # user_bills['timestamp'] = datetime.now() CHANGE
+        user_bills['timestamp'] = str(datetime.now())
 
-        user_bills['timestamp'] = datetime.now()
-        # print(user_bills['timestamp'])
-        # print(count)
-        # print(user_çcbills['number'])
+       
 
         user_history = db.user_bills.find({'user_telegram_id' : message.chat.id})
         maximum = 0
         for rec in user_history:
             maximum = max(maximum, rec['number'])
-            # print(maximum)
-        # print('done')
-
-        # global count_
+          
         user_bills['number'] = maximum+1
-        # count_ += 1
 
         get_sharing_details(message)
 
@@ -270,6 +266,7 @@ def post_sharing_selection(message):
 
     else:
         # handle direct commit scenario
+        # user_bills['shared_with'] = []
         add_bill_to_database(message)
 
 def handle_user_id_input_for_sharing(message):
@@ -306,7 +303,9 @@ async def send_update_to_user_about_expense(message, user_bills):
         if user == None:
             return
 
-        bot.send_message(user.id, 'An expense for {} on {} with value of {} was shared with you.'.format(str(user_bills['category']), str(user_bills['timestamp'].strftime(timestamp_format)), str(user_bills['cost'])))
+        # bot.send_message(user.id, 'An expense for {} on {} with value of {} was shared with you.'.format(str(user_bills['category']), str(user_bills['timestamp'].strftime(timestamp_format)), str(user_bills['cost']))) CHANGE
+        bot.send_message(user.id, 'An expense for {} on {} with value of {} was shared with you.'.format(str(user_bills['category']), str(user_bills['timestamp']), str(user_bills['cost'])))
+
     except Exception as e:
         print("Error during message send to remote user : ", e)
 
@@ -317,7 +316,9 @@ def add_bill_to_database(message):
     db.user_bills.insert_one(user_bills)
     # print('Added record '+ str(user_bills) +' to user_bills collection')
     
-    bot.send_message(chat_id, 'The following expenditure has been recorded: You have spent $' + str(user_bills['cost']) + ' for ' + str(user_bills['category']) + ' on ' + str(user_bills['timestamp'].strftime(timestamp_format)))
+    # bot.send_message(chat_id, 'The following expenditure has been recorded: You have spent $' + str(user_bills['cost']) + ' for ' + str(user_bills['category']) + ' on ' + str(user_bills['timestamp'].strftime(timestamp_format))) CHANGE
+    bot.send_message(chat_id, 'The following expenditure has been recorded: You have spent $' + str(user_bills['cost']) + ' for ' + str(user_bills['category']) + ' on ' + str(user_bills['timestamp']))
+
     
     # Check if limits are set and notify if they are crossed.
     limit_history = db.user_limits.find({'user_telegram_id' : user_bills['user_telegram_id']})
@@ -326,7 +327,7 @@ def add_bill_to_database(message):
             start_timestamp = datetime.combine(date.today(), datetime.min.time())
             end_timestamp = start_timestamp + timedelta(days=1)
             records = db.user_bills.aggregate([
-                {'$match' : { 'user_telegram_id' : message.chat.id, 'timestamp' : {'$gte':start_timestamp,'$lt': end_timestamp}}},
+                {'$match' : { 'user_telegram_id' : message.chat.id, 'timestamp'.strptime() : {'$gte':start_timestamp,'$lt': end_timestamp}}},
                 {'$group' : {'_id':{'category':'$category'}, 'count':{'$sum':'$cost'}}}
                 ])
             if not records:
@@ -486,11 +487,17 @@ def show_history(message):
             print(rec)
             cat.append(str(rec['category']))
             amt.append(float(rec['cost']))
-            if str(rec['timestamp'].strftime(timestamp_format))[:3] in hist_dict:
-                hist_dict[str(rec['timestamp'].strftime(timestamp_format))[:3]] += float(rec['cost'])
-            else:
-                hist_dict[str(rec['timestamp'].strftime(timestamp_format))[:3]] = float(rec['cost'])
-            spend_total_str += '\n{:20s} {:20s} {:20s} {:20s}\n'.format(str(rec['number']), str(rec['timestamp'].strftime(timestamp_format)),  str(rec['category']),  str(rec['cost']))
+            # if str(rec['timestamp'].strftime(timestamp_format))[:3] in hist_dict: CHANGE
+            #     hist_dict[str(rec['timestamp'].strftime(timestamp_format))[:3]] += float(rec['cost']) CHANGE
+
+            if str(rec['timestamp'])[:3] in hist_dict:
+                hist_dict[str(rec['timestamp'])[:3]] += float(rec['cost'])
+            else: 
+                         
+                hist_dict[str(rec['timestamp'])[:3]] = float(rec['cost'])
+            spend_total_str += '\n{:20s} {:20s} {:20s} {:20s}\n'.format(str(rec['number']), str(rec['timestamp']),  str(rec['category']),  str(rec['cost']))
+            #     hist_dict[str(rec['timestamp'].strftime(timestamp_format))[:3]] = float(rec['cost']) CHANGE
+            # spend_total_str += '\n{:20s} {:20s} {:20s} {:20s}\n'.format(str(rec['number']), str(rec['timestamp'].strftime(timestamp_format)),  str(rec['category']),  str(rec['cost'])) CHANGE
             if 'shared_with' in rec.keys():
                 spend_total_str += 'Shared With:'
                 for username in rec['shared_with']:
@@ -519,7 +526,9 @@ def edit1(m):
         raise Exception("Sorry! No spending records found!")
     spend_total_str = "Here is your spending history : \n EXPENSE NUMBER |    DATE AND TIME   | CATEGORY | AMOUNT |\n-----------------------------------------------------------------------\n"
     for rec in user_history:
-        spend_total_str += '\n{:20s} {:20s} {:20s} {:20s}\n'.format(str(rec['number']), str(rec['timestamp'].strftime(timestamp_format)),  str(rec['category']),  str(rec['cost']))
+        # spend_total_str += '\n{:20s} {:20s} {:20s} {:20s}\n'.format(str(rec['number']), str(rec['timestamp'].strftime(timestamp_format)),  str(rec['category']),  str(rec['cost'])) CHANGE
+        spend_total_str += '\n{:20s} {:20s} {:20s} {:20s}\n'.format(str(rec['number']), str(rec['timestamp']),  str(rec['category']),  str(rec['cost']))
+
         if 'shared_with' in rec.keys():
             spend_total_str += 'Shared With:'
             for username in rec['shared_with']:
@@ -594,19 +603,23 @@ def edit_date(m):
     timestamp = datetime.strptime(m.text, timestamp_format)
     user_bills = db.user_bills.find_one_and_update({"_id" : user_bills['_id']}, { '$set': { "timestamp" : timestamp} }, return_document = ReturnDocument.AFTER)
     bot.reply_to(m, "Date is updated")
-    #print(user_bills)
+    print(user_bills)
     # print(user_bills['shared_with'])
-    if user_bills['shared_with'] != 'NULL':
+    if 'shared_with' in user_bills:
+        print('here')
         for x in user_bills['shared_with']:
             # print(x)
             spend_total_str = "Here is the modified expense : \n|    DATE AND TIME   | CATEGORY | AMOUNT \n-----------------------------------------------------------------------\n"
-            spend_total_str += '{:20s} {:20s} {:20s} \n'.format(str(user_bills['timestamp'].strftime(timestamp_format)),  str(user_bills['category']),  str(user_bills['cost'])) 
+            # spend_total_str += '{:20s} {:20s} {:20s} \n'.format(str(user_bills['timestamp'].strftime(timestamp_format)),  str(user_bills['category']),  str(user_bills['cost']))  CHANGE
+            spend_total_str += '{:20s} {:20s} {:20s} \n'.format(str(user_bills['timestamp']),  str(user_bills['category']),  str(user_bills['cost'])) 
+
             try:
                 asyncio.run(updating_user_with_updated_expense(m, x, user_bills))
             except:
                 time.sleep(5)
             bot.send_message(user_bills['user_telegram_id'], spend_total_str)
-    
+    else: 
+        print('not')
     # print('Updated record '+ str(user_bills) +' to user_bills collection')
     
 def edit_cat(m):
@@ -620,12 +633,14 @@ def edit_cat(m):
         updated_user_bill=db.user_bills.find_one_and_update({"_id" : user_bills['_id']}, { '$set': { "category" : category} }, return_document = ReturnDocument.AFTER)
         bot.reply_to(m, "Category is updated")
         # print(user_bills['shared_with'])
-        if updated_user_bill['shared_with']:
+        if 'shared_with' in updated_user_bill:
             for x in updated_user_bill['shared_with']:
                 # print("jere")
                 # print(x)
                 spend_total_str = "Here is the modified expense : \n|    DATE AND TIME   | CATEGORY | AMOUNT \n-----------------------------------------------------------------------\n"
-                spend_total_str += '{:20s} {:20s} {:20s} \n'.format(str(updated_user_bill['timestamp'].strftime(timestamp_format)),  str(updated_user_bill['category']),  str(updated_user_bill['cost'])) 
+                # spend_total_str += '{:20s} {:20s} {:20s} \n'.format(str(updated_user_bill['timestamp'].strftime(timestamp_format)),  str(updated_user_bill['category']),  str(updated_user_bill['cost']))   CHANGE
+                spend_total_str += '{:20s} {:20s} {:20s} \n'.format(str(updated_user_bill['timestamp']),  str(updated_user_bill['category']),  str(updated_user_bill['cost'])) 
+
                 asyncio.run(updating_user_with_updated_expense(m, x, updated_user_bill))
                 bot.send_message(user_bills['user_telegram_id'], spend_total_str)
         
@@ -639,11 +654,13 @@ def edit_cost(m):
             updated_user_bill=db.user_bills.find_one_and_update({"_id" : user_bills['_id']}, { '$set': { "cost" : float(new_cost)} }, return_document = ReturnDocument.AFTER)
             bot.reply_to(m, "Cost is updated")
         #update the shared user 
-            if updated_user_bill['shared_with'] != 'NULL':
+            if 'shared_with' in updated_user_bill:
                 for x in updated_user_bill['shared_with']:
                     # print(x)
                     spend_total_str = "Here is the modified expense : \n|    DATE AND TIME   | CATEGORY | AMOUNT \n-----------------------------------------------------------------------\n"
-                    spend_total_str += '{:20s} {:20s} {:20s} \n'.format(str(updated_user_bill['timestamp'].strftime(timestamp_format)),  str(updated_user_bill['category']),  str(updated_user_bill['cost'])) 
+                    # spend_total_str += '{:20s} {:20s} {:20s} \n'.format(str(updated_user_bill['timestamp'].strftime(timestamp_format)),  str(updated_user_bill['category']),  str(updated_user_bill['cost']))  CHANGE
+                    spend_total_str += '{:20s} {:20s} {:20s} \n'.format(str(updated_user_bill['timestamp']),  str(updated_user_bill['category']),  str(updated_user_bill['cost'])) 
+
                     asyncio.run(updating_user_with_updated_expense(m, x, updated_user_bill))
                     bot.send_message(user_bills['user_telegram_id'], spend_total_str)
             # print('Updated record '+ str(user_bills) +' to user_bills collection')
@@ -656,13 +673,13 @@ def edit_cost(m):
     
 # To send the shared users the updated expense
 async def updating_user_with_updated_expense(message,user_name, user_bills):
+    print('updating user')
     try:
         user = await find_user_by_username(user_name)
-
         if user == None:
             return
-
-        bot.send_message(user.id, 'An expense has been modified.\n The new expense for {} on {} with value of {} was shared with you.'.format(str(user_bills['number']), str(user_bills['category']), str(user_bills['timestamp'].strftime(timestamp_format)), str(user_bills['cost'])))
+        # bot.send_message(user.id, 'An expense has been modified.\n The new expense for {} on {} with value of {} was shared with you.'.format(str(user_bills['number']), str(user_bills['category']), str(user_bills['timestamp'].strftime(timestamp_format)), str(user_bills['cost']))) CHANGE
+        bot.send_message(user.id, 'An expense has been modified.\n The new expense for {} on {} with value of {} was shared with you.'.format(str(user_bills['number']), str(user_bills['category']), str(user_bills['timestamp']), str(user_bills['cost'])))
     except Exception as e:
         print("Error during message send to remote user : ", e)
         
@@ -762,19 +779,6 @@ def command_delete(message):
     msg = bot.send_message(message.chat.id, 'Would you like to delete all data or a specific expense?', reply_markup=markup)
 
     bot.register_next_step_handler(msg, post_delete_selection)
-
-    # # msg = bot.send_message(message.chat.id, 'Would you like to delete all data or a specific expense?', reply_markup=markup)
-    # print("Message: "  + msg.text)
-    # if (msg.text ==delete_options[0]):
-    #     print('delete all')
-
-    #     # db.user_bills.delete_many({'user_telegram_id': message.chat.id})
-    #     db.user_bills.delete_many({})
-    #     bot.send_message(message.chat.id, 'All data deleted.')
-    # elif (msg == delete_options[1]):
-    #     print('delete one')
-    #     num = bot.send_message(message.chat.id, "which transaction number would you like to delete")
-    #     user_history = db.user_bills.find({'user_telegram_id' : message.chat.id, 'number': 2})
 
 def post_delete_selection(message):
         # print(message.text)
@@ -964,7 +968,9 @@ def settle_up(message):
             # print(str(rec['timestamp'].strftime(timestamp_format)))
             # print(message.text)
             # print(type(rec))
-            if(str(rec['timestamp'].strftime(timestamp_format))==message.text) :
+            # if(str(rec['timestamp'].strftime(timestamp_format))==message.text) : CHANGE
+            if(str(rec['timestamp'])==message.text) :
+
                 chat_id = message.chat.id
                 record['_id']=rec['_id']
                 record['timestamp']=rec['timestamp']
@@ -972,11 +978,15 @@ def settle_up(message):
                 record['number']=rec['number']
                 record['category']=rec['category']
                 record['shared_with']=rec['shared_with']
-                spend_total_str += '{:20s} {:20s} {:20s} {}\n'.format(str(rec['number']), str(rec['timestamp'].strftime(timestamp_format)),  str(rec['category']),  str(rec['cost']), str(rec['shared_with'][0]) if 'shared_with' in rec.keys() else "")
+                # spend_total_str += '{:20s} {:20s} {:20s} {}\n'.format(str(rec['number']), str(rec['timestamp'].strftime(timestamp_format)),  str(rec['category']),  str(rec['cost']), str(rec['shared_with'][0]) if 'shared_with' in rec.keys() else "") CHANGE
+                spend_total_str += '{:20s} {:20s} {:20s} {}\n'.format(str(rec['number']), str(rec['timestamp']),  str(rec['category']),  str(rec['cost']), str(rec['shared_with'][0]) if 'shared_with' in rec.keys() else "")
+
         #bot.send_message(chat_id, spend_total_str)
         # print(record)
         
-        bot.send_message(chat_id, 'The following expenditure has been selected to settle up: $' + str(record['cost']) + ' for ' + str(record['category']) + ' on ' + str(record['timestamp'].strftime(timestamp_format)))
+        # bot.send_message(chat_id, 'The following expenditure has been selected to settle up: $' + str(record['cost']) + ' for ' + str(record['category']) + ' on ' + str(record['timestamp'].strftime(timestamp_format))) CHANGE
+        bot.send_message(chat_id, 'The following expenditure has been selected to settle up: $' + str(record['cost']) + ' for ' + str(record['category']) + ' on ' + str(record['timestamp']))
+
         bot.send_message(chat_id, 'Your share of the expense is: {}'.format(record['cost']/(len(record['shared_with'])+1)))
         choice_for_settle(message, record)
 
@@ -1001,7 +1011,9 @@ def post_settle_selection(message,record):
         # print(new_cost)
         settled_user_bills= db.user_bills.find_one_and_update({"_id" : record['_id']}, { '$set': { "cost" : float(new_cost)} }, return_document = ReturnDocument.AFTER)
         paid_with_str = "Here is new expense you settled down : \n|    DATE AND TIME   | CATEGORY | AMOUNT TO BE PAID BY OTHERS | SHARED WITH | PAID BY \n-----------------------------------------------------------------------\n"
-        paid_with_str += '{:20s} {:20s} {:20s} {:20s}  \n'.format(str(settled_user_bills['timestamp'].strftime(timestamp_format)),  str(settled_user_bills['category']),  str(settled_user_bills['cost']), str(settled_user_bills['shared_with']) ) 
+        # paid_with_str += '{:20s} {:20s} {:20s} {:20s}  \n'.format(str(settled_user_bills['timestamp'].strftime(timestamp_format)),  str(settled_user_bills['category']),  str(settled_user_bills['cost']), str(settled_user_bills['shared_with']) ) CHANGE
+        paid_with_str += '{:20s} {:20s} {:20s} {:20s}  \n'.format(str(settled_user_bills['timestamp']),  str(settled_user_bills['category']),  str(settled_user_bills['cost']), str(settled_user_bills['shared_with']) ) 
+
         bot.send_message(chat_id, paid_with_str)
         
     else:

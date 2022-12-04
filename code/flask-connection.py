@@ -33,7 +33,7 @@ CORS(app)
 
 @app.route('/id/<id>')
 def get_records_by_id(id):
-   return dumps(list(db['user_bills'].find({'user_telegram_id': int(id)})))
+    return dumps(list(db['user_bills'].find({'user_telegram_id': int(id)})))
 
 @app.route('/tests', methods=['POST'])
 def my_test_endpoint():
@@ -72,7 +72,12 @@ def getAllExpenses():
 
 @app.route("/limits/<id>")
 def getLimitsForUser(id):
-   return dumps(list(db['user_limits'].find({'user_telegram_id': int(id)})));
+    print("id", id)
+    print(db['user_limits'].find({}).explain().get("executionStats", {}).get("nReturned"))
+
+    print(db['user_limits'].find({'user_telegram_id': int(id)}).explain().get("executionStats", {}).get("nReturned"))
+    # print(dumps(list(db['user_limits'].find({'user_telegram_id': int(id)}))))
+    return dumps(list(db['user_limits'].find({'user_telegram_id': int(id)})))
 
 if __name__ == '__main__':
    app.run(port=5002)
