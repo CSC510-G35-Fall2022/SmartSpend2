@@ -1,9 +1,11 @@
 Total score: 284
 | Rubric Item                                                                                                                                                                             | Self-Assessment | Evidence |
 |-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------|----------|
-| Video 1 | N/A | N/A |
-| Video 2 |      3       | see [README](https://github.com/CSC510-G35-Fall2022/Mental_Health/blob/main/README.md) under videos |
+| Video 1 | N/A | Very important: A 5min video of new functionality, showing a significant delta from old. |
+|Bonus X-Fold improvement|      3       | In some aspect of the code; theoretical complexity, runtime, memory, developer time...|
 | Workload is spread over the whole team (one team member is often Xtimes more productive than the others...but nevertheless, here is a track record that everyone is contributing a lot) |        2         |[contributors](https://github.com/CSC510-G35-Fall2022/Mental_Health/graphs/contributors)|
+| Docs: what: point descriptions of each class/function (in isolation)                                                                                                                    |        3         | [docs](https://github.com/CSC510-G35-Fall2022/Mental_Health/tree/main/docs), see readmes in each folder, see code comments|
+| Use of style checkers                                                                                                                                                                   |         3      |see under Run style check in [INSTALL.md](https://github.com/CSC510-G35-Fall2022/SmartSpend2/main/INSTALL.md)|
 | Number of commits                                                                                                                                                                       |         3        |[contributors](https://github.com/CSC510-G35-Fall2022/Mental_Health/graphs/contributors)|
 | Number of commits: by different people                                                                                                                                                  |         1        |[contributors](https://github.com/CSC510-G35-Fall2022/Mental_Health/graphs/contributors)|
 | Issues reports: there are many                                                                                                                                                          |         3        |[issues](https://github.com/CSC510-G35-Fall2022/Mental_Health/issues)|
