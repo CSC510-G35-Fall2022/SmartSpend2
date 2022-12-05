@@ -36,8 +36,8 @@ With simple commands, this bot allows you to:
 - Also added cancel feature, to abort an 'add' transaction at any point.
 - <u>Feature</u> -> Add 'limit_category' feature to work as an alarm when spending exceed preset limits.
 - - Users can create limits on the existing categories, food, groceries, utilities, ...
-- - <img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/se1.png" alt="commands" width="500"/>
-- - <img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/se2.png" alt="commands" width="500"/>
+- - <img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/limit1.png" alt="commands" width="500"/>
+- - <img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/limit2.png" alt="commands" width="500"/>
 - - When user adds an expense, limit categories, and all all three existing limits are checked.
 - - Ability to view limits for categories.
 - <u> Updated Feature display </u> -> Graphics
