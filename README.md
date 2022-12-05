@@ -48,8 +48,23 @@ https://user-images.githubusercontent.com/95981350/194871840-4b8816b7-a634-4c4f-
 
 See INSTALL.md
 
+## Funding 
+Not a funded project, nor is funding necessary.
 
-Contact Form and Bug Report Form
+## Contributors
+
+This project has the following contributors:
+
+|     | Contributor            | GitHub ID       |
+| --- | ---------------------- | --------------- |
+| 1   | Cheerla, Sanjana       | Stoir           |
+| 2   | Ganesh, Saail Gurunath | SaailGanesh     |
+| 3   | Pardeshi, Sourabh      | SourabhPardeshi |
+| 4   | Patel, Maya            | maya-dc-patel   |
+| 5   | Xin, Vincent           | Culcheese       |
+
+
+## Contact Form and Bug Report Form
 https://docs.google.com/forms/d/1cii1C1p-kijd8usQc4runQk88uT9rD750SH_IcEMuy8/edit
 <hr>
 <p>--------------------------------------------------------------------------------------------------</p>
