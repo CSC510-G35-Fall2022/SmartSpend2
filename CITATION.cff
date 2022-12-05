@@ -1,0 +1,18 @@
+cff-version: 1.3.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: "Patel"
+    given-names: "Maya"
+  - family-names: "Cheerla"
+    given-names: "Sanjana"
+  - family-names: "Xin"
+    given-names: "Vincent"
+  - family-names: "Ganesh"
+    given-names: "Saail"
+  - family-names: "Pardeshi"
+    given-names: "Sourabh"
+title: "Smart Spend"
+version: 2.0.4
+doi: 10.5281/zenodo.7401007
+date-released: 2021-12-05
+url: https://github.com/CSC510-G35-Fall2022/SmartSpend2
