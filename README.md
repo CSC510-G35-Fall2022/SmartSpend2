@@ -33,6 +33,7 @@ With simple commands, this bot allows you to:
 - - Attempted one refactor method which can be seen in [this branch](https://github.com/CSC510-G35-Fall2022/SmartSpend2/tree/refactor). This method was too time consuming and required more of the codebase to be refactored.
 - - Tried another refactor method, much faster, worked simpler, did not need to update more of the code base. This has been merged to main.
 - Moved away from Travis to GitHub actions for rolling builds.
+- Also added cancel feature, to abort an 'add' transaction at any point.
 - <u>Feature</u> -> Add 'limit_category' feature to work as an alarm when spending exceed preset limits.
 - - Users can create limits on the existing categories, food, groceries, utilities, ...
 - - When user adds an expense, limit categories, and all all three existing limits are checked.
