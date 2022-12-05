@@ -39,6 +39,11 @@ With simple commands, this bot allows you to:
 - - When user adds an expense, all three limits are checked.
 - - Created a website for the user to manage their expenses. The Telegram bot and the website work simultaneously and update in real time.
 
+
+Website: 
+
+
+<img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/Screen%20Shot%202022-12-05%20at%2011.43.37%20AM.png" width=1200>
 ## Demo
 https://user-images.githubusercontent.com/15325746/135395315-e234dc5e-d891-470a-b3f4-04aa1d11ed45.mp4
 
