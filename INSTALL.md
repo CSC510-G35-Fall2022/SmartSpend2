@@ -96,3 +96,19 @@ npm run prettier
 ```
 npm run audit
 ```
+
+# Troubleshooting Common Problems
+Problem: Bot not running properly, having issues with client ID.
+
+Solution:
+1. Check if dependencies are set properly.
+2. Follow install steps to get bot token.
+3. Paste new token in .env file.
+
+<hr>
+
+Problem: Website not opening when I'm clicking on the website link in the command
+
+Solution:
+1. Since the website is not deployed right now, the website must also be run
+2. follow steps to run the website in the install instructions
