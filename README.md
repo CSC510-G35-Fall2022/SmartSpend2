@@ -26,16 +26,14 @@ With simple commands, this bot allows you to:
 ### <u>Additions:</u>
 - Fixed several bugs related to parsing and tracking.
 - Refactored old code to suit updated structure.
+- - Previously all of the code was in a single file with around 650 lines. This appeared messy and was hard to edit parts of the program.
+- - Attempted one refactor method which can be seen in [this branch](https://github.com/CSC510-G35-Fall2022/SmartSpend2/tree/refactor). This method was too time consuming and required more of the codebase to be refactored.
+- - Tried another refactor method, much faster, worked simpler, did not need to update more of the code base. This has been merged to main.
 - Moved away from Travis to GitHub actions for rolling builds.
-- <u>Feature</u> -> Upgrade backend to use Mongo DB for better storage and access.
-- - Supports cloud based central storage as well as locally hosted database.
-- - Allows for free extensions since the data is stored in Object model.
-- <u>Feature</u> -> Add 'share' feature to share expense with other telegram users.
-- - Sends a notification message to the other user indicating the added expense.
-- - Added persistent storage for future tracking and settlement of balances.
-- <u>Feature</u> -> Add 'limit' feature to work as an alarm when spending exceed preset limits.
-- - Users can create limits on a daily, monthly, and yearly basis.
-- - When user adds an expense, all three limits are checked.
+- <u>Feature</u> -> Add 'limit_category' feature to work as an alarm when spending exceed preset limits.
+- - Users can create limits on the existing categories, food, groceries, utilities, ...
+- - When user adds an expense, limit categories, and all all three existing limits are checked.
+- - Ability to view limits for categories.
 - <u> Feature</u> -> Add 'website' feature to give the user a link to a personalized website. 
 - - Created a website for the user to manage their expenses. The Telegram bot and the website work simultaneously and update in real time.
 - - Website can add a new expense
