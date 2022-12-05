@@ -65,3 +65,13 @@ Write corresponding test cases to ensure it is not breaking the existing system.
 Create pull request and request for the code review. Once the request is approved, merge to main.
 
 Any suggestions to improve the bot is appreciated. Please add it to the TO-DO list.
+
+## New Features to add
+
+Edit functionality on the website
+
+Ability to add more categories
+ 
+Set up reminders for staying within limits. 
+
+Calculating limit progress for yearly, weekly, monthly
