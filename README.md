@@ -21,6 +21,7 @@ With simple commands, this bot allows you to:
 - Set limits for your daily/montly/yearly expenses
 - Search the best deals for your purchase
 - Share/Settle your expense with other users
+-
 
 
 ### <u>Additions:</u>
@@ -36,6 +37,7 @@ With simple commands, this bot allows you to:
 - <u>Feature</u> -> Add 'limit' feature to work as an alarm when spending exceed preset limits.
 - - Users can create limits on a daily, monthly, and yearly basis.
 - - When user adds an expense, all three limits are checked.
+- - Created a website for the user to manage their expenses. The Telegram bot and the website work simultaneously and update in real time.
 
 ## Demo
 https://user-images.githubusercontent.com/15325746/135395315-e234dc5e-d891-470a-b3f4-04aa1d11ed45.mp4
