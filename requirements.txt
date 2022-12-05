@@ -25,3 +25,5 @@ tomli==2.0.1
 urllib3==1.26.12
 matplotlib==3.1.3
 bob-telegram-tools==1.1.0
+#style checker
+pycodestyle==2.10.0
