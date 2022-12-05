@@ -46,7 +46,7 @@ https://user-images.githubusercontent.com/95981350/194871840-4b8816b7-a634-4c4f-
 
 ## Installation guide
 
-See INSTALL.md
+See [INSTALL.md](https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/INSTALL.md)
 
 ## Case Studies
 1) Tested smart spend bot code individually with all five of our members. Member 1 tested the following functionalities: add, delete, display . All of the functionaliies work as intended. Last updated Dec 05 2022.
@@ -55,6 +55,7 @@ See INSTALL.md
 4) Tested smart spend bot code individually with all five of our members. Member 4 tested the following functionalities: settle. All of the functionaliies work as intended. Last updated Dec 05 2022.
 5) Tested smart spend bot code individually with all five of our members. Member 5 tested the following functionalities: start, website. All of the functionaliies work as intended. Last updated Dec 05 2022.
 
+## 
 
 ## Funding 
 Not a funded project, nor is funding necessary.
@@ -73,6 +74,6 @@ This project has the following contributors:
 
 
 ## Contact Form and Bug Report Form
-https://docs.google.com/forms/d/1cii1C1p-kijd8usQc4runQk88uT9rD750SH_IcEMuy8/edit
+[click here](https://docs.google.com/forms/d/1cii1C1p-kijd8usQc4runQk88uT9rD750SH_IcEMuy8/edit)
 
 
