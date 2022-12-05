@@ -13,11 +13,13 @@
           [color]="color"
           [mode]="mode"
           [value]="getProgress('daily')"
-          [bufferValue]="bufferValue"
-        >
+          [bufferValue]="bufferValue">
         </mat-progress-bar>
       </section>
     </mat-card-content>
+    <label for="daily"  class="block  text-sm font-medium text-gray-700">Type daily limit</label>
+    <input  [(ngModel)]="list['daily']" id="daily" name="daily" type="text"  class="block rounded-md border-gray-300 border-2 pl-7 py-2 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="eg. 0.0">
+    <button mat-raised-button class="bg-red-100 p-4 m-2" (click)="setLimit('daily')">Set limit</button>
   </mat-card>
 
   <mat-card class="example-card">
@@ -35,6 +37,9 @@
         </mat-progress-bar>
       </section>
     </mat-card-content>
+    <label for="monthly"  class="block  text-sm font-medium text-gray-700">Type monthly limit</label>
+    <input  [(ngModel)]="list['monthly']" id="monthly" name="daily" type="text"  class="block rounded-md border-gray-300 border-2 pl-7 py-2 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="eg. 0.0">
+    <button mat-raised-button class="bg-red-100 p-4 m-2" (click)="setLimit('monthly')">Set limit</button>
   </mat-card>
 
   <mat-card class="example-card">
@@ -53,6 +58,9 @@
         </mat-progress-bar>
       </section>
     </mat-card-content>
+    <label for="yearly"  class="block  text-sm font-medium text-gray-700">Type yearly limit</label>
+    <input  [(ngModel)]="list['yearly']" id="yearly" name="yearly" type="text"  class="block rounded-md border-gray-300 border-2 pl-7 py-2 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="eg. 0.0">
+    <button mat-raised-button class="bg-red-100 p-4 m-2" (click)="setLimit('yearly')">Set limit</button>
   </mat-card>
 
 
@@ -92,6 +100,9 @@
         </mat-progress-bar>
       </section>
     </mat-card-content>
+    <label for="Food"  class="block  text-sm font-medium text-gray-700">Type Food limit</label>
+    <input  [(ngModel)]="list['Food']" id="Food" name="Food" type="text"  class="block rounded-md border-gray-300 border-2 pl-7 py-2 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="eg. 0.0">
+    <button mat-raised-button class="bg-red-100 p-4 m-2" (click)="setLimit('Food')">Set limit</button>
   </mat-card>
 
   <mat-card class="example-card">
@@ -109,6 +120,10 @@
         </mat-progress-bar>
       </section>
     </mat-card-content>
+    <div>value: {{list['groceries']}}</div>
+    <label for="groceries"  class="block  text-sm font-medium text-gray-700">Type grocery limit</label>
+    <input  [(ngModel)]="list['Groceries']" id="groceries" name="groceries" type="text"  class="block rounded-md border-gray-300 border-2 pl-7 py-2 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="eg. 0.0">
+    <button mat-raised-button class="bg-red-100 p-4 m-2" (click)="setLimit('Groceries')">Set limit</button>
   </mat-card>
   <mat-card class="example-card">
     <mat-card-content>
@@ -125,6 +140,9 @@
         </mat-progress-bar>
       </section>
     </mat-card-content>
+    <label for="utilities"  class="block  text-sm font-medium text-gray-700">Type utility limit</label>
+    <input  [(ngModel)]="list['Utilities']" id="utilities" name="utilities" type="text"  class="block rounded-md border-gray-300 border-2 pl-7 py-2 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="eg. 0.0">
+    <button mat-raised-button class="bg-red-100 p-4 m-2" (click)="setLimit('Utility')">Set limit</button>
   </mat-card>
 
   <mat-card class="example-card">
@@ -142,6 +160,10 @@
         </mat-progress-bar>
       </section>
     </mat-card-content>
+    <label for="transport"  class="block  text-sm font-medium text-gray-700">Type transport limit</label>
+    <input  [(ngModel)]="list['Transport']" id="transport" name="transport" type="text"  class="block rounded-md border-gray-300 border-2 pl-7 py-2 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="eg. 0.0">
+    <button mat-raised-button class="bg-red-100 p-4 m-2" (click)="setLimit('Transport')">Set limit</button>
   </mat-card>
 </div>
 </div>
+<button (click)="setLimit('Category')">Add limit</button>

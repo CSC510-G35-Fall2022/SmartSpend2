@@ -32,10 +32,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AppService } from './app.service';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AddExpensePageComponent } from './add-expense-page/add-expense-page.component';
+import { DeleteComponent } from './delete/delete.component';
 
 @NgModule({
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
-  declarations: [AppComponent, HeaderComponent, HistoryComponent, HomepageComponent, CategoryLimitsComponent, ExpenseComponent, DashboardComponent, AddExpensePageComponent],
+  declarations: [AppComponent, HeaderComponent, HistoryComponent, HomepageComponent, CategoryLimitsComponent, ExpenseComponent, DashboardComponent, AddExpensePageComponent, DeleteComponent],
   imports: [
     BrowserModule,
     MatChipsModule,

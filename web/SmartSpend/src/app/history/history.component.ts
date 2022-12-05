@@ -31,6 +31,7 @@ export class HistoryComponent {
   sort!: MatSort;
   expenses: any[] = [];
   expense!: [];
+  numbers!: any;
 
   constructor(
     public appService: AppService,
@@ -47,6 +48,8 @@ export class HistoryComponent {
       for (const prop in data) {
         this.expenses.push(data[prop]);
       }
+      this.numbers = (data.map((expense: { number: any; }) => expense.number))
+
       //
       this.dataSource = new MatTableDataSource(this.expenses);
     });
@@ -58,7 +61,11 @@ export class HistoryComponent {
       this.dataSource.sort = this.sort;
     }
   }
+  delete(number: any) {
+    console.log('delete', number);
+    this.appService.delete(number).subscribe((data: any) => {console.log('delete', data);});
 
+  }
 
   ngOnInit(): void {
 

@@ -40,12 +40,22 @@ export class AppService {
       console.log(this.expenseData);
     })
   }
- 
+
+  setLimitsforUser(limits: any) { 
+    this.http.post(`http://127.0.0.1:5002/limits/${this.userId}`, limits).subscribe(data => {
+          console.log(data);
+    });
+  
+  }
+
+  
   getLimitsForUser():any {
     console.log(this.userId);
     return this.http.get(`http://127.0.0.1:5002/limits/${this.userId}`);
   }
-
+delete(id: number): any {
+  return this.http.delete(`http://127.0.0.1:5002/delete/${this.userId}/${id}`);
+}
 
   getExpensesById(): any {
     console.log('id', this.userId);
@@ -65,10 +75,4 @@ export class AppService {
   }
 
 
-  getJournals() {
-    return this.http.get<any>(
-      'http://localhost:8080/Practice/api/v1/journals',
-      this.httpOptions
-    );
-  }
 }

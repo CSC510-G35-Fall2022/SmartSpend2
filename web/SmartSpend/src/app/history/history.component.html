@@ -48,3 +48,7 @@
   </div>
   
   <button mat-raised-button (click)="add()">Add expense</button></div></div>
+  <div class="text-center">Delete an expense: 
+
+  </div>
+ <div class="flex mx-20 justify-center"> <button (click)="delete(expense)" mat-raised-button *ngFor="let expense of numbers" >{{expense}}</button></div>
