@@ -66,10 +66,3 @@ This project has the following contributors:
 
 ## Contact Form and Bug Report Form
 https://docs.google.com/forms/d/1cii1C1p-kijd8usQc4runQk88uT9rD750SH_IcEMuy8/edit
-<hr>
-<p>--------------------------------------------------------------------------------------------------</p>
-<p>Title:'SmartSpend'</p>
-<p>Version: '1.0'</p>
-<p>Description: 'An easy to use Telegram Bot to track everyday expenses'</p>
-<p>Authors:'Maya, Vincent, Sanjana, Sourabh, Saail'</p>
-<p>--------------------------------------------------------------------------------------------------</p>
