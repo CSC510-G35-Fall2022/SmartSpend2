@@ -53,44 +53,36 @@ you should now be able to run the SmartSpend telegram bot and use the /website c
 1. For Style Checker (in local directory):
 
 ```
-npm install standard --save-dev
+pip install pycodestyle
 ```
 
 2. Run
    
 ```
-npm test
+pycodestyle --first <filepath>
 ```
 
 ### Testing the commands:
 
-1. Install jest:
+1. Install pytest:
 
 ```
-npm install --save-dev jest
+pip install pytest
 ```
 
 2. Run
 
 ```
-npm run test_commands
+pytest test/test_start_and_menu_command.py 
 ```
 
 ### Running Syntax Checker
 
-1. Install syntax checker
+1. Install syntax checker through your choice of python IDEs
 
-```
-npm install syntax-checker -g
-npm install uglifyjs -g
-sudo npm install -g uglify-js
-```
+2. Run through your choice of python IDEs
 
-2. Run:
 
-```
-npm run syntax
-```
 ### Running code formatter
 
 1. Install prettier
