@@ -1,3 +1,39 @@
+code.py:
+- has all of the bot commands and starts the bot polling with the main() command
+
+command/add.py:
+- has functionality to add new records with add commands
+
+command/delete.py:
+- has funcionality to delete records with delete commands
+
+command/display.py:
+- has functions to display records, with image graphics
+
+command/edit.py:
+- has functions to edit records with edit functions
+
+command/history.py:
+- has functions to view the history of records
+
+command/limit_cat.py:
+- has functions to limit each category
+
+command/limit.py:
+- has functions to limit daily, weekly, monthly
+
+command/search.py:
+- has functions to search the web for products
+
+command/settle.py:
+- has functions to settle the record with other users
+
+command/start.py:
+- has functions to display the menu command
+
+command/website.py
+- has functions to display the website
+
 start_and_menu_command(m)
 - Function that defines how the /start and /help commands have to be handled/processed
 
@@ -96,3 +132,6 @@ post_limit_category_selection(m)
 
 post_limit_amount_input(message)
 - The function saves the limit details to database and also validates the entered amount
+
+website
+- The fucntion returns the website address.
