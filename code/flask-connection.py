@@ -57,6 +57,15 @@ CORS(app)
 def get_records_by_id(id):
    return dumps(list(db['user_bills'].find({'user_telegram_id': int(id)})))
 
+
+@app.route('/limits/<id>', methods=['POST'])
+def setLimit(id):
+    print(id)
+    print(request.get_json())
+    db.user_limits.find_one_and_replace({'user_telegram_id': int(id)}, request.get_json())
+    return {'success': True}
+
+
 @app.route('/tests', methods=['POST'])
 def my_test_endpoint():
     print(request.get_json());

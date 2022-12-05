@@ -25,10 +25,14 @@ export class AddExpensePageComponent implements OnInit {
     this.appService.getExpensesById().subscribe((data: any) => {
       const nums = data.map((dat: any) => dat.number ?? -1);
       nextNumber = Math.max(...nums) + 1;
+      console.log('number',nextNumber);
+      if (nextNumber  < -1) {
+        nextNumber = 0;
+      }
       let expense = {
         user_telegram_id: this.appService.userId,
         category: this.expenseForm.controls['category'].value,
-        cost: this.expenseForm.controls['cost'].value,
+        cost: Number(this.expenseForm.controls['cost'].value),
         timestamp: formatDate(
           new Date(),
           'yyyy-MM-dd HH:mm:ss.SSSSSS',
@@ -36,6 +40,16 @@ export class AddExpensePageComponent implements OnInit {
         ),
         number: nextNumber,
       };
+      // let expense = {
+      //   user_telegram_id: this.appService.userId,
+      //   category: this.expenseForm.controls['category'].value,
+      //   cost: Number(this.expenseForm.controls['cost'].value),
+      //   timestamp: 
+      //     new Date('yyyy-MM-dd HH:mm:ss.SSSSSS'),
+      //   number: nextNumber,
+      // };
+
+      console.log(nextNumber)
       this.appService.sendExpense(expense);
     });
   }

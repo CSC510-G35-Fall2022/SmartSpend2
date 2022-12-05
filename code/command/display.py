@@ -135,7 +135,7 @@ def display_total(message, bot):
         cat = []
         amt = []
         for record in records:
-            total_text += '{:25s} {}\n'.format(
+            total_text += '{:25s} ${}\n'.format(
                 record['_id']['category'],  str(record['count']))
             cat.append(record['_id']['category'])
             amt.append(float(record['count']))

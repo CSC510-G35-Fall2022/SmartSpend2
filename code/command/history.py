@@ -97,7 +97,7 @@ def show_history(message, bot):
             else:
                 hist_dict[str(rec['timestamp'].strftime(timestamp_format))[
                     :3]] = float(rec['cost'])
-            spend_total_str += '\n{:20s} {:20s} {:20s} {:20s}\n'.format(str(rec['number']), str(
+            spend_total_str += '\n{:20s} {:20s} {:20s} ${:20s}\n'.format(str(rec['number']), str(
                 rec['timestamp'].strftime(timestamp_format)),  str(rec['category']),  str(rec['cost']))
             if 'shared_with' in rec.keys():
                 spend_total_str += 'Shared With:'
