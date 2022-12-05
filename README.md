@@ -39,6 +39,7 @@ With simple commands, this bot allows you to:
 - - <img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/limit1.png" alt="commands" width="500"/>
 - - <img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/limit2.png" alt="commands" width="500"/>
 - - When user adds an expense, limit categories, and all all three existing limits are checked.
+- - <img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/exceedlim.png" alt="commands" width="500"/>
 - - Ability to view limits for categories.
 - <u> Updated Feature display </u> -> Graphics
 - - Added matplotlib graphs to display to view individual categories spendings on a pie chart.
