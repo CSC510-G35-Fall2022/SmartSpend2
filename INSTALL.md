@@ -30,7 +30,23 @@ The below instructions can be followed in order to set-up this bot at your end i
 11. A successful run will generate a message on your terminal that says "TeleBot: Started polling." 
 12. Post this, navigate to your bot on Telegram, enter the "/start" or "/menu" command, and you are all set to track your expenses!
 
+### Running the website
+These are the install instructions for the website: 
 
+`npm install -g @angular/cli`
+
+angular material:
+
+``ng add @angular/material``
+
+installing tailwind: 
+
+`npm install -D tailwindcss`
+
+Now navigate to web/SmartSpend and type 
+`npm start`
+
+you should now be able to run the SmartSpend telegram bot and use the /website command to get your specific link for the website
 
 ### Run Style Check
 
