@@ -45,7 +45,21 @@ def my_test_endpoint():
     return {'success': 'true'}
     
     # return jsonify(request.get_json())
+@app.route('/delete/<id>/<num>', methods=['DELETE'])
+def delete_endpoint(id, num):
+    print(id, num)
+    # print(db['user_bills'].find({}).explain().get("executionStats", {}).get("nReturned"))
 
+    print('num', db.user_bills.find({'user_telegram_id': int(id), 'number': int(num)}).explain().get("executionStats", {}).get("nReturned"))
+
+    result  = list(db['user_bills'].find({'user_telegram_id': int(id), 'number': int(num)}))
+    print('result', result)
+    db.user_bills.delete_one((result[0]))
+    #    return dumps(list(db['user_limits'].find({'user_telegram_id': int(id)})));
+
+    return {'success': 'true'}
+
+    
 @app.route("/")
 def getAllExpenses():
     # return jsonify({'text':'Hello World!'})
