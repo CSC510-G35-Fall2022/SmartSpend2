@@ -21,7 +21,6 @@ With simple commands, this bot allows you to:
 - Set limits for your daily/montly/yearly expenses
 - Search the best deals for your purchase
 - Share/Settle your expense with other users
--
 
 
 ### <u>Additions:</u>
@@ -37,11 +36,13 @@ With simple commands, this bot allows you to:
 - <u>Feature</u> -> Add 'limit' feature to work as an alarm when spending exceed preset limits.
 - - Users can create limits on a daily, monthly, and yearly basis.
 - - When user adds an expense, all three limits are checked.
+- <u> Feature</u> -> Add 'website' feature to give the user a link to a personalized website. 
 - - Created a website for the user to manage their expenses. The Telegram bot and the website work simultaneously and update in real time.
-
+- - Website can add a new expense
+- - Website can view all expense and filter/sort them
+- - Website can view current limits and view accurate progress meters for category limits
 
 Website: 
-
 
 <img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/Screen%20Shot%202022-12-05%20at%2011.43.37%20AM.png" width=1200>
 ## Demo
@@ -50,17 +51,16 @@ https://user-images.githubusercontent.com/15325746/135395315-e234dc5e-d891-470a-
 ## New Functionality
 https://user-images.githubusercontent.com/95981350/194871840-4b8816b7-a634-4c4f-b247-293cedb932c8.mp4
 
-
 ## Installation guide
 
 See [INSTALL.md](https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/INSTALL.md)
 
 ## Case Studies
-1) Tested smart spend bot code individually with all five of our members. Member 1 tested the following functionalities: add, delete, display . All of the functionaliies work as intended. Last updated Dec 05 2022.
-2) Tested smart spend bot code individually with all five of our members. Member 2 tested the following functionalities: edit, history, limit. All of the functionaliies work as intended. Last updated Dec 05 2022.
-3) Tested smart spend bot code individually with all five of our members. Member 3 tested the following functionalities: limit_cat, search. All of the functionaliies work as intended. Last updated Dec 05 2022.
-4) Tested smart spend bot code individually with all five of our members. Member 4 tested the following functionalities: settle. All of the functionaliies work as intended. Last updated Dec 05 2022.
-5) Tested smart spend bot code individually with all five of our members. Member 5 tested the following functionalities: start, website. All of the functionaliies work as intended. Last updated Dec 05 2022.
+1) Tested smart spend bot code individually with all five of our members. Member 1 tested the following functionalities: add, delete, display . All of the functionalities work as intended. Last updated Dec 05 2022.
+2) Tested smart spend bot code individually with all five of our members. Member 2 tested the following functionalities: edit, history, limit. All of the functionalities work as intended. Last updated Dec 05 2022.
+3) Tested smart spend bot code individually with all five of our members. Member 3 tested the following functionalities: limit_cat, search. All of the functionalities work as intended. Last updated Dec 05 2022.
+4) Tested smart spend bot code individually with all five of our members. Member 4 tested the following functionalities: settle. All of the functionalities work as intended. Last updated Dec 05 2022.
+5) Tested smart spend bot code individually with all five of our members. Member 5 tested the following functionalities: start, website. All of the functionalities work as intended. Last updated Dec 05 2022.
 
 ## 
 
