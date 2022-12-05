@@ -10,6 +10,11 @@
         animation: none;
         border-top-style: solid;
         border-top-width: 10px !important;
+        color: red !important;
+}
+
+.mdc-linear-progress__bar .mdc-linear-progress__primary-bar {
+    color: red !important;
 }
 
 /* 

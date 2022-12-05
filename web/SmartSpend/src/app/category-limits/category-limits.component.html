@@ -1,18 +1,18 @@
-<div class="text-center text-3xl p-2">Spending limits</div>
-
-<div class="bg-gray-100 m-2 p-4">
+<div class="w-1/2 m-auto"><div class="text-center text-3xl p-2">Spending limits</div>
+<a routerLink="../"><button mat-raised-button>Back</button></a>
+<div *ngIf="appService.userId !== undefined && appService.userLimits !== undefined" class="bg-gray-100 m-2 p-4">
   <div class="text-blue-500 text-xl text-center py-2">Time limits</div>
 
   <mat-card class="example-card">
     <mat-card-content>
       <h2 class="example-h2">Daily Limit</h2>
-
+      <div>{{this.findSpent('daily')}} / {{this.appService.userLimits[0]?.daily}}</div>
       <section class="example-section">
         <mat-progress-bar
           class="example-margin"
           [color]="color"
           [mode]="mode"
-          [value]="monthlyValue"
+          [value]="getProgress('daily')"
           [bufferValue]="bufferValue"
         >
         </mat-progress-bar>
@@ -23,13 +23,13 @@
   <mat-card class="example-card">
     <mat-card-content>
       <h2 class="example-h2">Monthly Limit</h2>
-
+      <div>{{this.findSpent('monthly')}} / {{this.appService.userLimits[0]?.monthly}}</div>
       <section class="example-section">
         <mat-progress-bar
           class="example-margin"
           [color]="color"
           [mode]="mode"
-          [value]="monthProgress"
+          [value]="getProgress('monthly')"
           [bufferValue]="bufferValue"
         >
         </mat-progress-bar>
@@ -40,13 +40,14 @@
   <mat-card class="example-card">
     <mat-card-content>
       <h2 class="example-h2">Yearly Limit</h2>
+      <div>{{this.findSpent('yearly')}} / {{this.appService.userLimits[0]?.yearly}}</div>
 
       <section class="example-section">
         <mat-progress-bar
           class="example-margin"
           [color]="color"
           [mode]="mode"
-          [value]="yearlyValue"
+          [value]="getProgress('yearly')"
           [bufferValue]="bufferValue"
         >
         </mat-progress-bar>
@@ -54,22 +55,7 @@
     </mat-card-content>
   </mat-card>
 
-  <mat-card class="example-card">
-    <mat-card-content>
-      <h2 class="example-h2">Yearly Limit</h2>
 
-      <section class="example-section">
-        <mat-progress-bar
-          class="example-margin"
-          [color]="color"
-          [mode]="mode"
-          [value]="yearlyValue"
-          [bufferValue]="bufferValue"
-        >
-        </mat-progress-bar>
-      </section>
-    </mat-card-content>
-  </mat-card>
 </div>
 
 <!-- <div class="w-full bg-green-100 h-6 flex"><div class="bg-green-600 basis-${value}%"></div></div>
@@ -89,22 +75,73 @@
       </section>
     </mat-card-content> -->
 
-<div class="bg-gray-100 m-2 p-4">
+<div *ngIf="this.appService.userLimits !== undefined" class="bg-gray-100 m-2 p-4">
   <div class="text-blue-500 text-xl text-center py-2">Category limits</div>
   <mat-card class="example-card">
     <mat-card-content>
       <h2 class="example-h2">Food Limit</h2>
-      <div>{{this.findFoodSpent('Food')}} / {{this.appService.userLimits.Food}}</div>
+      <div>{{this.findSpent('Food')}} / {{this.appService.userLimits[0]?.Food}}</div>
       <section class="example-section">
         <mat-progress-bar
           class="example-margin"
           [color]="color"
           [mode]="mode"
-          [value]="foodProgress"
+          [value]="getProgress('Food')"
           [bufferValue]="bufferValue"
         >
         </mat-progress-bar>
       </section>
     </mat-card-content>
   </mat-card>
+
+  <mat-card class="example-card">
+    <mat-card-content>
+      <h2 class="example-h2">Grocery Limit</h2>
+      <div>{{this.findSpent('Groceries')}} / {{this.appService.userLimits[0]?.Groceries}}</div>
+      <section class="example-section">
+        <mat-progress-bar
+          class="example-margin"
+          [color]="color"
+          [mode]="mode"
+          [value]="getProgress('Groceries')"
+          [bufferValue]="bufferValue"
+        >
+        </mat-progress-bar>
+      </section>
+    </mat-card-content>
+  </mat-card>
+  <mat-card class="example-card">
+    <mat-card-content>
+      <h2 class="example-h2">Utilities Limit</h2>
+      <div>{{this.findSpent('Utilities')}} / {{this.appService.userLimits[0]?.Utilities}}</div>
+      <section class="example-section">
+        <mat-progress-bar
+          class="example-margin"
+          [color]="color"
+          [mode]="mode"
+          [value]="getProgress('Utilities')"
+          [bufferValue]="bufferValue"
+        >
+        </mat-progress-bar>
+      </section>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="example-card">
+    <mat-card-content>
+      <h2 class="example-h2">Transport Limit</h2>
+      <div>{{this.findSpent('Transport')}} / {{this.appService.userLimits[0]?.Transport}}</div>
+      <section class="example-section">
+        <mat-progress-bar
+          class="example-margin"
+          [color]="color"
+          [mode]="mode"
+          [value]="getProgress('Transport')"
+          [bufferValue]="bufferValue"
+        >
+        </mat-progress-bar>
+      </section>
+    </mat-card-content>
+  </mat-card>
+</div>
 </div>

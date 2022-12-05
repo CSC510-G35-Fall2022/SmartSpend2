@@ -1,38 +1,43 @@
-import { getLocaleTimeFormat } from '@angular/common';
-import { Component } from '@angular/core';
+import { DatePipe, formatDate, getLocaleTimeFormat } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AppService } from '../app.service';
 
 @Component({
   selector: 'app-add-expense-page',
   templateUrl: './add-expense-page.component.html',
-  styleUrls: ['./add-expense-page.component.css']
+  styleUrls: ['./add-expense-page.component.css'],
 })
-export class AddExpensePageComponent {
+export class AddExpensePageComponent implements OnInit {
   constructor(private fb: FormBuilder, public appService: AppService) {
-    
+    // let date =  {{today | date:'yyyy-MM-ddTHH:mm:ss.SSS':'+0:00'Z}};
   }
-  category = ""
-  cost = 0
+  category!: any;
+  cost!: any;
+  today = new Date();
   public expenseForm: FormGroup = this.fb.group({
     category: [this.category, [Validators.required]],
-    cost: [this.cost, [Validators.required]]
+    cost: [this.cost, [Validators.required]],
   });
 
   addExpense() {
-    
-    console.log(Date.now())
-
-    let expense = {
-      'user_telegram_id': this.appService.userId,
-      'category':  this.expenseForm.controls['category'].value,
-      'cost': this.expenseForm.controls['cost'].value,
-      'timestamp': Date.now(),
-      'number': this.appService.nextNumber
-    }
-    console.log(expense);
-    this.appService.sendExpense(expense);
-
-
+    let nextNumber = -1;
+    this.appService.getExpensesById().subscribe((data: any) => {
+      const nums = data.map((dat: any) => dat.number ?? -1);
+      nextNumber = Math.max(...nums) + 1;
+      let expense = {
+        user_telegram_id: this.appService.userId,
+        category: this.expenseForm.controls['category'].value,
+        cost: this.expenseForm.controls['cost'].value,
+        timestamp: formatDate(
+          new Date(),
+          'yyyy-MM-dd HH:mm:ss.SSSSSS',
+          'en-US'
+        ),
+        number: nextNumber,
+      };
+      this.appService.sendExpense(expense);
+    });
   }
+  ngOnInit() {}
 }

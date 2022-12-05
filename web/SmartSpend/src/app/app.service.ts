@@ -13,13 +13,15 @@ export class AppService {
       userid: '1'
     })
   };
-  static userId: number;
-  constructor(private http: HttpClient) {}
+  // static userId: number;
+  constructor(private http: HttpClient) {
+    console.log(this.userId)
+  }
   expenseData:any;
   userLimits:any;
   userData:any;
   nextNumber = -1;
-    userId!: any;
+  public userId!: any;
   rootURL = '/api';
 
 
@@ -38,26 +40,28 @@ export class AppService {
       console.log(this.expenseData);
     })
   }
-
-  getLimitsForUser() {
-    this.http.get(`http://127.0.0.1:5002/limits/${this.userId}`).subscribe(data => {
-      this.userLimits = data;
-      console.log(this.userLimits);
-
-    })
+ 
+  getLimitsForUser():any {
+    console.log(this.userId);
+    return this.http.get(`http://127.0.0.1:5002/limits/${this.userId}`);
   }
-  getExpensesById() {
-    this.http.get(`http://127.0.0.1:5002/id/${this.userId}`).subscribe(data => {
-      this.userData = data;
-      // this.expenseData = data as JSON;
-      const nums = this.userData.map((dat:any) => dat.number ?? -1);
-      console.log("nums", nums);
 
-      console.log(Math.max(... nums));
-      this.nextNumber = (Math.max(...nums)) + 1;
-      console.log("next number", this.nextNumber);
-      // console.log([...nums.entries()].reduce((a, e ) => e[1] > a[1] ? e : a))
-    })
+
+  getExpensesById(): any {
+    console.log('id', this.userId);
+    return this.http.get(`http://127.0.0.1:5002/id/${this.userId}`);
+    
+    // .subscribe(data => {
+    //   this.userData = data;
+    //   // this.expenseData = data as JSON;
+    //   const nums = this.userData.map((dat:any) => dat.number ?? -1);
+    //   console.log("nums", nums);
+
+    //   console.log(Math.max(... nums));
+    //   this.nextNumber = (Math.max(...nums)) + 1;
+    //   console.log("next number", this.nextNumber);
+    //   // console.log([...nums.entries()].reduce((a, e ) => e[1] > a[1] ? e : a))
+    // })
   }
 
 

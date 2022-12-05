@@ -1,9 +1,11 @@
+<div class=" w-2/3 m-auto mt-2 justify-center content-center"><a routerLink="../"><button mat-raised-button>Back</button></a>
+
 <div class="text-center text-2xl ">Here is all your expense history</div>
 <!-- <app-expense class="flex-col gap-10" *ngFor="let ex of appService.userData" [expense]="ex" ></app-expense> -->
 
 
 
-<div class="flex gap-4 m-2 p-2">
+<div class="justify-center flex flex-col  gap-4 m-2 p-2">
   
 <div class="mat-elevation-z8">
     <table mat-table [dataSource]="dataSource" matSort>
@@ -45,4 +47,4 @@
     <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
   </div>
   
-  <button mat-raised-button (click)="add()">Add expense</button></div>
+  <button mat-raised-button (click)="add()">Add expense</button></div></div>

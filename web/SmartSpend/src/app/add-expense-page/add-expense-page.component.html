@@ -1,4 +1,5 @@
-<p>add-expense-page works!</p>
+<a routerLink="../"><button mat-raised-button>Back</button></a>
+{{ today | date:'yyyy-MM-dd HH:mm:ss.SSSSS' }}
 <form [formGroup]="expenseForm" (ngSubmit)="addExpense()">
     <input  type="select"
     />
@@ -24,5 +25,5 @@
           </div>
         
       </div>
-    <button mat-raised-button type="submit">Submit</button>
+    <button class="mt-8" mat-raised-button type="submit">Submit</button>
 </form>
