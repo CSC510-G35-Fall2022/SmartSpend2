@@ -21,10 +21,13 @@ With simple commands, this bot allows you to:
 - Set limits for your daily/montly/yearly expenses
 - Search the best deals for your purchase
 - Share/Settle your expense with other users
+- <img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/commands.png" alt="commands" width="500"/>
 
 
 ### <u>Additions:</u>
 - Fixed several bugs related to parsing and tracking.
+- Updated menu view to display slash commands when "/" is typed in telegram chat
+- - <img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/updated_menu.png" alt="commands" width="500"/>
 - Refactored old code to suit updated structure.
 - - Previously all of the code was in a single file with around 650 lines. This appeared messy and was hard to edit parts of the program.
 - - Attempted one refactor method which can be seen in [this branch](https://github.com/CSC510-G35-Fall2022/SmartSpend2/tree/refactor). This method was too time consuming and required more of the codebase to be refactored.
@@ -36,6 +39,7 @@ With simple commands, this bot allows you to:
 - - Ability to view limits for categories.
 - <u> Updated Feature display </u> -> Graphics
 - - Added matplotlib graphs to display to view individual categories spendings on a pie chart.
+- - ![Graph](https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/graph.png)
 - <u> Feature</u> -> Add 'website' feature to give the user a link to a personalized website. 
 - - Created a website for the user to manage their expenses. The Telegram bot and the website work simultaneously and update in real time.
 - - Website can add a new expense
