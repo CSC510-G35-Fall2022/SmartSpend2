@@ -40,6 +40,9 @@ With simple commands, this bot allows you to:
 - <u> Updated Feature display </u> -> Graphics
 - - Added matplotlib graphs to display to view individual categories spendings on a pie chart.
 - - ![Graph](https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/graph.png)
+- <u> Updated Feature History </u> -> Graphics
+- - Added matplotlib graphs to let user see a bar graph of spending vs month.
+- - ![Graph](https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/history%20command.png)
 - <u> Feature</u> -> Add 'website' feature to give the user a link to a personalized website. 
 - - Created a website for the user to manage their expenses. The Telegram bot and the website work simultaneously and update in real time.
 - - Website can add a new expense
