@@ -113,6 +113,37 @@ npm run prettier
 npm run audit
 ```
 
+# Dependencies
+| dependency         | version   | more information                                       |
+|--------------------|-----------|--------------------------------------------------------|
+| attrs              | 22.1.0    | https://www.attrs.org/en/stable/                       |
+| beautifulsoup4     | 4.11.1    | https://www.crummy.com/software/BeautifulSoup/bs4/doc/ |
+| bs4                | 0.0.1     | https://www.crummy.com/software/BeautifulSoup/bs4/doc/ |
+| certifi            | 2022.9.24 | https://pypi.org/project/certifi/                      |
+| charset-normalizer | 2.1.1     | https://pypi.org/project/charset-normalizer/           |
+| idna               | 3.4       | https://pypi.org/project/idna/                         |
+| iniconfig          | 1.1.1     | https://pypi.org/project/iniconfig/                    |
+| packaging          | 21.3      | https://packaging.python.org/en/latest/                |
+| pluggy             | 1.0.0     | https://pluggy.readthedocs.io/en/stable/               |
+| py                 | 1.11.0    | https://pypi.org/project/py/                           |
+| pyaes              | 1.6.1     | https://pypi.org/project/pyaes/                        |
+| pyasn1             | 0.4.8     | https://pypi.org/project/pyasn/                        |
+| pymongo            | 4.2.0     | https://pymongo.readthedocs.io/en/stable/              |
+| pyparsing          | 3.0.9     | https://pypi.org/project/pyparsing/                    |
+| pyTelegramBotAPI   | 4.7.0     | https://pypi.org/project/pyTelegramBotAPI/             |
+| pytest             | 7.1.3     | https://docs.pytest.org/en/7.2.x/                      |
+| python-dotenv      | 0.21.0    | https://pypi.org/project/python-dotenv/                |
+| requests           | 2.28.1    | https://requests.readthedocs.io/en/latest/             |
+| dnspython          | 2.2.1     | https://www.dnspython.org/                             |
+| rsa                | 4.9         | https://pypi.org/project/rsa/                              |
+| soupsieve          | 2.3.2.post1 | https://pypi.org/project/soupsieve/                        |
+| tabulate           | 0.9.0       | https://pypi.org/project/tabulate/                         |
+| telethon           | 1.25.1      | https://docs.telethon.dev/en/stable/                       |
+| tomli              | 2.0.1       | https://pypi.org/project/tomli/                            |
+| urllib3            | 1.26.12     | https://urllib3.readthedocs.io/en/stable/                  |
+| matplotlib         | 3.1.3       | https://matplotlib.org/                                    |
+| bot-telegram-tools | 1.1.0       | https://github.com/python-telegram-bot/python-telegram-bot |
+
 # Troubleshooting Common Problems
 Problem: Bot not running properly, having issues with client ID.
 
