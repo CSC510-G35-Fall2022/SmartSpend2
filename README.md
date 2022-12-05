@@ -34,6 +34,8 @@ With simple commands, this bot allows you to:
 - - Users can create limits on the existing categories, food, groceries, utilities, ...
 - - When user adds an expense, limit categories, and all all three existing limits are checked.
 - - Ability to view limits for categories.
+- <u> Updated Feature display </u> -> Graphics
+- - Added matplotlib graphs to display to view individual categories spendings on a pie chart.
 - <u> Feature</u> -> Add 'website' feature to give the user a link to a personalized website. 
 - - Created a website for the user to manage their expenses. The Telegram bot and the website work simultaneously and update in real time.
 - - Website can add a new expense
