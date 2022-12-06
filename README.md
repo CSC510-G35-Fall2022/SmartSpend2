@@ -84,6 +84,8 @@ See [INSTALL.md](https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/IN
 4. <u>History: </u> This command is used by typing '/History'. This command is used to display history of all the spending records. Futhermore, the bot displays a Bar graph showing the spendings over all the months, so that user can analyze the spendings.<br>
 <img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/history%20command.png" alt="commands" width="350"/>
 
+5. <u>Limits: </u> This command is used by typing '/Limit'. This command is used to set daily, monthly, yearly limits for user. Futhermore, this command also has a view limits feature that allows user to view limits.
+
 ## Case Studies
 1) Tested smart spend bot code individually with all five of our members. Member 1 tested the following functionalities: add, delete, display . All of the functionalities work as intended. Last updated Dec 05 2022.
 2) Tested smart spend bot code individually with all five of our members. Member 2 tested the following functionalities: edit, history, limit. All of the functionalities work as intended. Last updated Dec 05 2022.
