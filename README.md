@@ -100,6 +100,9 @@ See [INSTALL.md](https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/IN
 - Add a categorical limit:
 <img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/tlimc1.png" alt="commands" width="350"/>
 
+- View all categorical limits:
+<img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/tlimc2.png" alt="commands" width="350"/>
+
 
 ## Case Studies
 1) Tested smart spend bot code individually with all five of our members. Member 1 tested the following functionalities: add, delete, display . All of the functionalities work as intended. Last updated Dec 05 2022.
