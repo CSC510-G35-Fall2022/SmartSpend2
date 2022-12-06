@@ -135,6 +135,7 @@ npm run audit
 | urllib3            | 1.26.12     | https://urllib3.readthedocs.io/en/stable/                  |
 | matplotlib         | 3.1.3       | https://matplotlib.org/                                    |
 | bot-telegram-tools | 1.1.0       | https://github.com/python-telegram-bot/python-telegram-bot |
+| Flask              | 2.2.2       | https://flask.palletsprojects.com/en/2.2.x/                |
 
 # Troubleshooting Common Problems
 Problem: Bot not running properly, having issues with client ID.
