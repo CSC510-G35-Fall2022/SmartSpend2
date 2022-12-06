@@ -74,6 +74,7 @@ commands = {
 
 
 def command_display(message, bot):
+    """Starts the command for a display"""
     chat_id = message.chat.id
     user_history = db.user_bills.find({'user_telegram_id': message.chat.id})
 
@@ -92,6 +93,7 @@ def command_display(message, bot):
 
 
 def display_total(message, bot):
+    """displays your spendings in the form of a table"""
     try:
         chat_id = message.chat.id
         display_option = message.text

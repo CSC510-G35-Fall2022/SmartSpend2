@@ -71,6 +71,7 @@ commands = {
 }
 
 def edit1(m, bot):
+    """Starts the edit command"""
     # info = bot.reply_to(m, "Please enter the date and time of the transaction you made in the following format, Eg: Sep 21 2022 1:33PM")
   # show show_history
     user_history = db.user_bills.find({'user_telegram_id':  m.chat.id})
@@ -94,6 +95,7 @@ def edit1(m, bot):
 
 
 def edit2(m, bot):
+    """Allows user to enter the category of the transaction"""
     try:
         global user_bills
         user_bills['number'] = m.text
@@ -114,6 +116,7 @@ def edit2(m, bot):
 
 
 def edit3(m, bot):
+    """Asks user what part of the expense they want to edit"""
     global user_bills
     # user_history = list(db.user_bills.find({'user_telegram_id' : m.chat.id, 'timestamp': {'$gte': user_bills['timestamp'], '$lt': user_bills['timestamp'] + timedelta(seconds=59)}, 'category': m.text}))
     user_history = list(db.user_bills.find(
@@ -138,6 +141,7 @@ def edit3(m, bot):
 
 
 def edit4(m, bot):
+    """Depending on the choice, edit a certain expense area"""
     choice1 = m.text
     markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
     markup.row_width = 2
@@ -162,6 +166,7 @@ def edit4(m, bot):
 
 
 def edit_date(m, bot):
+    """Updates the date for a user"""
     global user_bills
     timestamp = datetime.strptime(m.text, timestamp_format)
     user_bills = db.user_bills.find_one_and_update({"_id": user_bills['_id']}, {
@@ -186,6 +191,7 @@ def edit_date(m, bot):
 
 
 def edit_cat(m, bot):
+    """Updates the category of an expense for a user"""
     global user_bills
     # print(user_bills)
     category = m.text
@@ -213,6 +219,7 @@ def edit_cat(m, bot):
 
 
 def edit_cost(m, bot):
+    """Updates the cost of an expense for a user"""
     global user_bills
     new_cost = m.text
     try:
@@ -241,6 +248,7 @@ def edit_cost(m, bot):
 
 # To send the shared users the updated expense
 async def updating_user_with_updated_expense(message, user_name, user_bills, bot):
+    """Send any shared users an update about the expense"""
     try:
         user = await find_user_by_username(user_name)
 
@@ -253,6 +261,7 @@ async def updating_user_with_updated_expense(message, user_name, user_bills, bot
         print("Error during message send to remote user : ", e)
 
 async def find_user_by_username(username):
+    """Finds a user by their username"""
     try:
         async with TelegramClient(api_username, api_id, api_hash) as client:
             await client.start()
@@ -264,6 +273,7 @@ async def find_user_by_username(username):
         print("Failed to search user, details: ", e)
 
 def validate_entered_amount(amount_entered):
+    """Validates a numeric amount for the user"""
     if len(amount_entered) > 0 and len(amount_entered) <= 15:
         if amount_entered.isdigit:
             if re.match("^[0-9]*\\.?[0-9]*$", amount_entered):
