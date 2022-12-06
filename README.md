@@ -69,7 +69,7 @@ See [INSTALL.md](https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/IN
 
 ## Mini tutorial
 1. <u>Menu: </u> This command can be used by typing '/menu'. The bot will then dsiplay list of all commands.
-
+-<img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/menu_command.png" alt="commands" width="350"/>
 ## Case Studies
 1) Tested smart spend bot code individually with all five of our members. Member 1 tested the following functionalities: add, delete, display . All of the functionalities work as intended. Last updated Dec 05 2022.
 2) Tested smart spend bot code individually with all five of our members. Member 2 tested the following functionalities: edit, history, limit. All of the functionalities work as intended. Last updated Dec 05 2022.
