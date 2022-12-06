@@ -5,7 +5,7 @@ command/add.py:
 - has functionality to add new records with add commands
 
 command/delete.py:
-- has funcionality to delete records with delete commands
+- has functionality to delete records with delete commands
 
 command/display.py:
 - has functions to display records, with image graphics
