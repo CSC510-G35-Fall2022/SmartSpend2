@@ -55,9 +55,9 @@ With simple commands, this bot allows you to:
 - - Website can view all expense and filter/sort them
 - - Website can view current limits and view accurate progress meters for category limits
 
-Website: 
 
-<img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/Screen%20Shot%202022-12-05%20at%2011.43.37%20AM.png" width=1200>
+
+ 
 ## Demo
 https://user-images.githubusercontent.com/15325746/135395315-e234dc5e-d891-470a-b3f4-04aa1d11ed45.mp4
 
@@ -106,6 +106,22 @@ See [INSTALL.md](https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/IN
 
 7. <u>Search: </u> This command is used by typing '/search'. This program runs a web search on the specified query and provides the top 5 products together with their prices so that the user can compare them.
 <img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/tsearch1.png" alt="commands" width="350"/>
+
+8. <u>Website:</u> 
+<img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/Screen%20Shot%202022-12-05%20at%2011.43.37%20AM.png" width=350>
+To view all expenses, click View Expenses. It will bring you to a page that looks like this. 
+<img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/viewexpenses.png" width=350> 
+<li>To delete one expense, simply click on the number of the expense at the bottom. </li>
+
+<li>To Delete all, click on the delete all button</li>
+To add an expense, click Add Expense. It will bring you to a page like this. Once you fill in the price and select a category, hit submit
+<img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/addexpense.png" width=350> 
+
+<li>to view limits, click on the Add/Change spending limits</li>
+ It will bring you to a page like this. 
+<img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/limits.png" width=350> 
+If you want to change the limit for something, just type the number in below that category and click set limit. The default is 100.
+
 
 ## Testing
 We are doing both automated and blackbox testing. The reason why our coverage is 23% is because that coverage person only measures coverage from the automated tests. The rest of the coverage is covered using black box tests. We used black box tests because we had to test the telegram API functionality which was only testable when the bot would be running through telegram. This made it impossible to test using automated testing which was why we used blackbox.
