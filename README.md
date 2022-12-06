@@ -71,12 +71,15 @@ See [INSTALL.md](https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/IN
 1. <u>Menu: </u> This command can be used by typing '/menu'. The bot will then display list of all commands.<br>
 <img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/menu_command.png" alt="commands" width="350"/>
 
-1. <u>Add: </u> This command is used by typing '/add'. This command is used to add a spending record.<br>
+2. <u>Add: </u> This command is used by typing '/add'. This command is used to add a spending record.<br>
  Once the /add command is used, the bot gives various categories, like 'Food','Groceries','Miscellaneous' and so on, to choose from. Futheromore, the bot allows user to add a personalized category if it is not present in the options. Once the category is selected, then the bot asks the user to enter the amount to be recorded. After this the Bot gives an option to split with any other user, if 'Yes' is selected the other user will be informed and the transaction would be recorded, if 'No' is selected the transaction is recorded for the current user.<br>
 <img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/add_command.png" alt="commands" width="350"/>
 <img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/add_command_1.png" alt="commands" width="350"/>
 <img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/add_command_2.png" alt="commands" width="350"/>
 
+3. Display. <u>Add: </u> This command is used by typing '/Display'. This command is used to display the spending records for day.month or all spendings. Futhermore, the bot displays a Pie chart showing the spendings so that user can get a visual look at the spendings numbers.<br>
+<img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/display_1.png" alt="commands" width="350"/>
+<img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/display_2.png" alt="commands" width="350"/>
 ## Case Studies
 1) Tested smart spend bot code individually with all five of our members. Member 1 tested the following functionalities: add, delete, display . All of the functionalities work as intended. Last updated Dec 05 2022.
 2) Tested smart spend bot code individually with all five of our members. Member 2 tested the following functionalities: edit, history, limit. All of the functionalities work as intended. Last updated Dec 05 2022.
