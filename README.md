@@ -15,6 +15,13 @@
 https://user-images.githubusercontent.com/79175476/205810375-190013ab-1644-4929-96a8-3281ed22b791.mp4
 
 
+## Why you should pick our video 
+
+
+https://user-images.githubusercontent.com/79175476/205814411-31d5e4d4-b925-4b34-91a4-57c3da8a684a.mp4
+
+
+
 ## About SmartSpend
 
 SmartSpend is an easy-to-use Telegram Bot that assists you in recording your daily expenses on a local system without any hassle.  
