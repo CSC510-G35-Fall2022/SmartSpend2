@@ -10,6 +10,9 @@
 
 <hr>
 
+# Purpose
+It is often difficult to keep track of spendings. There are ways to do it - keep spread sheets, notes, or write them down in a journal. However all of these options are too hectic when trying to quikcly add spendings. The main purpose of this project is to simplify that by having a telegram bot that organizes and keeps track of spendings for you! With Smart Spend it is possible to keep track of spending records and view the history in a seamless manner! Check out our project below.
+
 ## Demo
 
 https://user-images.githubusercontent.com/79175476/205810375-190013ab-1644-4929-96a8-3281ed22b791.mp4
