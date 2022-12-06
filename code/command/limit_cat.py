@@ -129,6 +129,7 @@ def view_spendlimits(bot):
             message = bot.send_message(
                 user_limits['user_telegram_id'], 'Your Miscellaneous Limit is - {}'.format(user_history['Miscellaneous']))
 
+
 def validate_entered_amount(amount_entered):
     if len(amount_entered) > 0 and len(amount_entered) <= 15:
         if amount_entered.isdigit:

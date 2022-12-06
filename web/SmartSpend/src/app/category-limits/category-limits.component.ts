@@ -91,7 +91,8 @@ export class CategoryLimitsComponent implements OnInit {
     console.log(this.appService.userLimits[0]);
     console.log('before:', this.appService.userLimits[0]);
 
-    this.appService.userLimits[0][field] = this.list[field];
+    this.appService.userLimits[0][field] = Number(this.list[field]);
+    delete this.appService.userLimits[0]['_id']
     console.log('after update', this.list);
     console.log(
       "   this.appService.userLimits[0]['field']",

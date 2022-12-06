@@ -32,7 +32,9 @@ export class AppService {
       })
   }
 
-
+deleteAll() {
+  return this.http.delete(`http://127.0.0.1:5002/delete/${this.userId}`);
+}
   getExpenses() {
     this.http.get('http://127.0.0.1:5002/').subscribe(data => {
       this.expenseData = data;
@@ -48,7 +50,7 @@ export class AppService {
   
   }
 
-  
+
   getLimitsForUser():any {
     console.log(this.userId);
     return this.http.get(`http://127.0.0.1:5002/limits/${this.userId}`);
