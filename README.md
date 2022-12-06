@@ -63,6 +63,10 @@ https://user-images.githubusercontent.com/15325746/135395315-e234dc5e-d891-470a-
 ## New Functionality
 https://user-images.githubusercontent.com/95981350/194871840-4b8816b7-a634-4c4f-b247-293cedb932c8.mp4
 
+## Scalability Design
+The following image shows a scalability Design described in detail, and a scalability diagram to visualize how the detail would work.
+<img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/scalability.png" width=1000> 
+
 ## Installation guide
 
 See [INSTALL.md](https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/INSTALL.md)
