@@ -147,7 +147,7 @@ def edit_date(m, bot):
     bot.reply_to(m, "Date is updated")
     # print(user_bills)
     # print(user_bills['shared_with'])
-    if user_bills['shared_with'] != 'NULL':
+    if 'shared_with' in user_bills:
         for x in user_bills['shared_with']:
             # print(x)
             spend_total_str = "Here is the modified expense : \n|    DATE AND TIME   | CATEGORY | AMOUNT \n-----------------------------------------------------------------------\n"
@@ -199,7 +199,7 @@ def edit_cost(m, bot):
                                                                   '$set': {"cost": float(new_cost)}}, return_document=ReturnDocument.AFTER)
             bot.reply_to(m, "Cost is updated")
             # update the shared user
-            if updated_user_bill['shared_with'] != 'NULL':
+            if 'shared_with' in updated_user_bill:
                 for x in updated_user_bill['shared_with']:
                     # print(x)
                     spend_total_str = "Here is the modified expense : \n|    DATE AND TIME   | CATEGORY | AMOUNT \n-----------------------------------------------------------------------\n"
