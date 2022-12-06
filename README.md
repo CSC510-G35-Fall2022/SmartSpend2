@@ -103,6 +103,8 @@ See [INSTALL.md](https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/IN
 - View all categorical limits:
 <img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/tlimc2.png" alt="commands" width="350"/>
 
+7. <u>Search: </u> This command is used by typing '/search'. This program runs a web search on the specified query and provides the top 5 products together with their prices so that the user can compare them.
+<img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/tsearch1.png" alt="commands" width="350"/>
 
 ## Case Studies
 1) Tested smart spend bot code individually with all five of our members. Member 1 tested the following functionalities: add, delete, display . All of the functionalities work as intended. Last updated Dec 05 2022.
