@@ -107,6 +107,9 @@ See [INSTALL.md](https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/IN
 7. <u>Search: </u> This command is used by typing '/search'. This program runs a web search on the specified query and provides the top 5 products together with their prices so that the user can compare them.
 <img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/tsearch1.png" alt="commands" width="350"/>
 
+## Testing
+We are doing both automated and blackbox testing. The reason why our coverage is 23% is because that coverage person only measures coverage from the automated tests. The rest of the coverage is covered using black box tests. We used black box tests because we had to test the telegram API functionality which was only testable when the bot would be running through telegram. This made it impossible to test using automated testing which was why we used blackbox.
+
 ## Case Studies
 1) Tested smart spend bot code individually with all five of our members. Member 1 tested the following functionalities: add, delete, display . All of the functionalities work as intended. Last updated Dec 05 2022.
 2) Tested smart spend bot code individually with all five of our members. Member 2 tested the following functionalities: edit, history, limit. All of the functionalities work as intended. Last updated Dec 05 2022.
