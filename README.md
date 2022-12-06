@@ -89,14 +89,17 @@ See [INSTALL.md](https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/IN
 <img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/history%20command.png" alt="commands" width="350"/>
 
 5. <u>Limits: </u> This command is used by typing '/limit'. This command is used to set daily, monthly, yearly limits for user. Futhermore, this command also has a view limits feature that allows user to view limits.
-- Add a limit
+- Add a limit:
 <img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/tlimit1.png" alt="commands" width="350"/>
 <img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/tlimit2.png" alt="commands" width="350"/>
 
-6. <u>Categorical Limits: </u> This command is used by typing '/limitcategory'. This command is used to set monthly categorical limits for user. Furthermore, this command also has a view limits feature that allows user to see their monthly categorical limits.
-
-- View limits
+- View limits:
 <img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/tviewlims.png" alt="commands" width="350"/>
+
+6. <u>Categorical Limits: </u> This command is used by typing '/limitcategory'. This command is used to set monthly categorical limits for user. Furthermore, this command also has a view limits feature that allows user to see their monthly categorical limits.
+- Add a categorical limit:
+<img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/tlimc1.png" alt="commands" width="350"/>
+
 
 ## Case Studies
 1) Tested smart spend bot code individually with all five of our members. Member 1 tested the following functionalities: add, delete, display . All of the functionalities work as intended. Last updated Dec 05 2022.
