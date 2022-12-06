@@ -134,6 +134,7 @@ This project has the following contributors:
 | 4   | Patel, Maya            | maya-dc-patel   |
 | 5   | Xin, Vincent           | Culcheese       |
 
+Previous contributors: Authors:'Kaushik, Surya, Pradyumna, Harshitha, Aditi'
 
 ## Contact Form and Bug Report Form
 [click here](https://docs.google.com/forms/d/1cii1C1p-kijd8usQc4runQk88uT9rD750SH_IcEMuy8/edit)
