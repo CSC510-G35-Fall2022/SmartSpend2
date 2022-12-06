@@ -1,3 +1,4 @@
+"""Main code that starts the bot execution"""
 # MIT License
 
 # Copyright (c) 2022 CSC510-G35-Fall2022
@@ -24,6 +25,7 @@
 # from bob_telegram_tools.bot import TelegramBot
 # import matplotlib.pyplot as plt
 
+import command
 import logging
 import re
 import os
@@ -98,59 +100,71 @@ bot.set_my_commands([
 
 @bot.message_handler(commands=['start', 'menu'])
 def smart_menu(m):
+    """Executes the start and menu commands"""
     return start_and_menu_command(m)
 
 
 @bot.message_handler(commands=['add'])
 def smart_add(message):
+    """Executes the add command"""
     command_add(message, bot)
 
 
 @bot.message_handler(commands=['search'])
 def smart_search(message):
+    """Executes the search command to scrape the web for products"""
     command_select(message, bot)
 
 
 @bot.message_handler(commands=['history'])
 def smart_history(message):
+    """Executes the history command"""
     show_history(message, bot)
 
 
 @bot.message_handler(commands=['edit'])
 def smart_edit(message):
+    """Executes the edit command"""
     edit1(message, bot)
 
 
 @bot.message_handler(commands=['display'])
 def smart_display(message):
+    """Executes the display command"""
     command_display(message, bot)
 
 
 @bot.message_handler(commands=['delete'])
 def smart_delete(message):
+    """Executes the delete command"""
     command_delete(message, bot)
 
 
 @bot.message_handler(commands=['limit'])
 def smart_limit(message):
+    """Executes the limit command"""
     command_limit(message, bot)
 
 
 @bot.message_handler(commands=['limitcategory'])
 def smart_limit_cat(message):
+    """Executes the limit command"""
     command_limitcategory(message, bot)
 
 # Handling /settle command
 @bot.message_handler(commands=['settle'])
 def smart_settle(message):
+    """Executes the settle command"""
     command_settle(message, bot)
 
     # Handling /settle command
 @bot.message_handler(commands=['website'])
 def smart_website(message):
+    """Executes the website command"""
     command_website(message, bot)
 
 async def main():
+    """Main method that starts polling"""
     try:
         bot.polling(none_stop=True)
     except Exception as e:
