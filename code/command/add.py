@@ -71,6 +71,7 @@ commands = {
 }
 
 def command_add(message, bot):
+    """Starts the add command and prompts user for a category"""
     chat_id = message.chat.id
     user_bills['user_telegram_id'] = chat_id
     markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
@@ -83,6 +84,7 @@ def command_add(message, bot):
     bot.register_next_step_handler(msg, post_category_selection, bot)
 
 def post_category_selection(message, bot):
+    """Registers category and asks user for amount of money spent"""
     # print("hello world")
     try:
         chat_id = message.chat.id
@@ -121,6 +123,7 @@ def post_category_selection(message, bot):
         bot.send_message(chat_id, display_text)
 
 def post_amount_input(message, bot):
+    """Registers the spent amount"""
     # print(message.text)
     try:
         chat_id = message.chat.id
@@ -163,6 +166,7 @@ def post_amount_input(message, bot):
         bot.send_message(chat_id, display_text)
 
 def get_sharing_details(message, bot):
+    """Asks user if the user wants to split the bill with another user"""
     markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
     markup.row_width = 3
     markup.add("Yes")
@@ -172,6 +176,7 @@ def get_sharing_details(message, bot):
     bot.register_next_step_handler(message, post_sharing_selection, bot)
 
 def post_sharing_selection(message, bot):
+    """Asks user to enter another user to share the bill with"""
     chat_id = message.chat.id
     response = message.text
 
@@ -194,6 +199,7 @@ def post_sharing_selection(message, bot):
         add_bill_to_database(message, bot)
 
 def handle_user_id_input_for_sharing(message, bot):
+    """Handles user for sharing the bill"""
     chat_id = message.chat.id
     username = str(message.text)
 
@@ -220,6 +226,7 @@ def handle_user_id_input_for_sharing(message, bot):
     asyncio.run(send_update_to_user_about_expense(message, user_bills, bot))
 
 async def send_update_to_user_about_expense(message, user_bills, bot):
+    """Updates the other user about a recent transaction"""
     try:
         user = await find_user_by_username(message.text)
 
@@ -231,6 +238,7 @@ async def send_update_to_user_about_expense(message, user_bills, bot):
         print("Error during message send to remote user : ", e)
 
 def add_bill_to_database(message, bot):
+    """Adds a bill for a user to the database"""
     # print(message)
     chat_id = message.chat.id
     # print(user_bills)
@@ -378,6 +386,7 @@ def add_bill_to_database(message, bot):
     user_bills.clear()
 
 async def find_user_by_username(username):
+    """Finds a user by their username"""
     try:
         async with TelegramClient(api_username, api_id, api_hash) as client:
                 await client.start()
@@ -389,6 +398,7 @@ async def find_user_by_username(username):
         print("Failed to search user, details: ", e)
 
 def validate_entered_amount(amount_entered):
+    """Validates an input to check if it's a correct numeric value"""
     if len(amount_entered) > 0 and len(amount_entered) <= 15:
         if amount_entered.isdigit:
             if re.match("^[0-9]*\\.?[0-9]*$", amount_entered):
