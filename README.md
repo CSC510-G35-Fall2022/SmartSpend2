@@ -6,6 +6,7 @@
 [![DOI](https://zenodo.org/badge/562210446.svg)](https://zenodo.org/badge/latestdoi/562210446)
 [![Platform](https://img.shields.io/badge/Platform-Telegram-blue)](https://desktop.telegram.org/)
 ![Python CI](https://github.com/kaushikjadhav01/SmartSpend/actions/workflows/build-test.yaml/badge.svg)
+![coverage](https://img.shields.io/badge/Coverage-23%25-orange)
 
 <hr>
 
