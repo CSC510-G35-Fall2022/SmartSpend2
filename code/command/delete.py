@@ -72,7 +72,7 @@ commands = {
 }
 
 def command_delete(message, bot):
-
+    """Starts the delete command and asks user for an option"""
     markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
     markup.row_width = 2
     for c in delete_options:
@@ -85,6 +85,7 @@ def command_delete(message, bot):
 
 
 def post_delete_selection(message, bot):
+    """Deletes sends request to delete an expense or all"""
     # print(message.text)
     try:
         chat_id = message.chat.id
@@ -114,6 +115,7 @@ def post_delete_selection(message, bot):
 
 
 def delete_one_handler(message, bot):
+    """Sends delete request to the database"""
     chat_id = message.chat.id
     record_to_delete = message.text
     print(record_to_delete)
