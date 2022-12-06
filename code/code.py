@@ -73,6 +73,7 @@ bot.set_my_commands([
     telebot.types.BotCommand("/history", "Shows past expenses"),
     telebot.types.BotCommand("/search", "Scrapes the web for specific items and compares price"),
     telebot.types.BotCommand("/settle", "Settle and expense shared with you"),
+    telebot.types.BotCommand("/website", "visit a website to manage expenses")
 ])
 
 @bot.message_handler(commands=['start', 'menu'])

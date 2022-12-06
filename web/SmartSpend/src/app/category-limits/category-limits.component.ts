@@ -101,7 +101,11 @@ export class CategoryLimitsComponent implements OnInit {
     console.log('after:', this.appService.userLimits[0]);
     this.appService.setLimitsforUser(this.appService.userLimits[0])
   }
+
+
   ngOnInit(): void {
+
+   
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.appService.userId = params.get('id');
     });
@@ -109,11 +113,12 @@ export class CategoryLimitsComponent implements OnInit {
 
     this.appService.getExpensesById().subscribe((data: any[]) => {
       this.appService.userData = data;
-      this.appService.getLimitsForUser().subscribe((data: any) => {
+      console.log('expenses data', data[0].timestamp)
+      console.log(new Date(data[0].timestamp));
+      this.appService.getLimitsForUser().subscribe((dat: any) => {
         console.log('hi');
-        this.appService.userLimits = data;
-        console.log('this the data', data);
-        this.appService.userLimits = data;
+        this.appService.userLimits = dat;
+        console.log('this the limit data', dat);
         this.limits = {
           // yearly: this.appService.userLimits.yearly ?? 0,
           daily: this.appService.userLimits.daily ?? 0,

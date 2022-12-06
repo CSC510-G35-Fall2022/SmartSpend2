@@ -175,7 +175,7 @@ def edit_cat(m, bot):
                                                               '$set': {"category": category}}, return_document=ReturnDocument.AFTER)
         bot.reply_to(m, "Category is updated")
         # print(user_bills['shared_with'])
-        if updated_user_bill['shared_with']:
+        if 'shared_with' in updated_user_bill:
             for x in updated_user_bill['shared_with']:
                 # print("jere")
                 # print(x)
