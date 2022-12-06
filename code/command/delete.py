@@ -20,22 +20,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import logging
-import re
 import os
-import pymongo
-import telebot
-import time
 from telebot import types
-from datetime import datetime, date, timedelta
-from telethon import TelegramClient
-import asyncio
-from pymongo import MongoClient, ReturnDocument
-import os
+from pymongo import MongoClient
 from dotenv import load_dotenv
-import argparse
-import Scraped_data
-import formatter
 from tabulate import tabulate
 load_dotenv()
 

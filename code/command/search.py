@@ -19,18 +19,8 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-import logging
-import re
 import os
-import pymongo
-import telebot
-import time
-from telebot import types
-from datetime import datetime, date, timedelta
-from telethon import TelegramClient
-import asyncio
-from pymongo import MongoClient, ReturnDocument
-import os
+from pymongo import MongoClient
 from dotenv import load_dotenv
 import argparse
 import Scraped_data
@@ -70,6 +60,7 @@ commands = {
 }
 
 def command_select(message, bot):
+    """Starts the search command"""
     chat_id = message.chat.id
    
     message = bot.send_message(chat_id, 'what is the product Name?')
@@ -77,6 +68,7 @@ def command_select(message, bot):
     
 
 def product_table(message, bot):
+    """Displays a product table from the internet showing prices and comparisons"""
     try:
         chat_id = message.chat.id
         product_name = message.text

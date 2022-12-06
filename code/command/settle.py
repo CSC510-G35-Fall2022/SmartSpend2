@@ -20,22 +20,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import logging
-import re
 import os
-import pymongo
-import telebot
-import time
 from telebot import types
-from datetime import datetime, date, timedelta
-from telethon import TelegramClient
-import asyncio
+from datetime import datetime
 from pymongo import MongoClient, ReturnDocument
-import os
 from dotenv import load_dotenv
-import argparse
-import Scraped_data
-import formatter
 from tabulate import tabulate
 load_dotenv()
 
@@ -71,6 +60,7 @@ commands = {
 }
 
 def command_settle(message, bot):
+    """Starts the settle command and prompts user for date and time"""
     chat_id = message.chat.id
     message = bot.send_message(
         chat_id, "Please enter the date and time of the transaction you would like to settle in the following format, Eg: Sep 21 2022 1:33PM")
@@ -78,6 +68,7 @@ def command_settle(message, bot):
 
 
 def settle_up(message, bot):
+    """Using date and time, allows a user to spend to cover and expense"""
     record = dict()
     timestamp = datetime.strptime(message.text, timestamp_format)
 
@@ -118,6 +109,7 @@ def settle_up(message, bot):
 
 
 def choice_for_settle(message, record, bot):
+    """Confirms if a user wants to settle a bill"""
     markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
     markup.row_width = 2
     markup.add("Yes")
@@ -128,6 +120,7 @@ def choice_for_settle(message, record, bot):
 
 
 def post_settle_selection(message, record, bot):
+    """Updates the database with the transaction"""
     chat_id = message.chat.id
     response = message.text
     if response == "Yes":

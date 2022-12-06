@@ -20,22 +20,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import logging
 import re
 import os
-import pymongo
-import telebot
-import time
 from telebot import types
-from datetime import datetime, date, timedelta
-from telethon import TelegramClient
-import asyncio
 from pymongo import MongoClient, ReturnDocument
-import os
 from dotenv import load_dotenv
-import argparse
-import Scraped_data
-import formatter
 from tabulate import tabulate
 load_dotenv()
 
@@ -71,6 +60,7 @@ commands = {
 }
 
 def command_limit(message, bot):
+    """Starts the limit command"""
     chat_id = message.chat.id
     user_limits['user_telegram_id'] = chat_id
     markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
@@ -83,6 +73,7 @@ def command_limit(message, bot):
 
 
 def post_limit_category_selection(message, bot):
+    """Asks the user for how much the limit is"""
     chat_id = message.chat.id
     selected_limit_category = message.text
     if selected_limit_category != 'View Limits' and selected_limit_category in limit_categories:
@@ -99,6 +90,7 @@ def post_limit_category_selection(message, bot):
 
 
 def post_limit_amount_input(message, bot):
+    """Adds the limit to the database"""
     chat_id = message.chat.id
     amount_entered = message.text
     amount_value = validate_entered_amount(amount_entered)
@@ -115,6 +107,7 @@ def post_limit_amount_input(message, bot):
 
 
 def view_limits(bot):
+    """Views limits for daily, monthly, or yearly"""
     user_history_obj = db.user_limits.find(
         {'user_telegram_id': user_limits['user_telegram_id']})
     for user_history in user_history_obj:
@@ -129,6 +122,7 @@ def view_limits(bot):
                 user_limits['user_telegram_id'], 'Your Yearly Limit is - {}'.format(user_history['yearly']))
 
 def validate_entered_amount(amount_entered):
+    """Validates a numeric amount"""
     if len(amount_entered) > 0 and len(amount_entered) <= 15:
         if amount_entered.isdigit:
             if re.match("^[0-9]*\\.?[0-9]*$", amount_entered):

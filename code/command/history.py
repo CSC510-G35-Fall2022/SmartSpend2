@@ -22,22 +22,9 @@
 
 from bob_telegram_tools.bot import TelegramBot
 import matplotlib.pyplot as plt
-import logging
-import re
 import os
-import pymongo
-import telebot
-import time
-from telebot import types
-from datetime import datetime, date, timedelta
-from telethon import TelegramClient
-import asyncio
 from pymongo import MongoClient, ReturnDocument
-import os
 from dotenv import load_dotenv
-import argparse
-import Scraped_data
-import formatter
 from tabulate import tabulate
 load_dotenv()
 
@@ -73,6 +60,7 @@ commands = {
 }
 
 def show_history(message, bot):
+    """Starts the history command"""
     try:
         user_history = db.user_bills.find(
             {'user_telegram_id': message.chat.id})

@@ -20,22 +20,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import logging
 import re
 import os
-import pymongo
-import telebot
-import time
 from telebot import types
-from datetime import datetime, date, timedelta
-from telethon import TelegramClient
-import asyncio
 from pymongo import MongoClient, ReturnDocument
-import os
 from dotenv import load_dotenv
-import argparse
-import Scraped_data
-import formatter
 from tabulate import tabulate
 load_dotenv()
 
@@ -75,6 +64,7 @@ spendlimit_categories = ['Food', 'Groceries', 'Utilities',
                          'Transport', 'Shopping', 'Miscellaneous', 'View Limits']
 
 def command_limitcategory(message, bot):
+    """Starts a limitcategory command"""
     chat_id = message.chat.id
     user_limits['user_telegram_id'] = chat_id
     markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
@@ -87,6 +77,7 @@ def command_limitcategory(message, bot):
 
 
 def post_limit_spendcategory_selection(message, bot):
+    """After user selects the category they are prompted with the limit"""
     chat_id = message.chat.id
     selected_spend_category = message.text
     if selected_spend_category != 'View Limits' and selected_spend_category in spend_categories:
@@ -103,6 +94,7 @@ def post_limit_spendcategory_selection(message, bot):
 
 
 def post_spendlimit_amount_input(message, bot):
+    """Adds the limit to the userlimit table"""
     chat_id = message.chat.id
     amount_entered = message.text
     amount_value = validate_entered_amount(amount_entered)
@@ -129,6 +121,7 @@ def post_spendlimit_amount_input(message, bot):
 
 
 def view_spendlimits(bot):
+    """allows the user to view their spent limits"""
     user_history_obj = db.user_limits.find(
         {'user_telegram_id': user_limits['user_telegram_id']})
     for user_history in user_history_obj:
@@ -152,6 +145,7 @@ def view_spendlimits(bot):
                 user_limits['user_telegram_id'], 'Your Miscellaneous Limit is - {}'.format(user_history['Miscellaneous']))
 
 def validate_entered_amount(amount_entered):
+    """Validates a numeric amount"""
     if len(amount_entered) > 0 and len(amount_entered) <= 15:
         if amount_entered.isdigit:
             if re.match("^[0-9]*\\.?[0-9]*$", amount_entered):

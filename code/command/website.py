@@ -20,23 +20,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import logging
-import re
 import os
-import pymongo
-import telebot
-import time
-from telebot import types
-from datetime import datetime, date, timedelta
 from telegram import ParseMode
-from telethon import TelegramClient
-import asyncio
-from pymongo import MongoClient, ReturnDocument
-import os
+from pymongo import MongoClient
 from dotenv import load_dotenv
-import argparse
-import Scraped_data
-import formatter
 from tabulate import tabulate
 load_dotenv()
 
@@ -72,6 +59,7 @@ commands = {
 }
 
 def command_website(message, bot):
+    """Provides a link to the main website"""
     chat_id = message.chat.id
     # print(cluster)
     # print('https://localhost:4200/{}'.format(chat_id))
