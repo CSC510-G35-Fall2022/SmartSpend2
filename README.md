@@ -77,9 +77,13 @@ See [INSTALL.md](https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/IN
 <img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/add_command_1.png" alt="commands" width="350"/>
 <img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/add_command_2.png" alt="commands" width="350"/>
 
-3. Display. <u>Add: </u> This command is used by typing '/Display'. This command is used to display the spending records for day.month or all spendings. Futhermore, the bot displays a Pie chart showing the spendings so that user can get a visual look at the spendings numbers.<br>
+3. <u>Display: </u> This command is used by typing '/Display'. This command is used to display the spending records for day.month or all spendings. Futhermore, the bot displays a Pie chart showing the spendings so that user can get a visual look at the spendings numbers.<br>
 <img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/display_1.png" alt="commands" width="350"/>
 <img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/display_2.png" alt="commands" width="350"/>
+
+4. <u>History: </u> This command is used by typing '/History'. This command is used to display history of all the spending records. Futhermore, the bot displays a Bar graph showing the spendings over all the months, so that user can analyze the spendings.<br>
+<img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/history%20command.png" alt="commands" width="350"/>
+
 ## Case Studies
 1) Tested smart spend bot code individually with all five of our members. Member 1 tested the following functionalities: add, delete, display . All of the functionalities work as intended. Last updated Dec 05 2022.
 2) Tested smart spend bot code individually with all five of our members. Member 2 tested the following functionalities: edit, history, limit. All of the functionalities work as intended. Last updated Dec 05 2022.
