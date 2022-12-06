@@ -65,7 +65,7 @@ https://user-images.githubusercontent.com/95981350/194871840-4b8816b7-a634-4c4f-
 
 ## Scalability Design
 The following image shows a scalability Design described in detail, and a scalability diagram to visualize how the detail would work.
-<img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/scalability.png" width=1000> 
+<img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/scalabili.png" width=1000> 
 
 ## Installation guide
 
