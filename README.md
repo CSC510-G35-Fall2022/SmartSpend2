@@ -6,6 +6,7 @@
 [![DOI](https://zenodo.org/badge/562210446.svg)](https://zenodo.org/badge/latestdoi/562210446)
 [![Platform](https://img.shields.io/badge/Platform-Telegram-blue)](https://desktop.telegram.org/)
 ![Python CI](https://github.com/kaushikjadhav01/SmartSpend/actions/workflows/build-test.yaml/badge.svg)
+![coverage](https://img.shields.io/badge/Coverage-23%25-orange)
 
 <hr>
 
@@ -63,6 +64,10 @@ https://user-images.githubusercontent.com/15325746/135395315-e234dc5e-d891-470a-
 ## New Functionality
 https://user-images.githubusercontent.com/95981350/194871840-4b8816b7-a634-4c4f-b247-293cedb932c8.mp4
 
+## Scalability Design
+The following image shows a scalability Design described in detail, and a scalability diagram to visualize how the detail would work.
+<img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/future_scal.png" width=1000> 
+
 ## Installation guide
 
 See [INSTALL.md](https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/INSTALL.md)
@@ -77,14 +82,33 @@ See [INSTALL.md](https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/IN
 <img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/add_command_1.png" alt="commands" width="350"/>
 <img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/add_command_2.png" alt="commands" width="350"/>
 
-3. <u>Display: </u> This command is used by typing '/Display'. This command is used to display the spending records for day.month or all spendings. Futhermore, the bot displays a Pie chart showing the spendings so that user can get a visual look at the spendings numbers.<br>
+3. <u>Display: </u> This command is used by typing '/display'. This command is used to display the spending records for day.month or all spendings. Futhermore, the bot displays a Pie chart showing the spendings so that user can get a visual look at the spendings numbers.<br>
 <img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/display_1.png" alt="commands" width="350"/>
 <img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/display_2.png" alt="commands" width="350"/>
 
-4. <u>History: </u> This command is used by typing '/History'. This command is used to display history of all the spending records. Futhermore, the bot displays a Bar graph showing the spendings over all the months, so that user can analyze the spendings.<br>
+4. <u>History: </u> This command is used by typing '/history'. This command is used to display history of all the spending records. Futhermore, the bot displays a Bar graph showing the spendings over all the months, so that user can analyze the spendings.<br>
 <img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/history%20command.png" alt="commands" width="350"/>
 
-5. <u>Limits: </u> This command is used by typing '/Limit'. This command is used to set daily, monthly, yearly limits for user. Futhermore, this command also has a view limits feature that allows user to view limits.
+5. <u>Limits: </u> This command is used by typing '/limit'. This command is used to set daily, monthly, yearly limits for user. Futhermore, this command also has a view limits feature that allows user to view limits.
+- Add a limit:
+<img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/tlimit1.png" alt="commands" width="350"/>
+<img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/tlimit2.png" alt="commands" width="350"/>
+
+- View limits:
+<img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/tviewlims.png" alt="commands" width="350"/>
+
+6. <u>Categorical Limits: </u> This command is used by typing '/limitcategory'. This command is used to set monthly categorical limits for user. Furthermore, this command also has a view limits feature that allows user to see their monthly categorical limits.
+- Add a categorical limit:
+<img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/tlimc1.png" alt="commands" width="350"/>
+
+- View all categorical limits:
+<img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/tlimc2.png" alt="commands" width="350"/>
+
+7. <u>Search: </u> This command is used by typing '/search'. This program runs a web search on the specified query and provides the top 5 products together with their prices so that the user can compare them.
+<img src="https://github.com/CSC510-G35-Fall2022/SmartSpend2/blob/main/images/tsearch1.png" alt="commands" width="350"/>
+
+## Testing
+We are doing both automated and blackbox testing. The reason why our coverage is 23% is because that coverage person only measures coverage from the automated tests. The rest of the coverage is covered using black box tests. We used black box tests because we had to test the telegram API functionality which was only testable when the bot would be running through telegram. This made it impossible to test using automated testing which was why we used blackbox.
 
 ## Case Studies
 1) Tested smart spend bot code individually with all five of our members. Member 1 tested the following functionalities: add, delete, display . All of the functionalities work as intended. Last updated Dec 05 2022.
@@ -110,6 +134,7 @@ This project has the following contributors:
 | 4   | Patel, Maya            | maya-dc-patel   |
 | 5   | Xin, Vincent           | Culcheese       |
 
+Previous contributors: Authors:'Kaushik, Surya, Pradyumna, Harshitha, Aditi'
 
 ## Contact Form and Bug Report Form
 [click here](https://docs.google.com/forms/d/1cii1C1p-kijd8usQc4runQk88uT9rD750SH_IcEMuy8/edit)
