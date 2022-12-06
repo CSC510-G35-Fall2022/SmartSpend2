@@ -54,7 +54,7 @@ Total score: 284
 | Does the website and documentation describe what support, if any, the team provide to users and developers?                                                                                                    |    3   | docs folder, main readme
 | Does the project have an e-mail address or forum that is solely for supporting users?                                                                                                                          |    3   | Google form in Contributing.md
 | Are e-mails to the support e-mail address received by more than one person?                                                                                                                                    |   3    | Results are sent to Google shared drive
-| Does the project have a ticketing system to manage bug reports and feature requests?                                                                                                                           |   3    | isseues
+| Does the project have a ticketing system to manage bug reports and feature requests?                                                                                                                           |   3    | issues
 | Is the project's ticketing system publicly visible to the users, so they can view bug reports and feature requests?                                                                                            |   3    | issues
 | Is your software's architecture and design modular? | 3 | Issues and features are split up |
 | Does your software use an accepted coding standard or convention? | 3 | Used style checker |
