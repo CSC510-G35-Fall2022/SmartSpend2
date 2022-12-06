@@ -90,6 +90,22 @@ def delete_endpoint(id, num):
 
     return {'success': 'true'}
 
+
+        # return jsonify(request.get_json())
+@app.route('/delete/<id>', methods=['DELETE'])
+def delete_endpoint_all(id):
+    # print(id, num)
+    # print(db['user_bills'].find({}).explain().get("executionStats", {}).get("nReturned"))
+
+    # print('num', db.user_bills.find({'user_telegram_id': int(id), 'number': int(num)}).explain().get("executionStats", {}).get("nReturned"))
+
+    # result  = list(db['user_bills'].find({'user_telegram_id': int(id), 'number': int(num)}))
+    # print('result', result)
+    db.user_bills.delete_many(dumps(list(db['user_bills'].find({'user_telegram_id': int(id)}))));
+    #    return dumps(list(db['user_limits'].find({'user_telegram_id': int(id)})));
+
+    return {'success': 'true'}
+
     
 @app.route("/")
 def getAllExpenses():

@@ -56,6 +56,7 @@ export class HistoryComponent {
   }
 
   ngAfterViewInit() {
+    // console.log(this.dataSource)
     if (this.dataSource) {
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
@@ -64,26 +65,23 @@ export class HistoryComponent {
   delete(number: any) {
     console.log('delete', number);
     this.appService.delete(number).subscribe((data: any) => {console.log('delete', data);});
-
   }
 
+  // applyFilter(event: Event) {
+  //   const filterValue = (event.target as HTMLInputElement).value;
+  //   this.dataSource.filter = filterValue.trim().toLowerCase();
+
+  //   if (this.dataSource.paginator) {
+  //     this.dataSource.paginator.firstPage();
+  //   }
+  // }
+
+deleteAll(){
+  this.appService.deleteAll().subscribe((data: any) => {console.log(data);});
+}
   ngOnInit(): void {
 
-    // console.log(this.appService.userData);
 
-    // this.route.paramMap.subscribe((params: ParamMap) => {
-    //   this.appService.userId = Number(params.get('id'));
-    // });
-    // console.log(this.appService.userId);
-    // this.appService.getExpensesById().subscribe((data: any) => {
-    //   // this.expenses = Array(data);
-    //   console.log(this.expenses);
-    //   for (const prop in this.appService.userData) {
-    //     this.expenses.push(this.appService.userData[prop]);
-    //   }
-
-    //   this.dataSource = new MatTableDataSource(this.expenses);
-    // });
   }
 }
 
